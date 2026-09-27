@@ -5,7 +5,7 @@ import { useReferencePrices } from "../hooks/useReferencePrices";
 import { EmptyPriceValue } from "./EmptyPriceValue";
 import { useRouter } from "next/navigation";
 import { assetCatalog, marketPath } from "../lib/asset-catalog";
-import { MarketConfig } from "@levera/types";
+import { MarketConfig } from "@levier/types";
 
 interface StockCardSceneProps {
   markets?: MarketConfig[];

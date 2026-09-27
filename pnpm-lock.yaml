@@ -26,7 +26,7 @@ importers:
 
   apps/api:
     dependencies:
-      '@levera/types':
+      '@levier/types':
         specifier: workspace:*
         version: link:../../packages/types
       '@supabase/supabase-js':
@@ -63,7 +63,7 @@ importers:
 
   apps/indexer:
     dependencies:
-      '@levera/types':
+      '@levier/types':
         specifier: workspace:*
         version: link:../../packages/types
       '@supabase/supabase-js':
@@ -91,7 +91,7 @@ importers:
 
   apps/keeper:
     dependencies:
-      '@levera/types':
+      '@levier/types':
         specifier: workspace:*
         version: link:../../packages/types
       '@supabase/supabase-js':
@@ -144,7 +144,7 @@ importers:
       '@base-ui/react':
         specifier: ^1.8.0
         version: 1.8.0(@types/react@18.3.31)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      '@levera/types':
+      '@levier/types':
         specifier: workspace:*
         version: link:../../packages/types
       '@t3-oss/env-nextjs':

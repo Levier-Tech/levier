@@ -3,7 +3,7 @@
 import React from "react";
 import Link from "next/link";
 import { assetCatalog, marketPath } from "../lib/asset-catalog";
-import { MarketConfig } from "@levera/types";
+import { MarketConfig } from "@levier/types";
 import { useReferencePrices } from "../hooks/useReferencePrices";
 import { EmptyPriceValue } from "./EmptyPriceValue";
 

@@ -3,7 +3,7 @@
 import { env } from "../env.mjs";
 import React, { useState } from "react";
 import { ArrowUpRight, X, Loader2, CheckCircle2 } from "lucide-react";
-import { VaultConfig } from "@levera/types";
+import { VaultConfig } from "@levier/types";
 import { AssetLogo } from "./AssetLogo";
 import { useNetworkMode } from "../hooks/useNetworkMode";
 import { useVaultDeposit } from "../hooks/useVaultDeposit";

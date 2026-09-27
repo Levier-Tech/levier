@@ -8,7 +8,7 @@ import {
   ProtocolRiskStats,
   NetworkMode,
   PositionType,
-} from "@levera/types";
+} from "@levier/types";
 
 const API_BASE = "/api/v1";
 

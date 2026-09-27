@@ -6,7 +6,7 @@ import { useAccount, useWriteContract, usePublicClient } from "wagmi";
 import { parseUnits } from "viem";
 import { LeveraVaultABI, TestnetERC20ABI } from "../contracts/abis";
 import { getAddresses } from "../contracts/addresses";
-import { NetworkMode } from "@levera/types";
+import { NetworkMode } from "@levier/types";
 
 export function useVaultDeposit(networkMode: NetworkMode) {
   const { address } = useAccount();

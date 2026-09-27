@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import { VaultConfig, NetworkMode } from '@levera/types';
+import { VaultConfig, NetworkMode } from '@levier/types';
 import { fetchVaults as apiFetchVaults } from '../lib/api';
 import { useSmartPolling } from './useSmartPolling';
 

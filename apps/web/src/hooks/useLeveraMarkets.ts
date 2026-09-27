@@ -1,6 +1,6 @@
 "use client";
 import { useState, useCallback, useEffect, useRef } from "react";
-import type { MarketConfig, NetworkMode } from "@levera/types";
+import type { MarketConfig, NetworkMode } from "@levier/types";
 import { fetchMarkets } from "../lib/api";
 import { env } from "../env.mjs";
 import { useSmartPolling } from "./useSmartPolling";

@@ -1,8 +1,8 @@
-# LEVERA MARKETS
+# LEVIER MARKETS
 
 > **Leverage for tokenized assets on Robinhood Chain.**
 
-Levera Markets is the credit and leverage layer built for tokenized assets (equities, ETFs, and RWAs) on [Robinhood Chain](https://explorer.testnet.chain.robinhood.com). It provides a modern brokerage margin experience — **Borrow, Earn, Long, Short, Multiply, Auto-Protect** — over isolated lending markets, with each tokenized asset operating in its own risk-isolated pair.
+Levier Markets is the credit and leverage layer built for tokenized assets (equities, ETFs, and RWAs) on [Robinhood Chain](https://explorer.testnet.chain.robinhood.com). It provides a modern brokerage margin experience — **Borrow, Earn, Long, Short, Multiply, Auto-Protect** — over isolated lending markets, with each tokenized asset operating in its own risk-isolated pair.
 
 ---
 
@@ -76,7 +76,7 @@ See [RH Testnet Status](docs/RH_TESTNET_STATUS.md) and [RH Core Deployment](docs
 ## Monorepo Structure
 
 ```text
-levera/                                 # Monorepo root (Turborepo + pnpm)
+levier/                                 # Monorepo root (Turborepo + pnpm)
 ├── data/                               # Static JSON configuration
 │   ├── asset-catalog.json              # Asset names, icons & metadata
 │   ├── tokens.json                     # Token metadata (per network)
@@ -101,7 +101,7 @@ levera/                                 # Monorepo root (Turborepo + pnpm)
 │   │   ├── test/                       # Foundry unit & fuzz tests
 │   │   ├── script/                     # Deployment scripts (Forge Script)
 │   │   └── deployments/                # Deployment receipts & artifacts
-│   └── types/                          # Shared TypeScript interfaces (@levera/types)
+│   └── types/                          # Shared TypeScript interfaces (@levier/types)
 ├── scripts/                            # Deployment & verification scripts
 ├── tests/                              # Integration & boundary tests
 ├── supabase/                           # PostgreSQL migrations & seed data
@@ -199,7 +199,7 @@ graph TD
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/your-org/levera.git
+   git clone https://github.com/Levier-Tech/levier.git
    ```
 
 2. Install workspace dependencies:
@@ -233,10 +233,10 @@ graph TD
 
 ```bash
 # Build contracts
-pnpm --filter @levera/contracts build
+pnpm --filter @levier/contracts build
 
 # Run tests (including fuzz tests)
-pnpm --filter @levera/contracts test
+pnpm --filter @levier/contracts test
 
 # Generate lending ABIs
 pnpm generate:lending-abis
@@ -265,7 +265,7 @@ pnpm generate:lending-abis
 
 ## Environment Variables & Security
 
-Levera enforces a strict **Zero-Fallback Policy** using **Zod** schema validation. Missing required keys trigger a fail-fast runtime termination. Credentials never appear in browser bundles or logs.
+Levier enforces a strict **Zero-Fallback Policy** using **Zod** schema validation. Missing required keys trigger a fail-fast runtime termination. Credentials never appear in browser bundles or logs.
 
 ### Key Variables
 
@@ -350,4 +350,4 @@ Strict resource preservation for Supabase Free Tier (2 GB/month egress):
 
 ## License
 
-Copyright &copy; 2026 Levera Markets. All rights reserved.
+Copyright &copy; 2026 Levier Markets. All rights reserved.

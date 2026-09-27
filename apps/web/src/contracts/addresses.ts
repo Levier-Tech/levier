@@ -1,5 +1,5 @@
 import type { Address } from "viem";
-import type { NetworkMode } from "@levera/types";
+import type { NetworkMode } from "@levier/types";
 import { env } from "../env.mjs";
 export interface ProtocolAddresses {
   usdg: Address;

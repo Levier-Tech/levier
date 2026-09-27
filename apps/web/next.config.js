@@ -50,7 +50,7 @@ module.exports = (phase) => {
   }
   return {
     reactStrictMode: true,
-    transpilePackages: ["@levera/types"],
+    transpilePackages: ["@levier/types"],
     env: Object.fromEntries(publicKeys.map((key) => [key, process.env[key]])),
     async rewrites() {
       return [

@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { StockCardScene } from './StockCardScene';
-import { MarketConfig } from '@levera/types';
+import { MarketConfig } from '@levier/types';
 import { CABadge } from './CABadge';
 
 interface HeroSectionProps {

@@ -2,7 +2,7 @@
 
 import React from "react";
 import { ArrowUpRight } from "lucide-react";
-import { PortfolioSummary as PortfolioSummaryType } from "@levera/types";
+import { PortfolioSummary as PortfolioSummaryType } from "@levier/types";
 
 interface PortfolioSummaryProps {
   summary: PortfolioSummaryType;
