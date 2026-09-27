@@ -339,8 +339,8 @@ Strict resource preservation for Supabase Free Tier (2 GB/month egress):
 
 | Document | Description |
 | :--- | :--- |
-| [`brief/levera_development.md`](../brief/levera_development.md) | Product & engineering brief |
-| [`brief/levera_roadmap.md`](../brief/levera_roadmap.md) | Phase-by-phase development roadmap |
+| [`brief/levier_development.md`](../brief/levier_development.md) | Product & engineering brief |
+| [`brief/levier_roadmap.md`](../brief/levier_roadmap.md) | Phase-by-phase development roadmap |
 | [`docs/RH_TESTNET_STATUS.md`](docs/RH_TESTNET_STATUS.md) | Current testnet status & verification commands |
 | [`docs/RH_CORE_DEPLOYMENT_COMPLETE.md`](docs/RH_CORE_DEPLOYMENT_COMPLETE.md) | Core deployment completion report |
 | [`docs/RH_ORACLE_CHECKPOINT.md`](docs/RH_ORACLE_CHECKPOINT.md) | Oracle integration checkpoint |
