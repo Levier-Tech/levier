@@ -36,7 +36,7 @@ export function HowItWorks() {
             [PROTOCOL WORKFLOW]
           </span>
           <h2 className="text-2xl sm:text-4xl font-normal tracking-tight text-white uppercase font-mono mt-1">
-            HOW LEVERA WORKS
+            HOW LEVIER WORKS
           </h2>
         </div>
         <span className="text-xs text-[#8A8D88] uppercase hidden sm:block">

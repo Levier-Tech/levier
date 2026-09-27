@@ -145,15 +145,15 @@ export function Header() {
           <Link
             href="/"
             className="wordmark flex items-center gap-2.5"
-            aria-label="Levera Markets home"
+            aria-label="Levier Markets home"
           >
             <img
               src="/assets/Logo.png"
-              alt="Levera Emblem"
+              alt="Levier Emblem"
               className="w-7 h-7 object-contain rounded-sm shrink-0 drop-shadow-[0_0_8px_rgba(196,255,69,0.25)]"
             />
             <span className="flex items-baseline tracking-tight">
-              LEVERA<span className="wordmark-dot"></span>
+              LEVIER<span className="wordmark-dot"></span>
             </span>
           </Link>
         </div>

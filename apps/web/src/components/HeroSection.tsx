@@ -36,7 +36,7 @@ export function HeroSection({
           <span>TOKENIZED ASSETS. MORE POSSIBILITIES.</span>
           {tokenCA ? <CABadge address={tokenCA} truncate={false} /> : null}
         </div>
-        <span>LEVERA / 01</span>
+        <span>LEVIER / 01</span>
       </div>
 
       {/* 3D Rotating Stock Card Scene */}
@@ -58,7 +58,7 @@ export function HeroSection({
             href="#products"
             onClick={() => handleSelectTab('borrow')}
           >
-            <span>INTRODUCING</span> The Levera credit layer{' '}
+            <span>INTRODUCING</span> The Levier credit layer{' '}
             <span aria-hidden="true">↗</span>
           </a>
 
@@ -113,7 +113,7 @@ export function HeroSection({
       <div className="hero-footer">
         <span>THE CREDIT + LEVERAGE LAYER</span>
         <a href="#products">
-          Discover Levera <span aria-hidden="true">↓</span>
+          Discover Levier <span aria-hidden="true">↓</span>
         </a>
         <span>DESIGNED FOR ONCHAIN FINANCE</span>
       </div>

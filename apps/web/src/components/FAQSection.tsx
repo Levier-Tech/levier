@@ -4,9 +4,9 @@ import React from "react";
 
 const FAQ_ITEMS = [
   {
-    question: "What is Levera Markets?",
+    question: "What is Levier Markets?",
     answer:
-      "Levera is the credit and leverage layer for tokenized assets, designed for Robinhood Chain. Its core products include isolated collateral borrowing, ERC-4626 stablecoin yield vaults, 1-click long and short exposure, and keeper-automated position management.",
+      "Levier is the credit and leverage layer for tokenized assets, designed for Robinhood Chain. Its core products include isolated collateral borrowing, ERC-4626 stablecoin yield vaults, 1-click long and short exposure, and keeper-automated position management.",
   },
   {
     question: "How does borrowing work?",
