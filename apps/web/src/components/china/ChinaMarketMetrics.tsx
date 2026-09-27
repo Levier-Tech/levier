@@ -176,7 +176,7 @@ export function ChinaMarketMetrics({
             </span>
             <p className="text-[#9b9b99] mt-1 leading-relaxed">
               Chainlink published feed already incorporates the cumulative corporate action
-              multiplier. Levera applies zero secondary multiplier to prevent artificial inflation.
+              multiplier. Levier applies zero secondary multiplier to prevent artificial inflation.
             </p>
           </div>
           <div>

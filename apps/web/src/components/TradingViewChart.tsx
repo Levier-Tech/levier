@@ -18,8 +18,8 @@ export function TradingViewChart({
   data,
   colors: {
     backgroundColor = "transparent",
-    lineColor = "#c2ff47", // Levera brand green
-    textColor = "#888884", // Levera muted text
+    lineColor = "#c2ff47", // Levier brand green
+    textColor = "#888884", // Levier muted text
     areaTopColor = "rgba(194, 255, 71, 0.16)",
     areaBottomColor = "rgba(194, 255, 71, 0.0)",
   } = {},
