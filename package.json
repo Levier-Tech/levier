@@ -1,13 +1,13 @@
 {
-  "name": "levera-monorepo",
+  "name": "levier-monorepo",
   "private": true,
   "scripts": {
-    "build": "turbo run build --filter=!@levera/contracts",
-    "build:backend": "turbo run build --filter=!@levera/web --filter=!@levera/contracts",
+    "build": "turbo run build --filter=!@levier/contracts",
+    "build:backend": "turbo run build --filter=!@levier/web --filter=!@levier/contracts",
     "build:all": "turbo run build",
-    "dev": "concurrently -k \"turbo run dev --filter=@levera/web --filter=@levera/api\" \"npm run pons:indexer:serve\"",
+    "dev": "concurrently -k \"turbo run dev --filter=@levier/web --filter=@levier/api\" \"npm run pons:indexer:serve\"",
     "dev:all": "turbo run dev",
-    "dev:core": "turbo run dev --filter=@levera/web --filter=@levera/api",
+    "dev:core": "turbo run dev --filter=@levier/web --filter=@levier/api",
     "backend:all": "node scripts/run-all-backend.mjs",
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md,json}\"",
