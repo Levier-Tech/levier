@@ -3,7 +3,7 @@
 import { env } from "../env.mjs";
 import React, { useState } from "react";
 import { ArrowUpRight, X, Loader2, CheckCircle2 } from "lucide-react";
-import { AutoProtectConfig } from "@levera/types";
+import { AutoProtectConfig } from "@levier/types";
 import { useNetworkMode } from "../hooks/useNetworkMode";
 import { useAutoProtect } from "../hooks/useAutoProtect";
 

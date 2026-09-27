@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Position } from "@levera/types";
+import { Position } from "@levier/types";
 import { AssetLogo } from "./AssetLogo";
 
 interface OpenPositionsTableProps {

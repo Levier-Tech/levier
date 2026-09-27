@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import { NetworkMode, LiquidationHeatmapData, ProtocolRiskStats } from '@levera/types';
+import { NetworkMode, LiquidationHeatmapData, ProtocolRiskStats } from '@levier/types';
 import { fetchLiquidationHeatmap, fetchProtocolRiskStats } from '../lib/api';
 import { useSmartPolling } from './useSmartPolling';
 

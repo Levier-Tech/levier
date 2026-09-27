@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { marketPath } from "../lib/asset-catalog";
 import { ArrowUpRight } from "lucide-react";
-import { MarketConfig } from "@levera/types";
+import { MarketConfig } from "@levier/types";
 import { AssetLogo } from "./AssetLogo";
 
 interface MarketTableProps {

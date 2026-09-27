@@ -1,5 +1,5 @@
 "use client";
-import type { NetworkMode } from "@levera/types";
+import type { NetworkMode } from "@levier/types";
 import { env } from "../env.mjs";
 // Network selection is a deployment setting, never an independent localStorage override.
 export function useNetworkMode() {

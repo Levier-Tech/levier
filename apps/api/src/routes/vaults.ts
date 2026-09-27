@@ -1,6 +1,6 @@
 import { Router, Request, Response } from 'express';
 import { supabase, isLiveSupabase } from '../supabase.js';
-import { VaultConfig, NetworkMode } from '@levera/types';
+import { VaultConfig, NetworkMode } from '@levier/types';
 import { apiCache } from '../utils/cache.js';
 
 export const vaultsRouter = Router();

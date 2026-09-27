@@ -9,7 +9,7 @@ import {
   AlertTriangle,
   ExternalLink,
 } from "lucide-react";
-import { PositionType } from "@levera/types";
+import { PositionType } from "@levier/types";
 import { TradeStep } from "../hooks/useLeverageTrade";
 
 import { env } from "../env.mjs";

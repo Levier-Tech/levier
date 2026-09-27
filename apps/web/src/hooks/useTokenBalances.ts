@@ -3,7 +3,7 @@
 import { useAccount, useReadContract } from "wagmi";
 import { erc20Abi, formatUnits } from "viem";
 import { getAddresses } from "../contracts/addresses";
-import { NetworkMode } from "@levera/types";
+import { NetworkMode } from "@levier/types";
 
 export function useTokenBalances(
   networkMode: NetworkMode,

@@ -1,6 +1,6 @@
 import { Router, Request, Response } from "express";
 import { supabase, isLiveSupabase } from "../supabase.js";
-import { MarketConfig, NetworkMode } from "@levera/types";
+import { MarketConfig, NetworkMode } from "@levier/types";
 import { apiCache } from "../utils/cache.js";
 
 export const marketsRouter = Router();

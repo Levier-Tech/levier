@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { ArrowUpRight, Calculator, ShieldCheck, Zap } from 'lucide-react';
 import { AssetLogo } from './AssetLogo';
-import { MarketConfig } from '@levera/types';
+import { MarketConfig } from '@levier/types';
 
 interface MarketOption {
   symbol: string;

@@ -7,7 +7,7 @@ import { parseUnits } from "viem";
 import { AutoProtectModuleABI } from "../contracts/abis";
 import { getAddresses } from "../contracts/addresses";
 import { saveAutoProtectConfig } from "../lib/api";
-import { NetworkMode } from "@levera/types";
+import { NetworkMode } from "@levier/types";
 
 export function useAutoProtect(networkMode: NetworkMode) {
   const { address } = useAccount();

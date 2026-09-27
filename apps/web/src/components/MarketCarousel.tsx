@@ -3,7 +3,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import Link from 'next/link';
 import { ArrowUpRight, ChevronLeft, ChevronRight, Grab } from 'lucide-react';
-import { MarketConfig } from '@levera/types';
+import { MarketConfig } from '@levier/types';
 import { AssetLogo } from './AssetLogo';
 import { MarketTrendChart } from './MarketTrendChart';
 

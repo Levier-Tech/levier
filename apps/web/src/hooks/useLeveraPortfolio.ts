@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useMemo, useEffect, useCallback } from 'react';
-import { Position, PortfolioSummary, NetworkMode, AutoProtectConfig } from '@levera/types';
+import { Position, PortfolioSummary, NetworkMode, AutoProtectConfig } from '@levier/types';
 import { useAccount } from 'wagmi';
 import {
   fetchPositions,

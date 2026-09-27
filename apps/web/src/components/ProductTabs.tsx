@@ -4,7 +4,7 @@ import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { marketPath } from "../lib/asset-catalog";
-import { MarketConfig, VaultConfig } from "@levera/types";
+import { MarketConfig, VaultConfig } from "@levier/types";
 
 interface ProductTabsProps {
   markets?: MarketConfig[];

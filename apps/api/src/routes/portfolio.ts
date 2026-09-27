@@ -1,6 +1,6 @@
 import { Router, Request, Response } from 'express';
 import { supabase, isLiveSupabase } from '../supabase.js';
-import { PortfolioSummary, NetworkMode } from '@levera/types';
+import { PortfolioSummary, NetworkMode } from '@levier/types';
 
 export const portfolioRouter = Router();
 

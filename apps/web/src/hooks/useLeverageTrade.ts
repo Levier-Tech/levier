@@ -11,7 +11,7 @@ import {
 } from "../contracts/abis";
 import { getAddresses } from "../contracts/addresses";
 import { createPosition } from "../lib/api";
-import { NetworkMode, PositionType } from "@levera/types";
+import { NetworkMode, PositionType } from "@levier/types";
 
 export type TradeStep =
   "IDLE" | "APPROVING" | "EXECUTING" | "CONFIRMING" | "SUCCESS" | "ERROR";

@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { env } from "../env.mjs";
 import { marketPath, tradePath } from "../lib/asset-catalog";
 import { ArrowUpRight, Loader2 } from "lucide-react";
-import { MarketConfig, PositionType } from "@levera/types";
+import { MarketConfig, PositionType } from "@levier/types";
 import { TransactionPreviewModal } from "./TransactionPreviewModal";
 import { AssetLogo } from "./AssetLogo";
 import { useNetworkMode } from "../hooks/useNetworkMode";

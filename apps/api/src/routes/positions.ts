@@ -1,7 +1,7 @@
 import { Router, Request, Response } from 'express';
 import { z } from 'zod';
 import { supabase, isLiveSupabase } from '../supabase.js';
-import { NetworkMode } from '@levera/types';
+import { NetworkMode } from '@levier/types';
 import { apiCache } from '../utils/cache.js';
 
 export const positionsRouter = Router();
