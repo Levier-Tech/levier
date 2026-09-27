@@ -15,7 +15,7 @@
     "chainlinkFeedAddress": "0x62Cc8F9b5f56a33c9C8A60c8B92779f523c4E984",
     "oracleMethodology": "Chainlink BABA/USD Reference Feed (Heartbeat: 86,400s). Reverify official Chainlink reference directory and live contract before credit activation.",
     "lastVerificationDate": "2026-09-21T16:00:00Z",
-    "verifiedBy": "Levera Chinese Equities Data Audit (Robinhood Chain 4663)",
+    "verifiedBy": "Levier Chinese Equities Data Audit (Robinhood Chain 4663)",
     "governanceEvidenceHash": null,
     "documentationUrl": "https://robinhoodchain.blockscout.com/address/0xad25Ac6C84D497db898fa1E8387bf6Af3532a1c4"
   },
@@ -35,7 +35,7 @@
     "chainlinkFeedAddress": null,
     "oracleMethodology": "Pending activation discovery and verification. Public sources inconsistent; feed address not hardcoded until live contract validation.",
     "lastVerificationDate": "2026-09-21T16:00:00Z",
-    "verifiedBy": "Levera Chinese Equities Data Audit (Robinhood Chain 4663)",
+    "verifiedBy": "Levier Chinese Equities Data Audit (Robinhood Chain 4663)",
     "governanceEvidenceHash": null,
     "documentationUrl": "https://robinhoodchain.blockscout.com/address/0xeB30663bDFf0622Ef4e4E5cBb4E975F19f33f51D"
   },
@@ -55,7 +55,7 @@
     "chainlinkFeedAddress": null,
     "oracleMethodology": "External product feed on native networks. Robinhood Chain feed not deployed.",
     "lastVerificationDate": "2026-09-21T16:00:00Z",
-    "verifiedBy": "Levera Chinese Equities Data Audit",
+    "verifiedBy": "Levier Chinese Equities Data Audit",
     "governanceEvidenceHash": null,
     "documentationUrl": "https://app.ondo.finance/assets/"
   },
@@ -75,7 +75,7 @@
     "chainlinkFeedAddress": null,
     "oracleMethodology": "External product feed on native networks. Robinhood Chain feed not deployed.",
     "lastVerificationDate": "2026-09-21T16:00:00Z",
-    "verifiedBy": "Levera Chinese Equities Data Audit",
+    "verifiedBy": "Levier Chinese Equities Data Audit",
     "governanceEvidenceHash": null,
     "documentationUrl": "https://app.ondo.finance/assets/"
   },
@@ -95,7 +95,7 @@
     "chainlinkFeedAddress": null,
     "oracleMethodology": "External product feed on native networks. Robinhood Chain feed not deployed.",
     "lastVerificationDate": "2026-09-21T16:00:00Z",
-    "verifiedBy": "Levera Chinese Equities Data Audit",
+    "verifiedBy": "Levier Chinese Equities Data Audit",
     "governanceEvidenceHash": null,
     "documentationUrl": "https://app.ondo.finance/assets/"
   },
@@ -115,7 +115,7 @@
     "chainlinkFeedAddress": null,
     "oracleMethodology": "External product feed on native networks. Robinhood Chain feed not deployed.",
     "lastVerificationDate": "2026-09-21T16:00:00Z",
-    "verifiedBy": "Levera Chinese Equities Data Audit",
+    "verifiedBy": "Levier Chinese Equities Data Audit",
     "governanceEvidenceHash": null,
     "documentationUrl": "https://app.ondo.finance/assets/"
   },
@@ -135,7 +135,7 @@
     "chainlinkFeedAddress": null,
     "oracleMethodology": "Multi-source pricing via Backed and Chainlink on supported chains. Robinhood Chain deployment unverified.",
     "lastVerificationDate": "2026-09-21T16:00:00Z",
-    "verifiedBy": "Levera Chinese Equities Data Audit",
+    "verifiedBy": "Levier Chinese Equities Data Audit",
     "governanceEvidenceHash": null,
     "documentationUrl": "https://assets.backed.fi/legal-documentation/product-database?7ee26213_page=2"
   },
@@ -155,7 +155,7 @@
     "chainlinkFeedAddress": null,
     "oracleMethodology": "Multi-source pricing on supported chains.",
     "lastVerificationDate": "2026-09-21T16:00:00Z",
-    "verifiedBy": "Levera Chinese Equities Data Audit",
+    "verifiedBy": "Levier Chinese Equities Data Audit",
     "governanceEvidenceHash": null,
     "documentationUrl": "https://assets.backed.fi/legal-documentation/product-database?7ee26213_page=2"
   },
@@ -175,7 +175,7 @@
     "chainlinkFeedAddress": null,
     "oracleMethodology": "Multi-source pricing on supported chains.",
     "lastVerificationDate": "2026-09-21T16:00:00Z",
-    "verifiedBy": "Levera Chinese Equities Data Audit",
+    "verifiedBy": "Levier Chinese Equities Data Audit",
     "governanceEvidenceHash": null,
     "documentationUrl": "https://assets.backed.fi/legal-documentation/product-database?7ee26213_page=2"
   },
@@ -195,7 +195,7 @@
     "chainlinkFeedAddress": null,
     "oracleMethodology": "Multi-source pricing on supported chains.",
     "lastVerificationDate": "2026-09-21T16:00:00Z",
-    "verifiedBy": "Levera Chinese Equities Data Audit",
+    "verifiedBy": "Levier Chinese Equities Data Audit",
     "governanceEvidenceHash": null,
     "documentationUrl": "https://assets.backed.fi/legal-documentation/product-database?7ee26213_page=2"
   },
@@ -215,7 +215,7 @@
     "chainlinkFeedAddress": null,
     "oracleMethodology": "Multi-source pricing on supported chains.",
     "lastVerificationDate": "2026-09-21T16:00:00Z",
-    "verifiedBy": "Levera Chinese Equities Data Audit",
+    "verifiedBy": "Levier Chinese Equities Data Audit",
     "governanceEvidenceHash": null,
     "documentationUrl": "https://assets.backed.fi/legal-documentation/product-database?7ee26213_page=2"
   },
@@ -235,7 +235,7 @@
     "chainlinkFeedAddress": null,
     "oracleMethodology": "Multi-source pricing on supported chains.",
     "lastVerificationDate": "2026-09-21T16:00:00Z",
-    "verifiedBy": "Levera Chinese Equities Data Audit",
+    "verifiedBy": "Levier Chinese Equities Data Audit",
     "governanceEvidenceHash": null,
     "documentationUrl": "https://assets.backed.fi/legal-documentation/product-database?7ee26213_page=2"
   },
@@ -255,7 +255,7 @@
     "chainlinkFeedAddress": null,
     "oracleMethodology": "Multi-source pricing on supported chains.",
     "lastVerificationDate": "2026-09-21T16:00:00Z",
-    "verifiedBy": "Levera Chinese Equities Data Audit",
+    "verifiedBy": "Levier Chinese Equities Data Audit",
     "governanceEvidenceHash": null,
     "documentationUrl": "https://assets.backed.fi/legal-documentation/product-database?7ee26213_page=2"
   },
@@ -275,7 +275,7 @@
     "chainlinkFeedAddress": null,
     "oracleMethodology": "Multi-source pricing on supported chains.",
     "lastVerificationDate": "2026-09-21T16:00:00Z",
-    "verifiedBy": "Levera Chinese Equities Data Audit",
+    "verifiedBy": "Levier Chinese Equities Data Audit",
     "governanceEvidenceHash": null,
     "documentationUrl": "https://assets.backed.fi/legal-documentation/product-database?7ee26213_page=2"
   },
@@ -295,7 +295,7 @@
     "chainlinkFeedAddress": null,
     "oracleMethodology": "N/A - Pending issuer structuring and oracle deployment.",
     "lastVerificationDate": "2026-09-21T16:00:00Z",
-    "verifiedBy": "Levera Chinese Equities Data Audit",
+    "verifiedBy": "Levier Chinese Equities Data Audit",
     "governanceEvidenceHash": null,
     "documentationUrl": "https://www.sse.com.cn/"
   }

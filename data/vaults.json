@@ -1,7 +1,7 @@
 [
   {
-    "id": "levera-usdg-vault-testnet",
-    "name": "Levera USDG Yield Vault",
+    "id": "levier-usdg-vault-testnet",
+    "name": "Levier USDG Yield Vault",
     "symbol": "lvUSDG",
     "network": "TESTNET",
     "assetSymbol": "USDG",
@@ -19,8 +19,8 @@
     ]
   },
   {
-    "id": "levera-usd-vault-testnet",
-    "name": "Levera USDC Vault",
+    "id": "levier-usd-vault-testnet",
+    "name": "Levier USDC Vault",
     "symbol": "lvUSD",
     "network": "TESTNET",
     "assetSymbol": "USDC",
@@ -37,8 +37,8 @@
     ]
   },
   {
-    "id": "levera-usdg-vault-mainnet",
-    "name": "Levera USDG Yield Vault",
+    "id": "levier-usdg-vault-mainnet",
+    "name": "Levier USDG Yield Vault",
     "symbol": "lvUSDG",
     "network": "MAINNET",
     "assetSymbol": "USDG",

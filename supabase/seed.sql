@@ -1,5 +1,5 @@
 -- =============================================================================
--- LEVERA MARKETS DATABASE SEED SCRIPT
+-- LEVIER MARKETS DATABASE SEED SCRIPT
 -- Imports initial markets, vaults, and seed positions for TESTNET & MAINNET
 -- Monorepo Specification: Phase 2 (Task 2.2)
 -- =============================================================================
@@ -48,18 +48,18 @@ INSERT INTO vaults (
     apy, tvl_usd, utilization_rate, risk_tier, allocations
 ) VALUES
 (
-    'levera-usdg-vault-testnet', 'TESTNET', '0x1111111111111111111111111111111111111111',
-    'Levera USDG Yield Vault', 'lvUSDG', 'USDG', 7.15, 4850000.00, 78.4, 'Conservative',
+    'levier-usdg-vault-testnet', 'TESTNET', '0x1111111111111111111111111111111111111111',
+    'Levier USDG Yield Vault', 'lvUSDG', 'USDG', 7.15, 4850000.00, 78.4, 'Conservative',
     '[{"symbol":"NVDA","weightPercent":25},{"symbol":"AAPL","weightPercent":20},{"symbol":"META","weightPercent":15},{"symbol":"AMZN","weightPercent":15},{"symbol":"WETH","weightPercent":15},{"symbol":"Cash Reserve","weightPercent":10}]'::jsonb
 ),
 (
-    'levera-usd-vault-testnet', 'TESTNET', '0x2222222222222222222222222222222222222222',
-    'Levera USDC Vault', 'lvUSD', 'USDC', 6.85, 3660000.00, 74.2, 'Conservative',
+    'levier-usd-vault-testnet', 'TESTNET', '0x2222222222222222222222222222222222222222',
+    'Levier USDC Vault', 'lvUSD', 'USDC', 6.85, 3660000.00, 74.2, 'Conservative',
     '[{"symbol":"NVDA","weightPercent":30},{"symbol":"AAPL","weightPercent":25},{"symbol":"SPY","weightPercent":25},{"symbol":"TSLA","weightPercent":10},{"symbol":"Cash Reserve","weightPercent":10}]'::jsonb
 ),
 (
-    'levera-usdg-vault-mainnet', 'MAINNET', '0x3333333333333333333333333333333333333333',
-    'Levera USDG Yield Vault', 'lvUSDG', 'USDG', 7.80, 32100000.00, 84.2, 'Conservative',
+    'levier-usdg-vault-mainnet', 'MAINNET', '0x3333333333333333333333333333333333333333',
+    'Levier USDG Yield Vault', 'lvUSDG', 'USDG', 7.80, 32100000.00, 84.2, 'Conservative',
     '[{"symbol":"NVDA","weightPercent":30},{"symbol":"AAPL","weightPercent":25},{"symbol":"META","weightPercent":20},{"symbol":"AMZN","weightPercent":15},{"symbol":"Cash Reserve","weightPercent":10}]'::jsonb
 );
 
