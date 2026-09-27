@@ -7,43 +7,43 @@ export function ComparisonMatrix() {
   const comparisonData = [
     {
       feature: 'TARGET ASSETS',
-      levera: 'Tokenized US Equities & ETFs (NVDA, AAPL, TSLA, SPY)',
-      leveraPass: true,
+      levier: 'Tokenized US Equities & ETFs (NVDA, AAPL, TSLA, SPY)',
+      levierPass: true,
       traditional: 'Volatile Native Crypto Tokens & Altcoins',
       traditionalPass: false,
     },
     {
       feature: 'LEVERAGE EXECUTION',
-      levera: '1-Click Automated Margin Router',
-      leveraPass: true,
+      levier: '1-Click Automated Margin Router',
+      levierPass: true,
       traditional: 'Manual Multi-Step Flash Loans & Swaps',
       traditionalPass: false,
     },
     {
       feature: 'LIQUIDATION DEFENSE',
-      levera: 'Auto-Protect Keeper Deleverage Guard',
-      leveraPass: true,
+      levier: 'Auto-Protect Keeper Deleverage Guard',
+      levierPass: true,
       traditional: 'Instant Harsh Liquidation Penalties (10-15%)',
       traditionalPass: false,
     },
     {
       feature: 'RISK ARCHITECTURE',
-      levera: 'Isolated Collateral Vaults per Equity Market',
-      leveraPass: true,
+      levier: 'Isolated Collateral Vaults per Equity Market',
+      levierPass: true,
       traditional: 'Shared Liquidity Pool Risk Contagion',
       traditionalPass: false,
     },
     {
       feature: 'USER INTERFACE UX',
-      levera: 'Brokerage Margin Account Simplicity',
-      leveraPass: true,
+      levier: 'Brokerage Margin Account Simplicity',
+      levierPass: true,
       traditional: 'Complex DeFi Technical Jargon',
       traditionalPass: false,
     },
     {
       feature: 'SETTLEMENT CHAIN',
-      levera: 'Robinhood Chain L2 Low-Fee Instant Finality',
-      leveraPass: true,
+      levier: 'Robinhood Chain L2 Low-Fee Instant Finality',
+      levierPass: true,
       traditional: 'High Network Execution Fees',
       traditionalPass: false,
     },
@@ -57,11 +57,11 @@ export function ComparisonMatrix() {
             [PRODUCT ADVANTAGE]
           </span>
           <h2 className="text-2xl sm:text-4xl font-normal tracking-tight text-white uppercase font-mono mt-1">
-            LEVERA VS TRADITIONAL DEFI
+            LEVIER VS TRADITIONAL DEFI
           </h2>
         </div>
         <span className="text-xs text-[#8A8D88] uppercase hidden sm:block">
-          [WHY CHOOSE LEVERA]
+          [WHY CHOOSE LEVIER]
         </span>
       </div>
 
@@ -72,7 +72,7 @@ export function ComparisonMatrix() {
               <tr className="border-b border-white/15 bg-[#050505] text-[#8A8D88]">
                 <th className="p-3 sm:p-5 md:p-6 w-1/3">FEATURE / CAPABILITY</th>
                 <th className="p-3 sm:p-5 md:p-6 w-1/3 text-[#008000] font-bold bg-[#008000]/10 border-x border-[#008000]/20">
-                  LEVERA MARKETS
+                  LEVIER MARKETS
                 </th>
                 <th className="p-3 sm:p-5 md:p-6 w-1/3 text-[#8A8D88]">
                   TRADITIONAL DEFI (AAVE/COMPOUND)
@@ -91,7 +91,7 @@ export function ComparisonMatrix() {
                   <td className="p-3 sm:p-5 md:p-6 bg-[#008000]/5 border-x border-[#008000]/20 text-[#008000] font-semibold">
                     <div className="flex items-start gap-2.5">
                       <CheckCircle2 className="w-4 h-4 text-[#008000] shrink-0 mt-0.5" />
-                      <span>{row.levera}</span>
+                      <span>{row.levier}</span>
                     </div>
                   </td>
                   <td className="p-3 sm:p-5 md:p-6 text-[#8A8D88]">

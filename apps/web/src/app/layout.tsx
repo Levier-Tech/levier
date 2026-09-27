@@ -14,10 +14,10 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <head>
-        <title>LEVERA MARKETS | Credit & Leverage for Tokenized Assets</title>
+        <title>LEVIER MARKETS | Credit & Leverage for Tokenized Assets</title>
         <meta
           name="description"
-          content="The credit and leverage layer for tokenized assets on Robinhood Chain. Explore the Levera Markets interface."
+          content="The credit and leverage layer for tokenized assets on Robinhood Chain. Explore the Levier Markets interface."
         />
         <meta name="theme-color" content="#080808" />
         <link rel="icon" type="image/png" href="/assets/Logo.png" />
