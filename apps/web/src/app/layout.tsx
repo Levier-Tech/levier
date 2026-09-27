@@ -20,8 +20,14 @@ export default function RootLayout({
           content="The credit and leverage layer for tokenized assets on Robinhood Chain. Explore the Levier Markets interface."
         />
         <meta name="theme-color" content="#080808" />
-        <link rel="icon" type="image/png" href="/assets/Logo.png" />
-        <link rel="apple-touch-icon" href="/assets/Logo.png" />
+        <link rel="icon" type="image/png" href="/assets/levier-logo-new-trimmed.png" />
+        <link rel="apple-touch-icon" href="/assets/levier-logo-new-trimmed.png" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300..900&display=swap"
+        />
       </head>
       <body className="bg-[#080808] text-[#f4f4f0] min-h-screen flex flex-col font-sans selection:bg-[#c2ff47] selection:text-[#080808] antialiased">
         <Web3Provider>

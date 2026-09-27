@@ -109,7 +109,7 @@ export function PositionList({ account, optimisticPositions = [] }: { account: s
         
         let healthColor = "var(--green)";
         if (healthFactor < 1.5) healthColor = "#ffb84d";
-        if (healthFactor < 1.1) healthColor = "#ff6b6b";
+        if (healthFactor < 1.1) healthColor = "#d6153c";
 
         return (
           <div className="position-card" key={pos.id}>
@@ -154,7 +154,7 @@ export function PositionList({ account, optimisticPositions = [] }: { account: s
               </div>
               <div className="metric">
                 <span className="label">Liq. Price</span>
-                <span className="value text-[#ff6b6b]">${pos.liquidationPrice.toLocaleString(undefined, { maximumFractionDigits: 4 })}</span>
+                <span className="value text-[#d6153c]">${pos.liquidationPrice.toLocaleString(undefined, { maximumFractionDigits: 4 })}</span>
               </div>
               <div className="metric">
                 <span className="label">Health Factor</span>
@@ -247,7 +247,7 @@ export function PositionList({ account, optimisticPositions = [] }: { account: s
         }
         .side-badge.short {
           background: rgba(255, 107, 107, 0.15);
-          color: #ff6b6b;
+          color: #d6153c;
         }
         .pnl-display {
           font-size: 18px;
@@ -259,7 +259,7 @@ export function PositionList({ account, optimisticPositions = [] }: { account: s
           font-weight: 600;
         }
         .profit { color: var(--green); }
-        .loss { color: #ff6b6b; }
+        .loss { color: #d6153c; }
         
         .card-metrics {
           display: grid;

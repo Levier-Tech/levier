@@ -30,13 +30,24 @@ export function FAQSection() {
     <section className="faq-section section-wrap" id="faq">
       <div>
         <div className="section-topline">
-          <span>03 / THE DETAILS</span>
+          <span>05 / THE DETAILS</span>
         </div>
         <h2 className="section-title">
           A little
           <br />
           <span>more clarity.</span>
         </h2>
+
+        <p className="faq-contact">
+          Still have questions?{" "}
+          <a
+            href="https://x.com/LeveraMarke6"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Reach out on X ↗
+          </a>
+        </p>
       </div>
 
       <div className="faq-list">

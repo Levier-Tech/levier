@@ -51,7 +51,7 @@ export function Header() {
         Skip to content
       </a>
 
-      <header className="header-container border-b border-[#1f201d] bg-[#080808] fixed w-full top-0 left-0 right-0 z-50">
+      <header className="header-container border-b border-[var(--line)] bg-[var(--bg)] fixed w-full top-0 left-0 right-0 z-50">
         {/* LEFT NAVIGATION */}
         <nav className="nav-left" aria-label="Main navigation">
           {isLanding ? (
@@ -148,9 +148,9 @@ export function Header() {
             aria-label="Levier Markets home"
           >
             <img
-              src="/assets/Logo.png"
+              src="/assets/levier-logo-new-trimmed.png"
               alt="Levier Emblem"
-              className="w-7 h-7 object-contain rounded-sm shrink-0 drop-shadow-[0_0_8px_rgba(196,255,69,0.25)]"
+              className="h-9 w-auto shrink-0 drop-shadow-[0_0_8px_rgba(196,255,69,0.25)]"
             />
             <span className="flex items-baseline tracking-tight">
               LEVIER<span className="wordmark-dot"></span>
@@ -160,7 +160,10 @@ export function Header() {
 
         {/* RIGHT NAVIGATION */}
         <div className="nav-right">
-          <span className="chain-label">Robinhood Chain</span>
+          <span className="chain-label">
+            <span className="live-dot" aria-hidden="true" />
+            Robinhood Chain
+          </span>
 
           {isLanding ? (
             <div className="flex items-center gap-3">
@@ -169,7 +172,7 @@ export function Header() {
               </Link>
               <button
                 onClick={() => setIsWalletModalOpen(true)}
-                className="px-3 py-2 border border-[#303629] text-xs font-sans rounded text-[#c8cbc0] hover:border-[var(--green)] hover:text-white transition-colors"
+                className="px-3 py-2 border border-[var(--line)] text-xs font-sans rounded text-[var(--muted)] hover:border-[var(--green)] hover:text-white transition-colors"
               >
                 {isConnected && formattedAddress ? formattedAddress : "Connect"}
               </button>
@@ -179,7 +182,7 @@ export function Header() {
                 rel="noopener noreferrer"
                 aria-label="Follow Levera on X (Twitter)"
                 title="Follow Levera on X (@LeveraMarke6)"
-                className="p-2 border border-[#303629] text-[#c8cbc0] hover:text-[var(--green)] hover:border-[var(--green)] rounded transition-colors flex items-center justify-center shrink-0"
+                className="p-2 border border-[var(--line)] text-[var(--muted)] hover:text-[var(--green)] hover:border-[var(--green)] rounded transition-colors flex items-center justify-center shrink-0"
               >
                 <svg
                   width="15"
@@ -211,7 +214,7 @@ export function Header() {
                 rel="noopener noreferrer"
                 aria-label="Follow Levera on X (Twitter)"
                 title="Follow Levera on X (@LeveraMarke6)"
-                className="p-2 border border-[#303629] text-[#c8cbc0] hover:text-[var(--green)] hover:border-[var(--green)] rounded transition-colors flex items-center justify-center shrink-0"
+                className="p-2 border border-[var(--line)] text-[var(--muted)] hover:text-[var(--green)] hover:border-[var(--green)] rounded transition-colors flex items-center justify-center shrink-0"
               >
                 <svg
                   width="15"

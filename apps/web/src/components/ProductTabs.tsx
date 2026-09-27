@@ -417,6 +417,34 @@ export function ProductTabs({
           )}
         </div>
       </div>
+
+      {/* Quick facts across all three modes */}
+      <div className="product-facts">
+        <button
+          type="button"
+          className={`product-fact ${activeTab === "borrow" ? "active" : ""}`}
+          onClick={() => setActiveTab("borrow")}
+        >
+          <span className="product-fact-label">Borrow</span>
+          <strong>30% example LTV</strong>
+        </button>
+        <button
+          type="button"
+          className={`product-fact ${activeTab === "earn" ? "active" : ""}`}
+          onClick={() => setActiveTab("earn")}
+        >
+          <span className="product-fact-label">Earn</span>
+          <strong>TSLA · AMZN · PLTR vault assets</strong>
+        </button>
+        <button
+          type="button"
+          className={`product-fact ${activeTab === "leverage" ? "active" : ""}`}
+          onClick={() => setActiveTab("leverage")}
+        >
+          <span className="product-fact-label">Leverage</span>
+          <strong>Up to 2.5× exposure</strong>
+        </button>
+      </div>
     </section>
   );
 }
