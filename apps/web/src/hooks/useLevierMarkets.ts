@@ -6,7 +6,7 @@ import { env } from "../env.mjs";
 import { useSmartPolling } from "./useSmartPolling";
 import { assetCatalog } from "../lib/asset-catalog";
 const supportedSymbols = new Set(assetCatalog.map((asset) => asset.ticker));
-export function useLeveraMarkets(networkMode: NetworkMode) {
+export function useLevierMarkets(networkMode: NetworkMode) {
   const [markets, setMarkets] = useState<MarketConfig[]>([]);
   const [isLoading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);

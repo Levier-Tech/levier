@@ -3,12 +3,12 @@
 import { AppPage, DataState } from "../../components/AppPage";
 import React from "react";
 import { useNetworkMode } from "../../hooks/useNetworkMode";
-import { useLeveraVault } from "../../hooks/useLeveraVault";
+import { useLevierVault } from "../../hooks/useLevierVault";
 import { VaultCard, VaultCardSkeleton } from "../../components/VaultCard";
 
 export default function EarnPage() {
   const { networkMode } = useNetworkMode();
-  const { vaults, isLoading, error, refetch } = useLeveraVault(networkMode);
+  const { vaults, isLoading, error, refetch } = useLevierVault(networkMode);
 
   return (
     <AppPage

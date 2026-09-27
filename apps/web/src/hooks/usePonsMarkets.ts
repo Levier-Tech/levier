@@ -6,7 +6,7 @@ import { env } from "../env.mjs";
 
 /**
  * Hook for fetching and polling Pons graduated markets.
- * Follows the same pattern as useLeveraMarkets.
+ * Follows the same pattern as useLevierMarkets.
  */
 export function usePonsMarkets() {
   const [markets, setMarkets] = useState<PonsMarketEntry[]>([]);

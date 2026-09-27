@@ -18,7 +18,7 @@ const DEFAULT_AUTO_PROTECT: AutoProtectConfig = {
   maxDeleverageUsd: 1000,
 };
 
-export function useLeveraPortfolio(networkMode: NetworkMode) {
+export function useLevierPortfolio(networkMode: NetworkMode) {
   const { address } = useAccount();
   const [positions, setPositions] = useState<Position[]>([]);
   const [autoProtect, setAutoProtect] = useState<AutoProtectConfig>(DEFAULT_AUTO_PROTECT);
