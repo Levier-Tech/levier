@@ -6,7 +6,7 @@ import React, { useState, useEffect, useMemo } from "react";
  * Generate deterministic theme colors from a token symbol.
  */
 export function getSymbolTheme(symbol: string) {
-  // Levera uses a sleek minimal palette, avoiding random rainbow hues.
+  // Levier uses a sleek minimal palette, avoiding random rainbow hues.
   return {
     bg: "#141513",
     border: "#292a27",

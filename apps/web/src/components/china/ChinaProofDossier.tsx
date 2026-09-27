@@ -331,7 +331,7 @@ export function ChinaProofDossier({
           <div className="bg-[#080808] border border-[#181917] p-3.5 rounded flex flex-col justify-between gap-2">
             <div>
               <span className="text-[10px] text-[#777] uppercase font-display block whitespace-nowrap">
-                Levera Governance Market Identifier
+                Levier Governance Market Identifier
               </span>
               {proof.governanceEvidenceHash ? (
                 <span className="text-[#d1d4cb] break-all block mt-1">
@@ -339,7 +339,7 @@ export function ChinaProofDossier({
                 </span>
               ) : (
                 <span className="text-[#888] block mt-1 font-sans text-[11px]">
-                  Configured under Levera Isolated Risk Committee Registry.
+                  Configured under Levier Isolated Risk Committee Registry.
                 </span>
               )}
             </div>

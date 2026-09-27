@@ -111,7 +111,7 @@ export function ProductTabs({
             ref={tabListRef}
             className="product-tabs"
             role="tablist"
-            aria-label="Levera products"
+            aria-label="Levier products"
           >
             <button
               id="tab-borrow"
@@ -228,10 +228,10 @@ export function ProductTabs({
         {/* RIGHT COLUMN: PREVIEW PANEL */}
         <div
           className="product-visual"
-          aria-label="Illustrative Levera product interface"
+          aria-label="Illustrative Levier product interface"
         >
           <div className="preview-top">
-            <span>LEVERA</span>
+            <span>LEVIER</span>
             <span className="preview-badge">
               {activeTab === "borrow" && tslaMarket
                 ? "LIVE MARKET PREVIEW"
@@ -300,7 +300,7 @@ export function ProductTabs({
               <div className="example-heading">
                 <div className="asset-icon dollar">$</div>
                 <div>
-                  <strong>Levera USD Vault</strong>
+                  <strong>Levier USD Vault</strong>
                   <span>Stablecoin lending</span>
                 </div>
                 <span className="tag">Earn</span>

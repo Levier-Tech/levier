@@ -51,7 +51,7 @@ export default function PonsMarketsPage() {
             <span className="pons-step-num">02</span>
             <div>
               <strong>Eligibility check</strong>
-              <p>Levera validates liquidity, volume, market cap, and oracle availability.</p>
+              <p>Levier validates liquidity, volume, market cap, and oracle availability.</p>
             </div>
           </div>
           <div className="pons-step">
