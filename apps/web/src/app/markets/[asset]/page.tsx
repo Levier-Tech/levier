@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { useLeveraMarkets } from "../../../hooks/useLeveraMarkets";
+import { useLevierMarkets } from "../../../hooks/useLevierMarkets";
 import { useNetworkMode } from "../../../hooks/useNetworkMode";
 import { AppPage, DataState } from "../../../components/AppPage";
 import { MetricsSkeleton } from "../../../components/LoadingSkeleton";
@@ -29,7 +29,7 @@ function UnconfiguredMarketDetail({ params }: { params: { asset: string } }) {
   const symbol = params.asset.toUpperCase();
   const asset = assetCatalog.find((entry) => entry.ticker === symbol);
   const { networkMode } = useNetworkMode();
-  const { markets, isLoading, error, refetch } = useLeveraMarkets(networkMode);
+  const { markets, isLoading, error, refetch } = useLevierMarkets(networkMode);
   const market = markets.find(
     (entry) => entry.assetSymbol === symbol || entry.slug === params.asset,
   );

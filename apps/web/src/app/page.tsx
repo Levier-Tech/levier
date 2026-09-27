@@ -4,8 +4,8 @@ import React from "react";
 import { useRouter } from "next/navigation";
 import { marketPath } from "../lib/asset-catalog";
 import { useNetworkMode } from "../hooks/useNetworkMode";
-import { useLeveraMarkets } from "../hooks/useLeveraMarkets";
-import { useLeveraVault } from "../hooks/useLeveraVault";
+import { useLevierMarkets } from "../hooks/useLevierMarkets";
+import { useLevierVault } from "../hooks/useLevierVault";
 import { HeroSection } from "../components/HeroSection";
 import { ProductTabs } from "../components/ProductTabs";
 import { MarketGrid } from "../components/MarketGrid";
@@ -14,8 +14,8 @@ import { FAQSection } from "../components/FAQSection";
 export default function HomePage() {
   const { networkMode } = useNetworkMode();
   const { markets, isLoading: isMarketsLoading } =
-    useLeveraMarkets(networkMode);
-  const { vaults } = useLeveraVault(networkMode);
+    useLevierMarkets(networkMode);
+  const { vaults } = useLevierVault(networkMode);
 
   const router = useRouter();
   const openMarket = (ticker: string) => router.push(marketPath(ticker));

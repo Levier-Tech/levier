@@ -5,7 +5,7 @@ import { VaultConfig, NetworkMode } from '@levier/types';
 import { fetchVaults as apiFetchVaults } from '../lib/api';
 import { useSmartPolling } from './useSmartPolling';
 
-export function useLeveraVault(networkMode: NetworkMode) {
+export function useLevierVault(networkMode: NetworkMode) {
   const [vaults, setVaults] = useState<VaultConfig[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -16,7 +16,7 @@ export function useLeveraVault(networkMode: NetworkMode) {
       setVaults(data);
       setError(null);
     } catch (err: any) {
-      console.error('Failed to fetch vaults from Levera API:', err);
+      console.error('Failed to fetch vaults from Levier API:', err);
       setError(err.message || 'Error fetching vaults');
     } finally {
       setIsLoading(false);
