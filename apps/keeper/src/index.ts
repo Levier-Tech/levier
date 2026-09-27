@@ -12,7 +12,7 @@ async function runKeeperLoop() {
     return;
   }
   console.log("===========================================================");
-  console.log("       LEVERA PROTOCOL — AUTO-PROTECT KEEPER BOT           ");
+  console.log("       LEVIER PROTOCOL — AUTO-PROTECT KEEPER BOT           ");
   console.log("===========================================================");
   console.log(
     `[NETWORK]          : ${config.NETWORK_MODE} (Chain ID: ${config.CHAIN_ID})`,
