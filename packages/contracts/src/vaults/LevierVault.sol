@@ -5,10 +5,10 @@ import "@openzeppelin/contracts/token/ERC20/extensions/ERC4626.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
 /**
- * @title LeveraVault
+ * @title LevierVault
  * @notice ERC-4626 custody foundation. Market allocation and yield accrual are not implemented.
  */
-contract LeveraVault is ERC4626, Ownable {
+contract LevierVault is ERC4626, Ownable {
     bool public depositsPaused = true;
     event DepositsPauseUpdated(bool paused);
 

@@ -114,13 +114,13 @@ try {
   const registryCodeHash = await verifyRuntime(
     client,
     d.registry,
-    "LeveraMarketRegistry",
+    "LevierMarketRegistry",
   );
   assert(
     same(registryCodeHash, d.codeHashes.registry),
     "REGISTRY_CODE_CHANGED",
   );
-  const registryAbi = artifact("LeveraMarketRegistry").abi;
+  const registryAbi = artifact("LevierMarketRegistry").abi;
   const regRead = (functionName, args = []) =>
     client.readContract({
       address: d.registry,

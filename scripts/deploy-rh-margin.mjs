@@ -42,10 +42,10 @@ try {
     "UNRESOLVED_TRANSACTION",
   );
   await verifyBinding(ctx, binding);
-  await verifyRuntime(client, d.pair, "LeveraPair");
+  await verifyRuntime(client, d.pair, "LevierPair");
   const existing = await client.readContract({
     address: d.pair,
-    abi: artifact("LeveraPair").abi,
+    abi: artifact("LevierPair").abi,
     functionName: "accounts",
     args: [deployer.address],
   });
@@ -132,7 +132,7 @@ try {
       [plan.shortSlug, d.debt, d.collateral],
     ),
   );
-  await deploy("shortPair", "LeveraPair", [
+  await deploy("shortPair", "LevierPair", [
     shortId,
     d.debt,
     d.collateral,
@@ -140,7 +140,7 @@ try {
     d.registry,
     deployer.address,
   ]);
-  const registry = artifact("LeveraMarketRegistry").abi;
+  const registry = artifact("LevierMarketRegistry").abi;
   const ids = await client.readContract({
     address: d.registry,
     abi: registry,

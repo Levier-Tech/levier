@@ -9,7 +9,7 @@ interface IPonsMarketAdapter {
     /// @notice Returns true if the asset has graduated from the Pons bonding curve.
     function isGraduated(address asset) external view returns (bool);
 
-    /// @notice Returns true if the asset is eligible for leverage trading on Levera.
+    /// @notice Returns true if the asset is eligible for leverage trading on Levier.
     function isEligible(address asset) external view returns (bool);
 
     /// @notice Returns market metadata for a Pons asset.

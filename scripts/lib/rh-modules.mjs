@@ -53,8 +53,8 @@ export function moduleSpecs(c, owner) {
     { role: "shortRouter", contract: "ShortRouter", args: [owner] },
     { role: "autoProtect", contract: "AutoProtectModule", args: [owner] },
     {
-      role: "leveraVault",
-      contract: "LeveraVault",
+      role: "levierVault",
+      contract: "LevierVault",
       args: [
         c.debt,
         c.vaultName,
@@ -76,7 +76,7 @@ export async function verifyModuleInputs(ctx, c) {
     same(c.registry, ctx.state.registry) &&
       same(c.lendingRouter, ctx.state.router) &&
       same(c.registry, addresses.registry) &&
-      same(c.lendingRouter, addresses.leveraRouter),
+      same(c.lendingRouter, addresses.levierRouter),
     "BASE_MANIFEST_MISMATCH",
   );
   assert(
@@ -87,11 +87,11 @@ export async function verifyModuleInputs(ctx, c) {
   );
   assert(
     same(
-      await verifyRuntime(ctx.client, c.registry, "LeveraMarketRegistry"),
+      await verifyRuntime(ctx.client, c.registry, "LevierMarketRegistry"),
       c.registryCodeHash,
     ) &&
       same(
-        await verifyRuntime(ctx.client, c.lendingRouter, "LeveraRouter"),
+        await verifyRuntime(ctx.client, c.lendingRouter, "LevierRouter"),
         c.lendingRouterCodeHash,
       ),
     "BASE_RUNTIME_MISMATCH",
@@ -103,7 +103,7 @@ export async function verifyModuleInputs(ctx, c) {
   );
   const read = (address, abi, functionName, args = []) =>
     ctx.client.readContract({ address, abi, functionName, args });
-  const registry = artifact("LeveraMarketRegistry").abi;
+  const registry = artifact("LevierMarketRegistry").abi;
   assert(
     same(await read(c.registry, registry, "owner"), ctx.deployer.address),
     "REGISTRY_OWNER_MISMATCH",
@@ -131,7 +131,7 @@ export async function verifyModule(ctx, c, spec, address) {
     same(await read("owner"), ctx.deployer.address),
     "MODULE_OWNER_MISMATCH",
   );
-  if (spec.role === "leveraVault") {
+  if (spec.role === "levierVault") {
     assert(
       same(await read("asset"), c.debt) && (await read("depositsPaused")),
       "VAULT_CONFIGURATION_MISMATCH",
@@ -148,7 +148,7 @@ export async function verifyModule(ctx, c, spec, address) {
     assert(
       !(await ctx.client.readContract({
         address: c.registry,
-        abi: artifact("LeveraMarketRegistry").abi,
+        abi: artifact("LevierMarketRegistry").abi,
         functionName: "isAuthorizedRouter",
         args: [address],
       })),

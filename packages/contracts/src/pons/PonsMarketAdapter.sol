@@ -7,7 +7,7 @@ import "./IPonsMarketAdapter.sol";
 /**
  * @title PonsMarketAdapter
  * @notice On-chain adapter that detects Pons-graduated assets and evaluates
- *         their eligibility for leverage trading on Levera Markets.
+ *         their eligibility for leverage trading on Levier Markets.
  * @dev    Graduation status can be read from a Pons bonding-curve contract
  *         (when its address is set) or overridden manually by the owner.
  *         Market metadata (liquidity, market cap, volume) is cached on-chain

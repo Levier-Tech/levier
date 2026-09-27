@@ -1,7 +1,7 @@
 import { readFileSync, writeFileSync } from "node:fs";
 import { parseEnv } from "node:util";
 import { v, json, assert, safeFailure } from "./lib/rh-live.mjs";
-import { LeveraPairABI } from "../apps/web/src/contracts/generated/lending.ts";
+import { LevierPairABI } from "../apps/web/src/contracts/generated/lending.ts";
 try {
   const env = parseEnv(readFileSync(".env.testnet", "utf8"));
   const d = JSON.parse(env.LENDING_DEPLOYMENT_JSON);
@@ -42,7 +42,7 @@ try {
   const read = (blockNumber) =>
     c.readContract({
       address: d.pair,
-      abi: LeveraPairABI,
+      abi: LevierPairABI,
       functionName: "accounts",
       args: [env.TESTER_ADDRESS],
       blockNumber,

@@ -93,7 +93,7 @@ try {
     markets: [
       {
         symbol: "TSLA/USDG",
-        contract: "LeveraPair",
+        contract: "LevierPair",
         status: ctx.state.acceptanceComplete
           ? "deployed-lifecycle-passed-paused-at-checkpoint"
           : ctx.state.descriptor
@@ -103,7 +103,7 @@ try {
       },
       {
         symbol: "USDG/TSLA",
-        contract: "LeveraPair",
+        contract: "LevierPair",
         status: "future-short-foundation",
         direction: "USDG collateral / TSLA debt",
         needs: [

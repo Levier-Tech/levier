@@ -7,7 +7,7 @@ import {
   indexerStore,
 } from "./lib/rh-indexer-store.mjs";
 import { descriptorHash, replayEvents } from "./lib/rh-indexer.mjs";
-import { LeveraPairABI } from "../apps/web/src/contracts/generated/lending.ts";
+import { LevierPairABI } from "../apps/web/src/contracts/generated/lending.ts";
 const assert = (value, code) => {
   if (!value) throw Error(code);
 };
@@ -79,7 +79,7 @@ try {
     const p = accounts[row.user_address];
     const observed = await c.readContract({
       address: d.pair,
-      abi: LeveraPairABI,
+      abi: LevierPairABI,
       functionName: "accounts",
       args: [row.user_address],
       blockNumber: BigInt(checkpoint.block_number),

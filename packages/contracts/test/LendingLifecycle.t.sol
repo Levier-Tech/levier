@@ -3,8 +3,8 @@ pragma solidity ^0.8.24;
 
 import "forge-std/Test.sol";
 import "../src/tokens/TestnetERC20.sol";
-import "../src/core/LeveraPair.sol";
-import "../src/routers/LeveraRouter.sol";
+import "../src/core/LevierPair.sol";
+import "../src/routers/LevierRouter.sol";
 import "../src/modules/AutoProtectModule.sol";
 
 contract LendingLifecycleTest is Test {
@@ -13,9 +13,9 @@ contract LendingLifecycleTest is Test {
     TestnetERC20 stock;
     TestnetERC20 dollar;
     CompositeSanityOracle oracle;
-    LeveraMarketRegistry registry;
-    LeveraPair pair;
-    LeveraRouter router;
+    LevierMarketRegistry registry;
+    LevierPair pair;
+    LevierRouter router;
     bytes32 marketId;
 
     function setUp() public {
@@ -24,9 +24,9 @@ contract LendingLifecycleTest is Test {
         oracle = new CompositeSanityOracle(address(this));
         oracle.setPrice(address(stock), 250e18);
         oracle.setPrice(address(dollar), 1e18);
-        registry = new LeveraMarketRegistry(address(this));
+        registry = new LevierMarketRegistry(address(this));
         marketId = keccak256(abi.encodePacked("stock-usd", address(stock), address(dollar)));
-        pair = new LeveraPair(
+        pair = new LevierPair(
             marketId, address(stock), address(dollar), address(oracle), address(registry), address(this)
         );
         registry.addMarket(
@@ -35,14 +35,14 @@ contract LendingLifecycleTest is Test {
             address(dollar),
             address(pair),
             address(oracle),
-            LeveraMarketRegistry.RiskTier.TierA,
+            LevierMarketRegistry.RiskTier.TierA,
             6000,
             7000,
             25000,
             10000e18,
             100000e6
         );
-        router = new LeveraRouter();
+        router = new LevierRouter();
         registry.setAuthorizedRouter(address(router), true);
         stock.transfer(alice, 100e18);
         dollar.transfer(address(pair), 100000e6);
@@ -126,7 +126,7 @@ contract LendingLifecycleTest is Test {
 
     function testReduceOnlyBlocksBorrowButAllowsExit() public {
         open();
-        registry.setMarketStatus(marketId, LeveraMarketRegistry.MarketStatus.REDUCE_ONLY);
+        registry.setMarketStatus(marketId, LevierMarketRegistry.MarketStatus.REDUCE_ONLY);
         vm.startPrank(alice);
         vm.expectRevert("Pair: Market borrowing restricted");
         pair.borrow(1e6);
@@ -161,7 +161,7 @@ contract LendingLifecycleTest is Test {
 
     function testSixDecimalCollateralAndEighteenDecimalDebt() public {
         bytes32 reverseId = keccak256(abi.encodePacked("usd-stock", address(dollar), address(stock)));
-        LeveraPair reverse = new LeveraPair(
+        LevierPair reverse = new LevierPair(
             reverseId, address(dollar), address(stock), address(oracle), address(registry), address(this)
         );
         registry.addMarket(
@@ -170,7 +170,7 @@ contract LendingLifecycleTest is Test {
             address(stock),
             address(reverse),
             address(oracle),
-            LeveraMarketRegistry.RiskTier.TierA,
+            LevierMarketRegistry.RiskTier.TierA,
             6000,
             7000,
             20000,
@@ -204,7 +204,7 @@ contract LendingLifecycleTest is Test {
 
     function testRiskUpdateCannotSetThresholdAboveOneHundredPercent() public {
         vm.expectRevert("Registry: Liquidation LTV cannot exceed 100%");
-        registry.updateRiskTier(marketId, LeveraMarketRegistry.RiskTier.TierA, 6000, 10001, 25000);
+        registry.updateRiskTier(marketId, LevierMarketRegistry.RiskTier.TierA, 6000, 10001, 25000);
     }
 
     function testPairCannotBeRegisteredUnderWrongIdentity() public {
@@ -215,7 +215,7 @@ contract LendingLifecycleTest is Test {
             address(dollar),
             address(pair),
             address(oracle),
-            LeveraMarketRegistry.RiskTier.TierA,
+            LevierMarketRegistry.RiskTier.TierA,
             6000,
             7000,
             25000,

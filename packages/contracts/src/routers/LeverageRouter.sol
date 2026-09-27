@@ -5,7 +5,7 @@ import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
-import "../core/LeveraPair.sol";
+import "../core/LevierPair.sol";
 
 /**
  * @title LeverageRouter
@@ -41,7 +41,7 @@ contract LeverageRouter is ReentrancyGuard, Ownable {
 
     /**
      * @notice Open an atomic leveraged long position.
-     * @param pairAddress Target LeveraPair contract.
+     * @param pairAddress Target LevierPair contract.
      * @param initialCollateral Initial capital provided by the user.
      * @param borrowAmount Amount of debt to borrow for leverage multiplication.
      * @param leverageBps Desired leverage in basis points (e.g. 20000 = 2.0x, 25000 = 2.5x).
@@ -56,7 +56,7 @@ contract LeverageRouter is ReentrancyGuard, Ownable {
         require(initialCollateral > 0, "LeverageRouter: Zero initial collateral");
         require(leverageBps >= 10_000 && leverageBps <= 30_000, "LeverageRouter: Leverage out of bounds");
 
-        LeveraPair pair = LeveraPair(pairAddress);
+        LevierPair pair = LevierPair(pairAddress);
 
         // 1. Transfer initial collateral from user to pair
         IERC20 collateral = IERC20(pair.collateralToken());

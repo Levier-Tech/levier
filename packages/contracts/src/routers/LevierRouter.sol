@@ -4,14 +4,14 @@ pragma solidity ^0.8.24;
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
-import "../core/LeveraPair.sol";
+import "../core/LevierPair.sol";
 
 /**
- * @title LeveraRouter
+ * @title LevierRouter
  * @notice Unified user interaction contract for isolated lending pairs.
  * @dev Simplifies single-transaction supply, borrow, repay, and withdraw flows.
  */
-contract LeveraRouter is ReentrancyGuard {
+contract LevierRouter is ReentrancyGuard {
     using SafeERC20 for IERC20;
 
     /**
@@ -21,7 +21,7 @@ contract LeveraRouter is ReentrancyGuard {
         external
         nonReentrant
     {
-        LeveraPair pair = LeveraPair(pairAddress);
+        LevierPair pair = LevierPair(pairAddress);
 
         if (collateralAmount > 0) {
             IERC20(pair.collateralToken()).safeTransferFrom(msg.sender, address(this), collateralAmount);
@@ -38,7 +38,7 @@ contract LeveraRouter is ReentrancyGuard {
      * @notice Repays debt and withdraws collateral in a single atomic transaction.
      */
     function repayAndWithdraw(address pairAddress, uint256 repayAmount, uint256 withdrawAmount) external nonReentrant {
-        LeveraPair pair = LeveraPair(pairAddress);
+        LevierPair pair = LevierPair(pairAddress);
 
         if (repayAmount > 0) {
             (, uint256 debt) = pair.accounts(msg.sender);

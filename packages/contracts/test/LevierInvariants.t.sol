@@ -4,16 +4,16 @@ pragma solidity ^0.8.24;
 import "forge-std/Test.sol";
 import "../src/tokens/TestnetERC20.sol";
 import "../src/oracle/CompositeSanityOracle.sol";
-import "../src/registry/LeveraMarketRegistry.sol";
-import "../src/core/LeveraPair.sol";
-import "../src/vaults/LeveraVault.sol";
+import "../src/registry/LevierMarketRegistry.sol";
+import "../src/core/LevierPair.sol";
+import "../src/vaults/LevierVault.sol";
 
 /**
- * @title LeveraInvariantsTest
- * @notice Mathematical invariant and fuzz verification suite for LeveraVault and LeveraPair.
+ * @title LevierInvariantsTest
+ * @notice Mathematical invariant and fuzz verification suite for LevierVault and LevierPair.
  * Verifies solvency, 4626 share conversion bounds, and liquidation mathematical invariants.
  */
-contract LeveraInvariantsTest is Test {
+contract LevierInvariantsTest is Test {
     address admin = address(0xAD);
     address alice = address(0xA1);
     address bob = address(0xB1);
@@ -22,9 +22,9 @@ contract LeveraInvariantsTest is Test {
     TestnetERC20 usdg;
     TestnetERC20 nvda;
     CompositeSanityOracle oracle;
-    LeveraMarketRegistry registry;
-    LeveraVault vault;
-    LeveraPair pair;
+    LevierMarketRegistry registry;
+    LevierVault vault;
+    LevierPair pair;
 
     bytes32 marketId;
 
@@ -38,14 +38,14 @@ contract LeveraInvariantsTest is Test {
         oracle.setPrice(address(usdg), 1e18);   // $1.00
         oracle.setPrice(address(nvda), 250e18); // $250.00
 
-        registry = new LeveraMarketRegistry(admin);
+        registry = new LevierMarketRegistry(admin);
 
         // Vault for USDG
-        vault = new LeveraVault(
+        vault = new LevierVault(
             IERC20(address(usdg)),
-            "Levera USDG Vault",
+            "Levier USDG Vault",
             "lvUSDG",
-            "levera-usdg-vault-fuzz",
+            "levier-usdg-vault-fuzz",
             "Conservative",
             admin
         );
@@ -53,7 +53,7 @@ contract LeveraInvariantsTest is Test {
         vault.setDepositsPaused(false);
         // Pair: NVDA as Collateral ($250), USDG as Debt ($1)
         marketId = keccak256(abi.encodePacked("nvda-usdg-fuzz", address(nvda), address(usdg)));
-        pair = new LeveraPair(
+        pair = new LevierPair(
             marketId,
             address(nvda),
             address(usdg),
@@ -68,7 +68,7 @@ contract LeveraInvariantsTest is Test {
             address(usdg),
             address(pair),
             address(oracle),
-            LeveraMarketRegistry.RiskTier.TierA,
+            LevierMarketRegistry.RiskTier.TierA,
             7500, // 75% Max LTV
             8500, // 85% Liquidation LTV
             20000, // 200% Max Leverage

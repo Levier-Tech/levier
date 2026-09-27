@@ -49,9 +49,9 @@ try {
   const abis = Object.fromEntries(
     [
       "RhTestnetReferenceOracle",
-      "LeveraMarketRegistry",
-      "LeveraPair",
-      "LeveraRouter",
+      "LevierMarketRegistry",
+      "LevierPair",
+      "LevierRouter",
     ].map((n) => [n, artifact(n)]),
   );
   const read = (address, contract, name, args = []) =>
@@ -155,30 +155,30 @@ try {
     console.log("TESTNET_CONFIGURATION_PREPARED_NO_TRANSACTIONS");
   } else if (mode === "--deploy-base") {
     // Independent of the reference-oracle choice. No market can borrow yet.
-    await deploy("LeveraMarketRegistry", [deployer.address], "registry");
+    await deploy("LevierMarketRegistry", [deployer.address], "registry");
     assert(
       same(
-        await read(state.registry, "LeveraMarketRegistry", "owner"),
+        await read(state.registry, "LevierMarketRegistry", "owner"),
         deployer.address,
       ),
       "REGISTRY_OWNER_MISMATCH",
     );
-    await deploy("LeveraRouter", [], "router");
+    await deploy("LevierRouter", [], "router");
     await invoke(
       "authorize-router",
       state.registry,
-      "LeveraMarketRegistry",
+      "LevierMarketRegistry",
       "setAuthorizedRouter",
       [state.router, true],
     );
     assert(
-      await read(state.registry, "LeveraMarketRegistry", "isAuthorizedRouter", [
+      await read(state.registry, "LevierMarketRegistry", "isAuthorizedRouter", [
         state.router,
       ]),
       "ROUTER_NOT_AUTHORIZED",
     );
     assert(
-      (await read(state.registry, "LeveraMarketRegistry", "getMarketCount")) ===
+      (await read(state.registry, "LevierMarketRegistry", "getMarketCount")) ===
         0n,
       "UNEXPECTED_EXISTING_MARKETS",
     );
@@ -239,7 +239,7 @@ try {
           LEVERAGE_ROUTER_ADDRESS: state.leverageRouter,
           SHORT_ROUTER_ADDRESS: state.shortRouter,
           AUTO_PROTECT_ADDRESS: state.autoProtect,
-          LEVERA_VAULT_ADDRESS: state.leveraVault,
+          LEVIER_VAULT_ADDRESS: state.levierVault,
         });
       updateEnv(path, updates);
     }
@@ -353,7 +353,7 @@ try {
       );
       ctx.persist();
       await deploy(
-        "LeveraPair",
+        "LevierPair",
         [
           state.marketId,
           binding.collateral,
@@ -368,7 +368,7 @@ try {
       await invoke(
         "register-market",
         state.registry,
-        "LeveraMarketRegistry",
+        "LevierMarketRegistry",
         "addMarket",
         [
           policy.slug,
@@ -387,14 +387,14 @@ try {
       await invoke(
         "pause-market",
         state.registry,
-        "LeveraMarketRegistry",
+        "LevierMarketRegistry",
         "setMarketStatus",
         [state.marketId, 2],
       );
       await invoke(
         "configure-risk",
         state.registry,
-        "LeveraMarketRegistry",
+        "LevierMarketRegistry",
         "updateRiskTier",
         [
           state.marketId,
@@ -406,7 +406,7 @@ try {
       );
       const market = await read(
         state.registry,
-        "LeveraMarketRegistry",
+        "LevierMarketRegistry",
         "getMarket",
         [state.marketId],
       );
@@ -482,7 +482,7 @@ try {
         const receipt = await invoke(
           "acceptance-repay",
           state.pair,
-          "LeveraPair",
+          "LevierPair",
           "repay",
           [snapshot.debt],
         );
@@ -508,7 +508,7 @@ try {
         const receipt = await invoke(
           "acceptance-withdraw",
           state.pair,
-          "LeveraPair",
+          "LevierPair",
           "withdrawCollateral",
           [snapshot.collateral],
         );
@@ -523,7 +523,7 @@ try {
       await invoke(
         "pause-after-acceptance",
         state.registry,
-        "LeveraMarketRegistry",
+        "LevierMarketRegistry",
         "setMarketStatus",
         [state.marketId, 2],
       );
@@ -574,7 +574,7 @@ try {
       await invoke(
         "activate-market",
         state.registry,
-        "LeveraMarketRegistry",
+        "LevierMarketRegistry",
         "setMarketStatus",
         [state.marketId, 0],
       );
@@ -603,7 +603,7 @@ try {
         const receipt = await invoke(
           `acceptance-${action}`,
           state.pair,
-          "LeveraPair",
+          "LevierPair",
           method,
           [amount],
         );
@@ -645,13 +645,13 @@ try {
       await invoke(
         "pause-after-acceptance",
         state.registry,
-        "LeveraMarketRegistry",
+        "LevierMarketRegistry",
         "setMarketStatus",
         [state.marketId, 2],
       );
       assert(
         (
-          await read(state.registry, "LeveraMarketRegistry", "getMarket", [
+          await read(state.registry, "LevierMarketRegistry", "getMarket", [
             state.marketId,
           ])
         ).status === 2,

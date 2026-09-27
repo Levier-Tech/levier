@@ -9,7 +9,7 @@ const runId=`margin-accept-${randomUUID()}`;
 async function status(value) {
   const d=ctx.state.descriptor, m=ctx.state.margin.descriptor;
   for(const market of [d,m.short]) {
-    const abi=artifact('LeveraMarketRegistry').abi;
+    const abi=artifact('LevierMarketRegistry').abi;
     const current=await ctx.client.readContract({address:d.registry,abi,functionName:'getMarket',args:[market.marketId]});
     if(current.status!==value) await submit(ctx,`${runId}-status-${market.marketId}-${value}`,ctx.deployer,{to:d.registry,data:v.encodeFunctionData({abi,functionName:'setMarketStatus',args:[market.marketId,value]})});
   }
@@ -24,7 +24,7 @@ try {
   await readMarginSnapshot(client,m,d,deployer.address);
   state.margin.acceptance ??= {sides:{}};
   const acceptance=state.margin.acceptance;
-  const routerAbi=artifact('MarginRouter').abi,pairAbi=artifact('LeveraPair').abi;
+  const routerAbi=artifact('MarginRouter').abi,pairAbi=artifact('LevierPair').abi;
   const balance=token=>client.readContract({address:token,abi:v.erc20Abi,functionName:'balanceOf',args:[deployer.address]});
   const call=async(id,to,abi,functionName,args)=>{
     const operation=`margin-accept-v1-${id}`,data=v.encodeFunctionData({abi,functionName,args});

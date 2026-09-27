@@ -66,7 +66,7 @@ try {
       "LeverageRouter",
       "ShortRouter",
       "AutoProtectModule",
-      "LeveraVault",
+      "LevierVault",
     ],
     verified: [
       "Existing registry/router identity and authorization",

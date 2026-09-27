@@ -44,7 +44,7 @@ try {
     );
   for (const e of entries) {
     const router = artifact("MarginRouter").abi,
-      registry = artifact("LeveraMarketRegistry").abi;
+      registry = artifact("LevierMarketRegistry").abi;
     if (
       !(await ctx.client.readContract({
         address: e.margin.router,

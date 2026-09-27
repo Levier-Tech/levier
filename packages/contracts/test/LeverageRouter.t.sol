@@ -4,8 +4,8 @@ pragma solidity ^0.8.24;
 import "forge-std/Test.sol";
 import "../src/tokens/TestnetERC20.sol";
 import "../src/oracle/CompositeSanityOracle.sol";
-import "../src/registry/LeveraMarketRegistry.sol";
-import "../src/core/LeveraPair.sol";
+import "../src/registry/LevierMarketRegistry.sol";
+import "../src/core/LevierPair.sol";
 import "../src/routers/LeverageRouter.sol";
 
 contract LeverageRouterTest is Test {
@@ -15,8 +15,8 @@ contract LeverageRouterTest is Test {
     TestnetERC20 nvda;
     TestnetERC20 usdg;
     CompositeSanityOracle oracle;
-    LeveraMarketRegistry registry;
-    LeveraPair pair;
+    LevierMarketRegistry registry;
+    LevierPair pair;
     LeverageRouter leverageRouter;
 
     bytes32 marketId;
@@ -31,10 +31,10 @@ contract LeverageRouterTest is Test {
         oracle.setPrice(address(nvda), 250e18); // $250.00
         oracle.setPrice(address(usdg), 1e18); // $1.00
 
-        registry = new LeveraMarketRegistry(admin);
+        registry = new LevierMarketRegistry(admin);
         marketId = keccak256(abi.encodePacked("nvda-usdg-testnet", address(nvda), address(usdg)));
 
-        pair = new LeveraPair(marketId, address(nvda), address(usdg), address(oracle), address(registry), admin);
+        pair = new LevierPair(marketId, address(nvda), address(usdg), address(oracle), address(registry), admin);
 
         registry.addMarket(
             "nvda-usdg-testnet",
@@ -42,7 +42,7 @@ contract LeverageRouterTest is Test {
             address(usdg),
             address(pair),
             address(oracle),
-            LeveraMarketRegistry.RiskTier.TierA,
+            LevierMarketRegistry.RiskTier.TierA,
             6000,
             7000,
             25000,

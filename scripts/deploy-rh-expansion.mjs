@@ -81,13 +81,13 @@ try {
   await verifyBinding(ctx, binding);
   assert(
     same(
-      await verifyRuntime(client, draft.registry, "LeveraMarketRegistry"),
+      await verifyRuntime(client, draft.registry, "LevierMarketRegistry"),
       draft.registryCodeHash,
     ),
     "REGISTRY_CHANGED",
   );
-  const registry = artifact("LeveraMarketRegistry").abi,
-    pair = artifact("LeveraPair").abi,
+  const registry = artifact("LevierMarketRegistry").abi,
+    pair = artifact("LevierPair").abi,
     router = artifact("MarginRouter").abi,
     oracle = artifact("RhTestnetReferenceOracle").abi;
   const read = (address, abi, functionName, args = []) =>
@@ -241,7 +241,7 @@ try {
       [reviewed.shortSlug, binding.debt, binding.collateral],
     ),
   );
-  const longPair = await deploy("longPair", "LeveraPair", [
+  const longPair = await deploy("longPair", "LevierPair", [
     longId,
     binding.collateral,
     binding.debt,
@@ -256,7 +256,7 @@ try {
     binding.debt,
     BigInt(binding.maxSpreadBps),
   ]);
-  const shortPair = await deploy("shortPair", "LeveraPair", [
+  const shortPair = await deploy("shortPair", "LevierPair", [
     shortId,
     binding.debt,
     binding.collateral,

@@ -5,7 +5,7 @@ import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
-import "../core/LeveraPair.sol";
+import "../core/LevierPair.sol";
 
 /**
  * @title ShortRouter
@@ -38,7 +38,7 @@ contract ShortRouter is ReentrancyGuard, Ownable {
         require(pairAddress != address(0), "ShortRouter: Invalid pair");
         require(stableCollateral > 0, "ShortRouter: Zero collateral");
 
-        LeveraPair pair = LeveraPair(pairAddress);
+        LevierPair pair = LevierPair(pairAddress);
 
         IERC20 collateral = IERC20(pair.collateralToken());
         collateral.safeTransferFrom(msg.sender, address(this), stableCollateral);

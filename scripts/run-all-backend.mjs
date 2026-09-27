@@ -4,25 +4,25 @@ const SERVICES = [
   {
     name: "API",
     command: "pnpm",
-    args: ["--filter=@levera/api", "start"],
+    args: ["--filter=@levier/api", "start"],
     color: "\x1b[36m", // Cyan
   },
   {
     name: "INDEXER",
     command: "pnpm",
-    args: ["--filter=@levera/indexer", "start"],
+    args: ["--filter=@levier/indexer", "start"],
     color: "\x1b[35m", // Magenta
   },
   {
     name: "ORACLE",
     command: "pnpm",
-    args: ["--filter=@levera/price-oracle", "start"],
+    args: ["--filter=@levier/price-oracle", "start"],
     color: "\x1b[33m", // Yellow
   },
   {
     name: "KEEPER",
     command: "pnpm",
-    args: ["--filter=@levera/keeper", "start"],
+    args: ["--filter=@levier/keeper", "start"],
     color: "\x1b[32m", // Green
   },
 ];
@@ -97,7 +97,7 @@ process.on("SIGINT", () => shutdown("SIGINT"));
 process.on("SIGTERM", () => shutdown("SIGTERM"));
 
 console.log("===============================================================");
-console.log("      LEVERA PROTOCOL — ALL-IN-ONE BACKEND ORCHESTRATOR        ");
+console.log("      LEVIER PROTOCOL — ALL-IN-ONE BACKEND ORCHESTRATOR        ");
 console.log("===============================================================");
 console.log(`Active Services: ${SERVICES.map((s) => s.name).join(", ")}`);
 console.log("===============================================================\n");

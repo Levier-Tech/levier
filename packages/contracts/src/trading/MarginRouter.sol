@@ -4,7 +4,7 @@ import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
-import "../core/LeveraPair.sol";
+import "../core/LevierPair.sol";
 interface IV2Pool {
     function token0() external view returns(address);
     function token1() external view returns(address);
@@ -20,8 +20,8 @@ contract MarginRouter is ReentrancyGuard,Ownable {
     using SafeERC20 for IERC20;
     IERC20 public immutable stock;
     IERC20 public immutable stable;
-    LeveraPair public immutable longPair;
-    LeveraPair public immutable shortPair;
+    LevierPair public immutable longPair;
+    LevierPair public immutable shortPair;
     IV2Pool public immutable pool;
     bool public immutable stockIsToken0;
     bool public isPaused=true;
@@ -32,7 +32,7 @@ contract MarginRouter is ReentrancyGuard,Ownable {
     event PositionClosed(address indexed user,bool indexed isShort,uint256 collateral,uint256 debt,uint256 stableReturned);
     constructor(address stock_,address stable_,address long_,address short_,address pool_,address owner_) Ownable(owner_) {
         require(stock_!=stable_&&stock_.code.length>0&&stable_.code.length>0&&pool_.code.length>0,"Margin: Invalid assets");
-        stock=IERC20(stock_);stable=IERC20(stable_);longPair=LeveraPair(long_);shortPair=LeveraPair(short_);pool=IV2Pool(pool_);
+        stock=IERC20(stock_);stable=IERC20(stable_);longPair=LevierPair(long_);shortPair=LevierPair(short_);pool=IV2Pool(pool_);
         require(address(longPair.collateralToken())==stock_&&address(longPair.debtToken())==stable_&&address(shortPair.collateralToken())==stable_&&address(shortPair.debtToken())==stock_,"Margin: Pair assets");
         require(address(longPair.registry())==address(shortPair.registry()),"Margin: Registry mismatch");
         stockIsToken0=pool.token0()==stock_;
@@ -73,7 +73,7 @@ contract MarginRouter is ReentrancyGuard,Ownable {
     function open(bool isShort,uint256 margin,uint256 borrowAmount,uint256 minCollateral,uint256 deadline) external nonReentrant {
         require(!isPaused,"Margin: Paused");require(block.timestamp<=deadline,"Margin: Expired");
         require(margin>0&&borrowAmount>0&&minCollateral>0,"Margin: Zero amount");
-        LeveraPair pair=isShort?shortPair:longPair;
+        LevierPair pair=isShort?shortPair:longPair;
         (uint256 oldCollateral,uint256 oldDebt)=pair.accounts(msg.sender);
         require(oldCollateral==0&&oldDebt==0,"Margin: Existing position");
         uint256 output=quoteExactInput(isShort,isShort?borrowAmount:margin+borrowAmount);
@@ -84,7 +84,7 @@ contract MarginRouter is ReentrancyGuard,Ownable {
         emit PositionOpened(msg.sender,isShort,margin,collateral,borrowAmount);
     }
     function quoteClose(bool isShort,address user) external view returns(uint256) {
-        LeveraPair pair=isShort?shortPair:longPair;
+        LevierPair pair=isShort?shortPair:longPair;
         (uint256 collateral,uint256 debt)=pair.accounts(user);
         if(collateral==0)return 0;
         if(debt==0)return isShort?collateral:quoteExactInput(true,collateral);
@@ -97,7 +97,7 @@ contract MarginRouter is ReentrancyGuard,Ownable {
     }
     function close(bool isShort,uint256 minStableOut,uint256 deadline) external nonReentrant returns(uint256 returned) {
         require(block.timestamp<=deadline,"Margin: Expired");require(minStableOut>0,"Margin: Zero minimum");
-        LeveraPair pair=isShort?shortPair:longPair;
+        LevierPair pair=isShort?shortPair:longPair;
         (uint256 collateral,uint256 debt)=pair.accounts(msg.sender);require(collateral>0,"Margin: No position");
         uint256 remaining=collateral;
         if(debt>0) {
@@ -121,7 +121,7 @@ contract MarginRouter is ReentrancyGuard,Ownable {
         bool stockOut=op.closing?op.isShort:!op.isShort;
         bool zero=stockOut==stockIsToken0;
         require((zero?amount0:amount1)==op.output&&(zero?amount1:amount0)==0,"Margin: Invalid output");
-        LeveraPair pair=op.isShort?shortPair:longPair;
+        LevierPair pair=op.isShort?shortPair:longPair;
         IERC20 collateral=op.isShort?stable:stock;IERC20 debt=op.isShort?stock:stable;
         if(op.closing){
             debt.forceApprove(address(pair),op.debt);pair.repayFor(op.user,op.debt);debt.forceApprove(address(pair),0);

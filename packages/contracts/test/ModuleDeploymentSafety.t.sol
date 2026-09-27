@@ -4,16 +4,16 @@ import {Test} from "forge-std/Test.sol";
 import {LeverageRouter} from "../src/routers/LeverageRouter.sol";
 import {ShortRouter} from "../src/routers/ShortRouter.sol";
 import {AutoProtectModule} from "../src/modules/AutoProtectModule.sol";
-import {LeveraVault, IERC20} from "../src/vaults/LeveraVault.sol";
+import {LevierVault, IERC20} from "../src/vaults/LevierVault.sol";
 import {TestnetERC20} from "../src/tokens/TestnetERC20.sol";
 import {DeployRhModules} from "../script/DeployRhModules.s.sol";
-import {DeployLevera} from "../script/DeployLevera.s.sol";
+import {DeployLevier} from "../script/DeployLevier.s.sol";
 
 contract ModuleDeploymentSafetyTest is Test {
     LeverageRouter longRouter;
     ShortRouter shortRouter;
     AutoProtectModule protect;
-    LeveraVault vault;
+    LevierVault vault;
     TestnetERC20 token;
     address user = address(123);
     function setUp() public {
@@ -21,7 +21,7 @@ contract ModuleDeploymentSafetyTest is Test {
         shortRouter = new ShortRouter(address(this));
         protect = new AutoProtectModule(address(this));
         token = new TestnetERC20("Fixture USDG", "USDG", 6, 100e6, address(this));
-        vault = new LeveraVault(IERC20(address(token)), "Fixture Vault", "fv", "fixture", "Experimental", address(this));
+        vault = new LevierVault(IERC20(address(token)), "Fixture Vault", "fv", "fixture", "Experimental", address(this));
         token.transfer(user, 10e6);
     }
     function testRoutersStartPausedBeforeTouchingUserTokens() public {
@@ -56,7 +56,7 @@ contract ModuleDeploymentSafetyTest is Test {
         assertEq(token.balanceOf(user),10e6);assertEq(vault.totalSupply(),0);
     }
     function testPublicTestnetCannotRunMockDeployment() public {
-        DeployLevera legacy = new DeployLevera();vm.chainId(46630);
+        DeployLevier legacy = new DeployLevier();vm.chainId(46630);
         vm.expectRevert("Legacy deployment: local fixtures only");legacy.run();
     }
     function testModulesRejectWrongNetworkAndEnabledApplications() public {
