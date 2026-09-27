@@ -1,0 +1,22 @@
+{
+  "name": "@levera/contracts",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "command -v forge >/dev/null 2>&1 && forge build || echo '[Contracts] Foundry not installed, skipping smart contract build'",
+    "test": "PATH=\"$HOME/.foundry/bin:$PATH\" forge test -vvv",
+    "deploy:testnet": "node ../../scripts/deploy-rh-lending.mjs",
+    "deploy:anvil": "PATH=\"$HOME/.foundry/bin:$PATH\" forge script script/DeployLevera.s.sol:DeployLevera --rpc-url http://127.0.0.1:8545 --broadcast && tsx scripts/record_deployment.ts"
+  },
+  "dependencies": {
+    "@openzeppelin/contracts": "^5.0.2",
+    "@supabase/supabase-js": "^2.42.0",
+    "dotenv": "^16.4.5"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.30",
+    "tsx": "^4.7.1",
+    "typescript": "^5.4.3"
+  }
+}

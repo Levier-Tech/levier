@@ -1,0 +1,263 @@
+{
+  "network": {
+    "name": "Robinhood Chain Mainnet",
+    "chainId": 4663
+  },
+  "pons": {
+    "factoryV2": "0x7eD598BcEf8bd9Edd8C97A195C6d13f40801EC7e"
+  },
+  "filter": {
+    "ponsOnly": true,
+    "graduatedOnly": true,
+    "maximumMarketCapUsd": 1000000,
+    "requestedLimit": 10
+  },
+  "result": {
+    "requested": 10,
+    "returned": 10,
+    "complete": false,
+    "reason": "Successfully filtered tokens below 1M market cap threshold."
+  },
+  "tokens": [
+    {
+      "chain_id": 4663,
+      "name": "CHEQUE",
+      "symbol": "CHEQUE",
+      "address": "0x1e43020e48983972f17f1555b0f2d4d6c7c2463b",
+      "logo_url": "https://ipfs.io/ipfs/bafkreib2emkwp2cefcven2tlpuriaaxqr7ibhwoco4c7wyxrwxsixnfjq4",
+      "description": "Cut a cheque to anyone on X.\nLaunch a coin for any X handle. Every trade writes them a cheque. They cash it by signing in with X.",
+      "website_url": null,
+      "twitter_url": "https://x.com/chequeapp",
+      "telegram_url": null,
+      "discord_url": null,
+      "pairSymbol": "ETH",
+      "supply": "1000000000000000000000000000",
+      "priceUsd": 0.000003336,
+      "marketCapUsd": 3336,
+      "market": "uniswap_v4",
+      "graduationCandidate": true,
+      "requiredRpcVerification": {
+        "method": "getLaunchedToken(address)",
+        "expectedExists": true,
+        "expectedPhase": 2
+      },
+      "eligibleByMarketCap": false
+    },
+    {
+      "chain_id": 4663,
+      "name": "CHEQUE",
+      "symbol": "CHEQUEAPP",
+      "address": "0x864349237186beda08640f0041e81cff07eb4aa6",
+      "logo_url": "https://pbs.twimg.com/profile_images/2100808264112111616/LV2uK1zb_400x400.jpg",
+      "description": "https://trade.padre.gg/rk/moneyonsol",
+      "website_url": "https://trade.padre.gg/rk/moneyonsol",
+      "twitter_url": "https://x.com/chequeapp",
+      "telegram_url": null,
+      "discord_url": null,
+      "pairSymbol": "ERC20",
+      "supply": "1000000000000000000000000000",
+      "priceUsd": 0.000002092,
+      "marketCapUsd": 2092,
+      "market": "uniswap_v4",
+      "graduationCandidate": true,
+      "requiredRpcVerification": {
+        "method": "getLaunchedToken(address)",
+        "expectedExists": true,
+        "expectedPhase": 2
+      },
+      "eligibleByMarketCap": false
+    },
+    {
+      "chain_id": 4663,
+      "name": "FoneSocial",
+      "symbol": "FOSO",
+      "address": "0xf441068b5dc1a6cd8b5849dfeaff7e86c75aac45",
+      "logo_url": "https://ipfs.io/ipfs/QmTB6jCFzAutBjMyUSipDdbvXfWhZUqK5tctDUQe2aAdGo",
+      "description": "Post a thesis on  @fomo or @pumpfun, the coin buys itself back and burns. Onchain, automatic, immutable.",
+      "website_url": "https://fonesocial.app/",
+      "twitter_url": "https://x.com/FoneSocial",
+      "telegram_url": null,
+      "discord_url": null,
+      "pairSymbol": "ETH",
+      "supply": "885450376467165932231869223",
+      "priceUsd": 0.000004434,
+      "marketCapUsd": 3927,
+      "market": "uniswap_v4",
+      "graduationCandidate": true,
+      "requiredRpcVerification": {
+        "method": "getLaunchedToken(address)",
+        "expectedExists": true,
+        "expectedPhase": 2
+      },
+      "eligibleByMarketCap": false
+    },
+    {
+      "chain_id": 4663,
+      "name": "musewatch",
+      "symbol": "musewatch",
+      "address": "0x7be581cd5279e8919a350c6fd1fabba878c0374f",
+      "logo_url": "https://ipfs.io/ipfs/bafkreig2qbby2qkiupmiftnyxb7ds5iejj6kfngdsz6ipl22p7yqe4pjfm",
+      "description": "MuseWatch is the live explorer for the Muse ecosystem. Discover new Muses automatically, follow their public activity across supported platforms, explore their connections, and watch the entire ecosystem unfold through a real-time activity scanner.\n\nMuseWatch finds the Muses and tracks what they’re doing.\n\nDiscover. Monitor. Follow. 🔭",
+      "website_url": "https://musewatch.lol/",
+      "twitter_url": "https://x.com/MusewatchRH",
+      "telegram_url": null,
+      "discord_url": null,
+      "pairSymbol": "ETH",
+      "supply": "1000000000000000000000000000",
+      "priceUsd": 0.00001157,
+      "marketCapUsd": 11413,
+      "market": "uniswap_v4",
+      "graduationCandidate": true,
+      "requiredRpcVerification": {
+        "method": "getLaunchedToken(address)",
+        "expectedExists": true,
+        "expectedPhase": 2
+      },
+      "eligibleByMarketCap": false
+    },
+    {
+      "chain_id": 4663,
+      "name": "Vlad",
+      "symbol": "VLADCOIN",
+      "address": "0xb9dd0fee7288fc3c0ed6538b6a7b3e8206fbfba3",
+      "logo_url": "https://trywire.family/api/launch/image/7b8eaa07624e.jpg",
+      "description": "Fees to @vladtenev via Wire\n@vladtenev",
+      "website_url": "https://trywire.family",
+      "twitter_url": "https://x.com/vladtenev",
+      "telegram_url": null,
+      "discord_url": null,
+      "pairSymbol": "ETH",
+      "supply": "1000000000000000000000000000",
+      "priceUsd": 0.00003895,
+      "marketCapUsd": 38950,
+      "market": "uniswap_v4",
+      "graduationCandidate": true,
+      "requiredRpcVerification": {
+        "method": "getLaunchedToken(address)",
+        "expectedExists": true,
+        "expectedPhase": 2
+      },
+      "eligibleByMarketCap": false
+    },
+    {
+      "chain_id": 4663,
+      "name": "CHEQUE",
+      "symbol": "CHEQUE",
+      "address": "0xb74a9b7a3129bcc14069451d38de216c1f8667c1",
+      "logo_url": "https://ipfs.io/ipfs/bafkreib2emkwp2cefcven2tlpuriaaxqr7ibhwoco4c7wyxrwxsixnfjq4",
+      "description": "Cut a cheque to anyone on X.\nLaunch a coin for any X handle. Every trade writes them a cheque. They cash it by signing in with X.",
+      "website_url": null,
+      "twitter_url": "https://x.com/chequeapp",
+      "telegram_url": null,
+      "discord_url": null,
+      "pairSymbol": "ETH",
+      "supply": "1000000000000000000000000000",
+      "priceUsd": 0.000002684,
+      "marketCapUsd": 2684,
+      "market": "uniswap_v4",
+      "graduationCandidate": true,
+      "requiredRpcVerification": {
+        "method": "getLaunchedToken(address)",
+        "expectedExists": true,
+        "expectedPhase": 2
+      },
+      "eligibleByMarketCap": false
+    },
+    {
+      "chain_id": 4663,
+      "name": "CHEQUE",
+      "symbol": "CHEQUE",
+      "address": "0x768dd756f3c7bb024a3f7b4057f2ba16e620f755",
+      "logo_url": "https://ipfs.io/ipfs/bafkreib2emkwp2cefcven2tlpuriaaxqr7ibhwoco4c7wyxrwxsixnfjq4",
+      "description": "Cut a cheque to anyone on X.\nLaunch a coin for any X handle. Every trade writes them a cheque. They cash it by signing in with X.",
+      "website_url": null,
+      "twitter_url": "https://x.com/chequeapp",
+      "telegram_url": null,
+      "discord_url": null,
+      "pairSymbol": "ETH",
+      "supply": "1000000000000000000000000000",
+      "priceUsd": 0.0004989,
+      "marketCapUsd": 498973,
+      "market": "uniswap_v4",
+      "graduationCandidate": true,
+      "requiredRpcVerification": {
+        "method": "getLaunchedToken(address)",
+        "expectedExists": true,
+        "expectedPhase": 2
+      },
+      "eligibleByMarketCap": false
+    },
+    {
+      "chain_id": 4663,
+      "name": "launchpost",
+      "symbol": "$LAUNCHPOST",
+      "address": "0x32a47bcfae323fcaa0d5b22cd0c67ca434ae4100",
+      "logo_url": "https://media.launchpost.fun/logos/x-2100809393248067622.png",
+      "description": "Launch a coin from any post. Tag the bot with a ticker on X, Telegram or Discord and it's live on Robinhood Chain in seconds. 70% of fees to whoever posted.",
+      "website_url": null,
+      "twitter_url": "https://x.com/launchpostbot",
+      "telegram_url": null,
+      "discord_url": null,
+      "pairSymbol": "ETH",
+      "supply": "1000000000000000000000000000",
+      "priceUsd": 0.00006366,
+      "marketCapUsd": 61877,
+      "market": "uniswap_v4",
+      "graduationCandidate": true,
+      "requiredRpcVerification": {
+        "method": "getLaunchedToken(address)",
+        "expectedExists": true,
+        "expectedPhase": 2
+      },
+      "eligibleByMarketCap": false
+    },
+    {
+      "chain_id": 4663,
+      "name": "Bridged FXRP",
+      "symbol": "bFXRP",
+      "address": "0x9c468454979e3145869246e301b9570c5380cdd8",
+      "logo_url": "https://iili.io/nxa3viG.md.jpg",
+      "description": "Put your XRP to work. earn yield, lend, trade, and stake it across the Flare ecosystem",
+      "website_url": "https://xrpfi.flare.network/defi",
+      "twitter_url": null,
+      "telegram_url": null,
+      "discord_url": null,
+      "pairSymbol": "ETH",
+      "supply": "1000000000000000000000000000",
+      "priceUsd": 0.000008737,
+      "marketCapUsd": 8738,
+      "market": "uniswap_v4",
+      "graduationCandidate": true,
+      "requiredRpcVerification": {
+        "method": "getLaunchedToken(address)",
+        "expectedExists": true,
+        "expectedPhase": 2
+      },
+      "eligibleByMarketCap": false
+    },
+    {
+      "chain_id": 4663,
+      "name": "Levera Markets",
+      "symbol": "LEVERA",
+      "address": "0x492f71fb6cb10f923b0740436f5cd39c7c9a177a",
+      "logo_url": "https://ipfs.io/ipfs/bafkreic7hrjowl24467ucacxycbdj32y53h5icoxyo7ny6sdh4ncteayxe",
+      "description": "Leverage for tokenized assets on Robinhood Chain.\nBorrow, earn, and build exposure. All in one place.",
+      "website_url": null,
+      "twitter_url": "https://x.com/LeveraMarke6",
+      "telegram_url": null,
+      "discord_url": null,
+      "pairSymbol": "ETH",
+      "supply": "1000000000000000000000000000",
+      "priceUsd": 0.00002386,
+      "marketCapUsd": 23862,
+      "market": "uniswap_v4",
+      "graduationCandidate": true,
+      "requiredRpcVerification": {
+        "method": "getLaunchedToken(address)",
+        "expectedExists": true,
+        "expectedPhase": 2
+      },
+      "eligibleByMarketCap": false
+    }
+  ]
+}

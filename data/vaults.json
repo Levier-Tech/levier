@@ -1,0 +1,57 @@
+[
+  {
+    "id": "levera-usdg-vault-testnet",
+    "name": "Levera USDG Yield Vault",
+    "symbol": "lvUSDG",
+    "network": "TESTNET",
+    "assetSymbol": "USDG",
+    "apy": 7.15,
+    "tvlUsd": 4850000,
+    "utilizationRate": 78.4,
+    "riskTier": "Conservative",
+    "allocations": [
+      { "symbol": "NVDA", "weightPercent": 25 },
+      { "symbol": "AAPL", "weightPercent": 20 },
+      { "symbol": "META", "weightPercent": 15 },
+      { "symbol": "AMZN", "weightPercent": 15 },
+      { "symbol": "WETH", "weightPercent": 15 },
+      { "symbol": "Cash Reserve", "weightPercent": 10 }
+    ]
+  },
+  {
+    "id": "levera-usd-vault-testnet",
+    "name": "Levera USDC Vault",
+    "symbol": "lvUSD",
+    "network": "TESTNET",
+    "assetSymbol": "USDC",
+    "apy": 6.85,
+    "tvlUsd": 3660000,
+    "utilizationRate": 74.2,
+    "riskTier": "Conservative",
+    "allocations": [
+      { "symbol": "NVDA", "weightPercent": 30 },
+      { "symbol": "AAPL", "weightPercent": 25 },
+      { "symbol": "SPY", "weightPercent": 25 },
+      { "symbol": "TSLA", "weightPercent": 10 },
+      { "symbol": "Cash Reserve", "weightPercent": 10 }
+    ]
+  },
+  {
+    "id": "levera-usdg-vault-mainnet",
+    "name": "Levera USDG Yield Vault",
+    "symbol": "lvUSDG",
+    "network": "MAINNET",
+    "assetSymbol": "USDG",
+    "apy": 7.80,
+    "tvlUsd": 32100000,
+    "utilizationRate": 84.2,
+    "riskTier": "Conservative",
+    "allocations": [
+      { "symbol": "NVDA", "weightPercent": 30 },
+      { "symbol": "AAPL", "weightPercent": 25 },
+      { "symbol": "META", "weightPercent": 20 },
+      { "symbol": "AMZN", "weightPercent": 15 },
+      { "symbol": "Cash Reserve", "weightPercent": 10 }
+    ]
+  }
+]

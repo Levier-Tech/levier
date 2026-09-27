@@ -1,0 +1,42 @@
+[
+  {
+    "ticker": "TSLA",
+    "name": "Tesla",
+    "image": "/assets/tesla.svg",
+    "className": "tesla",
+    "indexStr": "01 / 05",
+    "featured": true
+  },
+  {
+    "ticker": "AMZN",
+    "name": "Amazon",
+    "image": "/assets/amazon.svg",
+    "className": "amazon",
+    "indexStr": "02 / 05",
+    "featured": true
+  },
+  {
+    "ticker": "PLTR",
+    "name": "Palantir",
+    "image": "/assets/palantir.svg",
+    "className": "palantir",
+    "indexStr": "03 / 05",
+    "featured": true
+  },
+  {
+    "ticker": "NFLX",
+    "name": "Netflix",
+    "image": "/assets/netflix.svg",
+    "className": "netflix",
+    "indexStr": "04 / 05",
+    "featured": true
+  },
+  {
+    "ticker": "AMD",
+    "name": "Advanced Micro Devices",
+    "image": "/assets/amd.svg",
+    "className": "amd",
+    "indexStr": "05 / 05",
+    "featured": true
+  }
+]

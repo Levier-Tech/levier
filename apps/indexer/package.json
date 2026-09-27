@@ -1,0 +1,24 @@
+{
+  "name": "@levera/indexer",
+  "version": "0.1.0",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "tsx src/index.ts --serve ../../.env.testnet",
+    "build": "tsc",
+    "start": "node --import tsx dist/index.js --serve --runtime",
+    "lint": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@levera/types": "workspace:*",
+    "@supabase/supabase-js": "^2.42.0",
+    "dotenv": "^16.4.5",
+    "viem": "^2.9.11",
+    "zod": "^3.22.4"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.30",
+    "tsx": "^4.7.1",
+    "typescript": "^5.4.3"
+  }
+}

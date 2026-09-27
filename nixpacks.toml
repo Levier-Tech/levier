@@ -1,0 +1,14 @@
+[providers]
+node = "pnpm"
+
+[phases.setup]
+cmds = ["corepack enable"]
+
+[phases.install]
+cmds = ["pnpm install"]
+
+[phases.build]
+cmds = ["pnpm run build"]
+
+[start]
+cmd = "sh -c 'pnpm --filter=@levera/${SERVICE:-web} start'"

@@ -1,0 +1,115 @@
+# ==========================================
+# Dependencies & Package Managers
+# ==========================================
+node_modules/
+.pnpm-store/
+.npm/
+.yarn/
+.turbo/
+**/.turbo/
+
+# ==========================================
+# Next.js & TypeScript Build Outputs
+# ==========================================
+.next/
+out/
+build/
+!packages/contracts/vendor/uniswap-v2-core/build/
+packages/contracts/vendor/uniswap-v2-core/build/*
+!packages/contracts/vendor/uniswap-v2-core/build/UniswapV2Factory.json
+!packages/contracts/vendor/uniswap-v2-core/build/UniswapV2Pair.json
+dist/
+*.tsbuildinfo
+**/*.tsbuildinfo
+
+# ==========================================
+# Foundry / Smart Contracts Build Artifacts & Broadcast Logs
+# (STRICT: broadcast/ contains deployment transactions and wallet addresses)
+# ==========================================
+broadcast/
+**/broadcast/
+cache/
+**/cache/
+artifacts/
+**/artifacts/
+
+# ==========================================
+# Environment Files & Secrets (STRICT - NEVER COMMIT)
+# ==========================================
+.env
+.env.*
+.env*.local
+**/.env
+**/.env.*
+**/.env*.local
+
+# Whitelist example environment templates only
+!.env.example
+!.env.testnet.example
+!.env.mainnet.example
+!**/.env.example
+!**/.env.testnet.example
+!**/.env.mainnet.example
+!**/.env.*.example
+
+# ==========================================
+# Private Keys, Certificates, Keystores & Wallets
+# ==========================================
+*.pem
+*.key
+*.keystore
+*.pkcs12
+*.p12
+*.pfx
+*private_key*
+*private-key*
+*privkey*
+*secret*
+*mnemonic*
+secrets/
+**/secrets/
+keystore/
+**/keystore/
+wallets/
+**/wallets/
+
+# ==========================================
+# Logs & Diagnostic Files
+# ==========================================
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+forge-test-*.log
+anvil.log
+
+# ==========================================
+# IDE, Editor & OS Files
+# ==========================================
+.DS_Store
+**/.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.sublime-workspace
+*.swp
+*~
+
+# ==========================================
+# Local Database / Supabase Local Dumps
+# ==========================================
+.supabase/local/
+supabase/.temp/
+
+# Additional local sensitive artifacts
+.secrets/
+**/.secrets/
+*.dump
+*.backup
+*.sqlite
+*.sqlite3
+*.env
+
+/docs
+/tests

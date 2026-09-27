@@ -1,0 +1,13 @@
+# Foundry
+out/
+cache/
+broadcast/
+
+# Environment & Keys
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+*.keystore
+private_key*

@@ -1,0 +1,37 @@
+"use client";
+
+import React from "react";
+import "./globals.css";
+import { Header } from "../components/Header";
+import { Footer } from "../components/Footer";
+import { Web3Provider } from "../providers/Web3Provider";
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <html lang="en" className="dark">
+      <head>
+        <title>LEVERA MARKETS | Credit & Leverage for Tokenized Assets</title>
+        <meta
+          name="description"
+          content="The credit and leverage layer for tokenized assets on Robinhood Chain. Explore the Levera Markets interface."
+        />
+        <meta name="theme-color" content="#080808" />
+        <link rel="icon" type="image/png" href="/assets/Logo.png" />
+        <link rel="apple-touch-icon" href="/assets/Logo.png" />
+      </head>
+      <body className="bg-[#080808] text-[#f4f4f0] min-h-screen flex flex-col font-sans selection:bg-[#c2ff47] selection:text-[#080808] antialiased">
+        <Web3Provider>
+          <Header />
+          <main id="main" className="flex-1 w-full mx-auto pt-[79px] min-[901px]:pt-[86px] min-[1051px]:pt-[100px]">
+            {children}
+          </main>
+          <Footer />
+        </Web3Provider>
+      </body>
+    </html>
+  );
+}

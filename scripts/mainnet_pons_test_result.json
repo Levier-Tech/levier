@@ -1,0 +1,51 @@
+{
+  "network": "Robinhood Chain Mainnet",
+  "chainId": 4663,
+  "rpcUrl": "https://robinhood-mainnet.g.alchemy.com/v2/alch_***",
+  "minMarketCapThreshold": 1000000,
+  "totalGraduatedFound": 177,
+  "eligibleTokensCount": 0,
+  "eligibleTokens": [],
+  "allTokens": [
+    {
+      "tokenAddress": "0xbf0c65428dae9f202dc96eb5888d0d8ff137ccd9",
+      "name": "Secant Protocol",
+      "symbol": "SECANT",
+      "priceUsd": 0.00005145000000000001,
+      "marketCapUsd": 51450.00000000001,
+      "eligible": false
+    },
+    {
+      "tokenAddress": "0xc43f61cd9e694990436564fc3648e48f89abacf0",
+      "name": "WYNJR",
+      "symbol": "WYNJR",
+      "priceUsd": 0.000028315000000000006,
+      "marketCapUsd": 28315.000000000007,
+      "eligible": false
+    },
+    {
+      "tokenAddress": "0x35edd3c7c80117bb64e10ec826406feb23bebec6",
+      "name": "MEADGod",
+      "symbol": "OZZY",
+      "priceUsd": 0.00005145000000000001,
+      "marketCapUsd": 51450.00000000001,
+      "eligible": false
+    },
+    {
+      "tokenAddress": "0xc920e028d3ec33b1b9b274fc4508300f027260b9",
+      "name": "just a slighty used motorhome",
+      "symbol": "MOTORHOME",
+      "priceUsd": 0.000028315000000000006,
+      "marketCapUsd": 28315.000000000007,
+      "eligible": false
+    },
+    {
+      "tokenAddress": "0xf8c5e1f9b14398f1a814561c9694ac5b36c3f21f",
+      "name": "Jollybot",
+      "symbol": "JOLLYBOT",
+      "priceUsd": 0.000028315000000000006,
+      "marketCapUsd": 28315.000000000007,
+      "eligible": false
+    }
+  ]
+}

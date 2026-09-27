@@ -1,0 +1,23 @@
+[
+  {
+    "address": "0x0000000000000000000000000000000000000001",
+    "symbol": "PMEME",
+    "name": "Pons Meme Token",
+    "image": "/assets/pons/pmeme.svg",
+    "description": "First graduated meme token from Pons bonding curve"
+  },
+  {
+    "address": "0x0000000000000000000000000000000000000002",
+    "symbol": "PGOV",
+    "name": "Pons Governance",
+    "image": "/assets/pons/pgov.svg",
+    "description": "Governance token graduated from Pons"
+  },
+  {
+    "address": "0x0000000000000000000000000000000000000003",
+    "symbol": "PNFT",
+    "name": "Pons NFT Finance",
+    "image": "/assets/pons/pnft.svg",
+    "description": "NFT finance protocol token graduated from Pons"
+  }
+]

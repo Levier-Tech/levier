@@ -1,0 +1,53 @@
+.scroll-stack-scroller {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: visible;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  will-change: scroll-position;
+}
+
+.scroll-stack-inner {
+  padding: 1rem 0 4rem;
+  position: relative;
+}
+
+.scroll-stack-card-wrapper {
+  position: relative;
+}
+
+.scroll-stack-card {
+  transform-origin: top center;
+  will-change: transform, filter;
+  backface-visibility: hidden;
+  transform-style: preserve-3d;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+  height: auto;
+  min-height: 14rem;
+  width: 100%;
+  margin: 20px 0;
+  padding: 2.5rem;
+  border-radius: 4px;
+  background-color: #080908;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-sizing: border-box;
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  position: relative;
+  transition: border-color 0.3s ease;
+}
+
+.scroll-stack-card:hover {
+  border-color: rgba(0, 128, 0, 0.5);
+}
+
+.scroll-stack-end {
+  width: 100%;
+  height: 10rem;
+  clear: both;
+}

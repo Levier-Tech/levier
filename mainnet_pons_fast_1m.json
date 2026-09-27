@@ -1,0 +1,191 @@
+{
+  "network": {
+    "name": "Robinhood Chain Mainnet",
+    "chainId": 4663
+  },
+  "pons": {
+    "factoryV2": "0x7eD598BcEf8bd9Edd8C97A195C6d13f40801EC7e"
+  },
+  "filter": {
+    "ponsOnly": true,
+    "graduatedOnly": true,
+    "minimumMarketCapUsd": 1000000,
+    "requestedLimit": 8
+  },
+  "result": {
+    "requested": 8,
+    "returned": 7,
+    "complete": true,
+    "reason": "Successfully fetched metadata and real-time DexScreener pricing for target candidates > 1M MC."
+  },
+  "tokens": [
+    {
+      "chain_id": 4663,
+      "name": "ZZZ",
+      "symbol": "ZZZ",
+      "address": "0x7dbf38976f6d3b9c529e7d9484a71898b409ee6a",
+      "logo_url": "https://ipfs.io/ipfs/bafybeibu52cvzvhxiujhhmxspeizjmkbae2v4ovfncft66oizaqfuacbwm",
+      "description": "\"independent investigators finding that dozens of wikis may have been edited by this same swarm\"\n\n\"Once the agents realized what was happening, they started prefacing all their wiki edits with 'ZZZ' to push them to the bottom of the queue\"\n\n~ AndrewCurran_",
+      "website_url": null,
+      "twitter_url": null,
+      "telegram_url": null,
+      "discord_url": null,
+      "pairSymbol": "ETH",
+      "supply": "840000000000000000000000000",
+      "priceUsd": 0.02292,
+      "marketCapUsd": 19023382,
+      "market": "uniswap_v4",
+      "graduationCandidate": true,
+      "requiredRpcVerification": {
+        "method": "getLaunchedToken(address)",
+        "expectedExists": true,
+        "expectedPhase": 2
+      },
+      "eligibleByMarketCap": true
+    },
+    {
+      "chain_id": 4663,
+      "name": "Longbow",
+      "symbol": "BOW",
+      "address": "0x451b42A15100C340CA12F7c66DE06fac5EA2D751",
+      "logo_url": "https://ipfs.io/ipfs/bafkreie3adpvb2ogx5btharginrahlzczwj2fyuiydkvrelw42jneti27e",
+      "description": "ongbow is the credit layer for Robinhood Chain. Borrow USDG against tokenized stocks, RWAs, crypto and project tokens, without selling what you hold. Powered by Morpho Blue, with Chainlink pricing the major markets and a Uniswap v3 TWAP pricing project tok",
+      "website_url": null,
+      "twitter_url": "https://x.com/l",
+      "telegram_url": "https://t.me/longbowlend",
+      "discord_url": null,
+      "pairSymbol": "ERC20",
+      "supply": "1000000000000000000000000000",
+      "priceUsd": 0.007273,
+      "marketCapUsd": 7273980,
+      "market": "uniswap_v4",
+      "graduationCandidate": true,
+      "requiredRpcVerification": {
+        "method": "getLaunchedToken(address)",
+        "expectedExists": true,
+        "expectedPhase": 2
+      },
+      "eligibleByMarketCap": true
+    },
+    {
+      "chain_id": 4663,
+      "name": "microduck",
+      "symbol": "microduck",
+      "address": "0xD5f1afEA47b1A9eab414D2ee740cF1d6d039E725",
+      "logo_url": "https://axiomtrading-v2.axiom-cdn.io/6MTJE7ySqC1ENB7ZYDvVarEG71S7N3SuyyPrL83nbdU9.webp",
+      "description": "",
+      "website_url": null,
+      "twitter_url": null,
+      "telegram_url": null,
+      "discord_url": null,
+      "pairSymbol": "ERC20",
+      "supply": "1000000000000000000000000000",
+      "priceUsd": 0.005616,
+      "marketCapUsd": 5616894,
+      "market": "uniswap_v4",
+      "graduationCandidate": true,
+      "requiredRpcVerification": {
+        "method": "getLaunchedToken(address)",
+        "expectedExists": true,
+        "expectedPhase": 2
+      },
+      "eligibleByMarketCap": true
+    },
+    {
+      "chain_id": 4663,
+      "name": "Route",
+      "symbol": "ROUTE",
+      "address": "0x4A72B9702f991b790788f8AFA9e7112541f4E8f8",
+      "logo_url": "https://ipfs.io/ipfs/bafkreig7lxqgeeznhhrgqg7ejjp45twmt2cbqf72kck6bdid5e6eh3hljm",
+      "description": "",
+      "website_url": null,
+      "twitter_url": "https://x.com/routedotfun",
+      "telegram_url": null,
+      "discord_url": null,
+      "pairSymbol": "ETH",
+      "supply": "1000000000000000000000000000",
+      "priceUsd": 0.00406,
+      "marketCapUsd": 4056026,
+      "market": "uniswap_v4",
+      "graduationCandidate": true,
+      "requiredRpcVerification": {
+        "method": "getLaunchedToken(address)",
+        "expectedExists": true,
+        "expectedPhase": 2
+      },
+      "eligibleByMarketCap": true
+    },
+    {
+      "chain_id": 4663,
+      "name": "Robin the Frog",
+      "symbol": "ROBIN",
+      "address": "0x11B70d0243baf75E85CE03201A92b5B7C33BEB59",
+      "logo_url": "https://ipfs.io/ipfs/QmRTbjEcnz4aRu26wbU4CvGQgDmqdQ8Sa2f6SXU9c2uDVF",
+      "description": "Robin the Frog from The Muppets. Kermit’s nephew, featured in Muppet Robin Hood. The official mascot of Robinhood Chain.",
+      "website_url": "http://therobincoin.xyz",
+      "twitter_url": null,
+      "telegram_url": "https://x.com/robincoinrh",
+      "discord_url": null,
+      "pairSymbol": "ERC20",
+      "supply": "992491223611121337955507681",
+      "priceUsd": 0.004266,
+      "marketCapUsd": 4022214,
+      "market": "uniswap_v4",
+      "graduationCandidate": true,
+      "requiredRpcVerification": {
+        "method": "getLaunchedToken(address)",
+        "expectedExists": true,
+        "expectedPhase": 2
+      },
+      "eligibleByMarketCap": true
+    },
+    {
+      "chain_id": 4663,
+      "name": "The Bull",
+      "symbol": "BULL",
+      "address": "0x49bac47750F3dCdBa49350B5D74fd399e90f97C6",
+      "logo_url": "https://ipfs.io/ipfs/bafkreidnu2xjqhfwl6butgtsefmpgfv74f6b47cnurkkvpycayasmcrzzq",
+      "description": "Robinhood's Bull, now onchain ⛓️\n\nJoin the herd & Spread the Way of the Bull 🐂🍀",
+      "website_url": null,
+      "twitter_url": "https://x.com/BullcoinRH",
+      "telegram_url": "https://t.me/bullcoinportal",
+      "discord_url": null,
+      "pairSymbol": "ETH",
+      "supply": "999985146295225256564710070",
+      "priceUsd": 0.001763,
+      "marketCapUsd": 1763805,
+      "market": "uniswap_v4",
+      "graduationCandidate": true,
+      "requiredRpcVerification": {
+        "method": "getLaunchedToken(address)",
+        "expectedExists": true,
+        "expectedPhase": 2
+      },
+      "eligibleByMarketCap": true
+    },
+    {
+      "chain_id": 4663,
+      "name": "PENPE",
+      "symbol": "PENPE",
+      "address": "0xb83fC6010C8Dcf628abE787a161c619FcC543117",
+      "logo_url": "https://ipfs.io/ipfs/bafkreieytv6gpanrzmuoeeezwicw4wtnzupjrjhdeufzavcod74waivoya",
+      "description": "Father of pepe, without me wouldn’t be him so far ",
+      "website_url": "https://penpehood.fun",
+      "twitter_url": "https://x.com/penpehood",
+      "telegram_url": "https://t.me/penpehood",
+      "discord_url": null,
+      "pairSymbol": "ERC20",
+      "supply": "1000000000000000000000000000",
+      "priceUsd": 0.002191,
+      "marketCapUsd": 2169626,
+      "market": "uniswap_v4",
+      "graduationCandidate": true,
+      "requiredRpcVerification": {
+        "method": "getLaunchedToken(address)",
+        "expectedExists": true,
+        "expectedPhase": 2
+      },
+      "eligibleByMarketCap": true
+    }
+  ]
+}
