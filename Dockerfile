@@ -77,10 +77,10 @@ RUN if [ "$SERVICE" = "backend" ]; then \
     elif [ "$SERVICE" = "all" ]; then \
       pnpm run build; \
     else \
-      pnpm --filter=@levera/${SERVICE} build; \
+      pnpm --filter=@levier/${SERVICE} build; \
     fi
 
 # Expose common service ports (Next.js web: 3000/dynamic, API: 3001/dynamic)
 EXPOSE 3000 3001 8080
 
-CMD ["sh", "-c", "if [ \"$SERVICE\" = \"backend\" ]; then node scripts/run-all-backend.mjs; else pnpm --filter=@levera/${SERVICE:-web} start; fi"]
+CMD ["sh", "-c", "if [ \"$SERVICE\" = \"backend\" ]; then node scripts/run-all-backend.mjs; else pnpm --filter=@levier/${SERVICE:-web} start; fi"]

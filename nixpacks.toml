@@ -11,4 +11,4 @@ cmds = ["pnpm install"]
 cmds = ["pnpm run build"]
 
 [start]
-cmd = "sh -c 'pnpm --filter=@levera/${SERVICE:-web} start'"
+cmd = "sh -c 'pnpm --filter=@levier/${SERVICE:-web} start'"
