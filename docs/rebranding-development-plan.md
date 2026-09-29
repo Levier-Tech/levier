@@ -291,39 +291,68 @@ TSLA/USDG lifecycle before anyone touches mainnet.
   become reachable — deploying to mainnet before this phase would skip
   the one testnet proof that the rename didn't silently break anything.
 
-### Phase 13.6 — Remaining Contract Deployment (deferred, not started)
+### Phase 13.6 — Remaining Contract Deployment — Status: DONE (testnet), 1 contract mainnet-only
 
-**Owner decision**: relaunching as a brand-new product, not just doing a
-brand-string swap — every contract in `packages/contracts/src` should
-eventually deploy to testnet and mainnet under the `Levier*` names, not
-just the 8 already live (Phase 13.5). Deferred here, per-contract, with
-exactly what's blocking each one:
+**Owner decision**: relaunching as a brand-new product, so every contract in
+`packages/contracts/src` deploys under the `Levier*` names. The earlier version
+of this section listed most contracts as blocked. Those blockers turned out to
+be avoidable on testnet, and 18 of 19 contracts are now live on RH Testnet
+(chain 46630). Addresses are in `packages/contracts/deployments/testnet-46630.json`
+(core), `pons-testnet-46630.json` (Pons group) and `.secrets/rh-live/state.json`
+(margin group, journaled).
 
-- **`RhShortReferenceOracle`** — ready to deploy any time. Self-contained:
-  only needs the already-deployed `RhTestnetReferenceOracle`, the existing
-  binding hash, and the existing TSLA/USDG addresses. No new external data.
-- **`MarginRouter`** — blocked. Needs a real DEX/AMM factory contract
-  address on RH Testnet for swap routing. Checked Robinhood's public docs
-  (`docs.robinhood.com/chain/contracts`) — no such address is published for
-  either mainnet (4663) or testnet (46630). Needs Robinhood support/Discord
-  confirmation, or standing up an own AMM as new infra.
-- **`LeveragePositionManager`, `PonsMarketAdapter`, `PonsRiskEngine`,
-  `PonsLeverageRegistry`, `PonsOracleRouter`, `PonsAutoProtectModule`** —
-  blocked. All hard-require a real Pons-graduated token
-  (`LeveragePositionManager`'s own doc comment: "Manages leveraged
-  long/short positions for Pons-graduated assets"). No Levier-branded Pons
-  token exists yet — launching one is a product decision via Pons's own
-  platform, not a config lookup. Matches §5's existing note that Levier's
-  own Pons token is "a separate, future decision."
-- **`VerifiedFeedOracle`** — not applicable to testnet. Needs a real
-  Chainlink-style L2 sequencer uptime feed; mainnet-only tooling.
-- **Additional stock pairs (AAPL/SPY/NVDA)** — blocked. No testnet
-  contract address discoverable anywhere (Robinhood's public `/assets` API
-  only lists mainnet chain 4663 deployments; the only reason TSLA/USDG's
-  real testnet addresses were knowable at all was reading them off the
-  *already-deployed* legacy `LeveraPair`, and no such pair exists for these
-  assets). Needs Robinhood support/Discord to confirm testnet addresses, or
-  their own token-deployment decision.
+- **Pons group — deployed.** `PonsOracleRouter`, `PonsMarketAdapter`,
+  `PonsLeverageRegistry`, `PonsRiskEngine`, `LeveragePositionManager`,
+  `PonsAutoProtectModule`, plus `CompositeSanityOracle` and mock `PMEME`/`PGOV`
+  tokens, via `packages/contracts/script/DeployPons.s.sol` (now reuses the real
+  faucet USDG through `USDG_ADDRESS` and writes
+  `deployments/pons-testnet-46630.json`). The mock tokens and the manual
+  graduation flags exist for testing only. A real Levier Pons token is still a
+  separate product decision (see §5).
+- **Margin group — deployed and accepted.** `MarginRouter`,
+  `RhShortReferenceOracle`, the short `LevierPair`, and a UniswapV2 factory and
+  TSLA/USDG pool. The earlier "blocked, needs a Robinhood DEX factory" note was
+  wrong: `pnpm deploy:rh-margin` deploys its own V2 factory and pool from the
+  vendored bytecode in `packages/contracts/vendor/uniswap-v2-core/`. The funded
+  long and short open/close acceptance cycle passed. Run it with
+  `levier testnet deploy margin`.
+- **`VerifiedFeedOracle` — not deployed.** Needs a real Chainlink-style L2
+  sequencer uptime feed, which exists on mainnet only.
+- **Additional stock markets (AAPL/SPY/NVDA and AMZN/PLTR/NFLX/AMD) — not
+  deployed.** No published testnet token addresses. The expansion pipeline
+  (`pnpm rh:markets:*`) exists but has no approved draft in `.env.testnet`
+  (`RH_EXPANSION_DRAFT_JSON`).
+
+### Phase 13.7 — Testnet Website Enablement & Publisher Stability — Status: DONE
+
+Found while making the deployed site testable (`https://levier-testnet.up.railway.app`):
+
+- The markets stayed hidden because `MARKET_DEPLOYMENTS_JSON` had `enabled:false`
+  and `MARGIN_TRADING_ENABLED` / `LENDING_ENABLED` were `false` on the Railway
+  `web` service. Build-time ARGs in the `Dockerfile` mean any change needs a
+  rebuild. `levier testnet enable` applies them.
+- `/trade` was wired only to the Pons market client. `MarginTradePanel` was never
+  mounted, so a configured stock/USDG market showed "Market not found".
+  `apps/web/src/app/trade/page.tsx` now opens the margin panel when the asset
+  matches a configured market.
+- `/api/margin/history` and `/api/lending/history` returned 503 because the
+  explorer's `next_page_params` gained extra keys (`value`, `hash`,
+  `inserted_at`, `fee`) that the strict cursor schema rejected.
+  `historyCursorSchema` now allows them, each strictly validated.
+- The price publisher kept stopping and pausing the markets. Causes found:
+  (1) `OWNER_PAUSE_BUDGET_REQUIRED`, because `maxTransactionGasCostWei` of 1e15 in
+  `RH_PUBLISHER_POLICY_JSON` made the pause reserve exceed the signer budget; it is
+  now 1e14; (2) the Kraken USDG websocket answered HTTP 429 after too many
+  connections, so `intervalMs` is now 45000 and the restart loop waits 90 s;
+  (3) `unsupported block number` from a lagging RPC node, now retried in
+  `scripts/lib/rh-live.mjs`. Failures that used to be fully redacted now leave a
+  masked trace in `.secrets/rh-live/publisher-errors.log`.
+- The publisher activates the markets itself and requires them paused at start.
+  Do not un-pause markets by hand before starting it. Keep it running with
+  `levier testnet publisher`.
+- Verified through the deployed UI with a signing test wallet: open and close of
+  a Long and a Short, and deposit, borrow, repay and withdraw on `/lending`.
+  A real browser-wallet session has not been recorded yet.
 
 ### Phase 14 — ABI Regeneration + Frontend Contract Bindings — Status: DONE
 
@@ -567,8 +596,8 @@ rehearsed on testnet/dry-run before the two real-money steps happen.
 - [x] Phases 1–14 complete; final repo-wide `grep -ri "levera"` returns
       only §5 out-of-scope items (Pons external data, legacy chain-31337
       deployment records) and the `@LeveraMarke6` social handle (Phase 16,
-      owner decision). Phase 13.6 (remaining contracts) and Phase 15/16
-      (manual/product) remain open by design — see those sections.
+      owner decision). Phase 13.6 is done on testnet apart from `VerifiedFeedOracle` and extra stock
+      markets, and Phase 15/16 (manual/product) remain open by design — see those sections.
       **Real Phase 1 gap found and fixed while running this gate**:
       `README.md`'s architecture diagram, contract-description table, and
       deployment-status table still said `Levera*` throughout — Phase 1
