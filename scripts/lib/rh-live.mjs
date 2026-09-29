@@ -97,7 +97,27 @@ export async function context(profile) {
     },
     rpcUrls: { default: { http: [env.RPC_URL] } },
   });
-  const transport = v.http(env.RPC_URL, { timeout, retryCount: 0 });
+  const httpTransport = v.http(env.RPC_URL, { timeout, retryCount: 0 });
+  // The RPC endpoint sits behind several nodes. A node that is a block behind rejects reads pinned to the
+  // newest block ("unsupported block number"), so retry only those rejections; sends are never retried.
+  const behindNode = /unsupported block number|header not found|block not found|unknown block/i;
+  const transport = (options) => {
+    const inner = httpTransport(options);
+    return {
+      ...inner,
+      request: async (args) => {
+        for (let attempt = 0; ; attempt++) {
+          try {
+            return await inner.request(args);
+          } catch (error) {
+            const detail = String(error?.details ?? error?.shortMessage ?? error?.message);
+            if (attempt >= 5 || !behindNode.test(detail)) throw error;
+            await new Promise((resolve) => setTimeout(resolve, 1200));
+          }
+        }
+      },
+    };
+  };
   const client = v.createPublicClient({ chain, transport, cacheTime: 0 });
   assert((await client.getChainId()) === 46630, "RPC_CHAIN_MISMATCH");
   const deployer = privateKeyToAccount(env.PRIVATE_KEY),
