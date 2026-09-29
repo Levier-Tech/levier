@@ -20,8 +20,6 @@ export default function RootLayout({
           content="The credit and leverage layer for tokenized assets on Robinhood Chain. Explore the Levier Markets interface."
         />
         <meta name="theme-color" content="#080808" />
-        <link rel="icon" type="image/png" href="/assets/levier-logo-new-trimmed.png" />
-        <link rel="apple-touch-icon" href="/assets/levier-logo-new-trimmed.png" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link
