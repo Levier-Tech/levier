@@ -17,6 +17,7 @@ set +a
 : "${RPC_URL:?RPC_URL missing}" "${PRIVATE_KEY:?PRIVATE_KEY missing}" "${USDG_ADDRESS:?USDG_ADDRESS missing}"
 
 confirm() {
+  [ "${LEVIER_YES:-}" = "1" ] && { echo "$1 [auto-yes]"; return 0; }
   read -r -p "$1 [y/N] " reply
   [[ "$reply" =~ ^[Yy]$ ]] || { echo "Aborted."; exit 1; }
 }

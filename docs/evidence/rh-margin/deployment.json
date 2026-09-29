@@ -1,0 +1,156 @@
+{
+  "capturedAt": "2026-09-29T08:37:30.987Z",
+  "descriptor": {
+    "chainId": 46630,
+    "owner": "0xFE29CF5C0c75E8c905128d0344160C3664f33B10",
+    "router": "0x2c7ca6d241c8b1573f83df764d921d3d97931a38",
+    "factory": "0xb9920614b2842d132aa9f5485f39283738d21139",
+    "pool": "0x86A5531A26807E81EFDC2b7822A7a7b238a385C2",
+    "longPair": "0x43b3c72fa2e5b0b8ba8b610b7a39ce4c33ed38aa",
+    "short": {
+      "chainId": 46630,
+      "marketId": "0xe88dfea8eff943c2c403ce19926864ad1cd688dd4b3bc55c74d82dfe0b0360d4",
+      "pair": "0xa1c74a56ffecd1a472c86660696a7e92a8e87739",
+      "registry": "0x41d7f4c434de83d1602c5a0bd548d1b985c8fff3",
+      "oracle": "0x9aff05d9b3f81db43c54b6223476ff960431fecf",
+      "collateral": "0x7E955252E15c84f5768B83c41a71F9eba181802F",
+      "debt": "0xC9f9c86933092BbbfFF3CCb4b105A4A94bf3Bd4E",
+      "collateralSymbol": "USDG",
+      "debtSymbol": "TSLA",
+      "collateralDecimals": 6,
+      "debtDecimals": 18,
+      "codeHashes": {
+        "pair": "0x713b28892bfd2096ba97c2bf83237bc838100ecef313a0fdf9b86d1ac158e75e",
+        "registry": "0x7339ef8ed68f8eff3564679c488c72d3f85ca62806b4ca1fff9927b2ca967c05",
+        "oracle": "0x3a429dc502032b8baf897b21ff9bb2b815c37b01acac81931586bc2655e72455",
+        "collateral": "0x864cc9ad53b338b82da1f7cab85ab0b3d5c8861acb422b6fec63cf36234f36a6",
+        "debt": "0x2f367e6a678e7b30ab613d5963e541e6f4d3ca586de76e2f441fbfeb1a27c440"
+      }
+    },
+    "codeHashes": {
+      "router": "0x8b61f4bad90bc24ac3a52d49b8c2f5c7893e3519ffad7c79012ed1586b0e0fe9",
+      "factory": "0xbab145d02e7005f0d84c6c1639d39b799b0ea16df99ebbdaf5a14d9da820b4e0",
+      "pool": "0x5b83bdbcc56b2e630f2807bbadd2b0c21619108066b92a58de081261089e9ce5"
+    },
+    "policy": {
+      "maxMarginRaw": "10000000",
+      "slippageBps": 50,
+      "deadlineSeconds": 120,
+      "gasBufferBps": 13000,
+      "maxGasLimit": "1500000",
+      "longLeveragesBps": [
+        12500,
+        15000
+      ],
+      "shortExposureBps": [
+        10000,
+        12500
+      ]
+    }
+  },
+  "seed": {
+    "stockRaw": "111462803009194761",
+    "stableRaw": "40000000"
+  },
+  "lpBalance": "2111518912097",
+  "transactions": [
+    {
+      "id": "margin-v1-deploy-factory",
+      "hash": "0x91587b7d6a4f29a4bd77ce8ddbce5c6c28be74a422c4b5176b5c5dff9c545a91",
+      "block": "126106410",
+      "status": "success",
+      "gasWei": 33928130000000
+    },
+    {
+      "id": "margin-v1-create-pool",
+      "hash": "0x160f801759ac751d40fcfe31238b21f2784e859b8d8d7e4d8a70a04f3353bc31",
+      "block": "126106481",
+      "status": "success",
+      "gasWei": 25350920000000
+    },
+    {
+      "id": "margin-v1-deploy-shortOracle",
+      "hash": "0xc1c1618379c29ad0d610e9fd25296908d0b63a9e61e3e830d02115ce50d73442",
+      "block": "126106561",
+      "status": "success",
+      "gasWei": 4574310000000
+    },
+    {
+      "id": "margin-v1-deploy-shortPair",
+      "hash": "0xab4b5e97eafa84c83b1075c0059e4dd549c47742fe1386c67e3c934300288353",
+      "block": "126106628",
+      "status": "success",
+      "gasWei": 25040970000000
+    },
+    {
+      "id": "margin-v1-register-short",
+      "hash": "0x4fa0a7cfb84986edf44a3407b2680c3f6ba78716354e4b914b93201f23b119ef",
+      "block": "126106698",
+      "status": "success",
+      "gasWei": 3184070000000
+    },
+    {
+      "id": "margin-v1-pause-short",
+      "hash": "0x215758d5b8012e9c0c23326abff98590b6dc4fe41118bddc17f923da33ef9ffe",
+      "block": "126106758",
+      "status": "success",
+      "gasWei": "438340000000"
+    },
+    {
+      "id": "margin-v1-risk-short",
+      "hash": "0xb2ad1db6bf859c3cad0df652ad8bea86322b714592dfe3943529afcdb9a17761",
+      "block": "126106820",
+      "status": "success",
+      "gasWei": "739410000000"
+    },
+    {
+      "id": "margin-v1-deploy-router",
+      "hash": "0x898bbe158f6add2cae1a7f2341e350f843d79fae81a34fc0be5aac3ea1db6d5a",
+      "block": "126106898",
+      "status": "success",
+      "gasWei": 24662570000000
+    },
+    {
+      "id": "margin-v1-approve-seed-stock",
+      "hash": "0xd02182dfb8bc739259de9878aa03a94e8c6121241edbc561d96f297fa3383bb5",
+      "block": "126106994",
+      "status": "success",
+      "gasWei": "715900000000"
+    },
+    {
+      "id": "margin-v1-approve-seed-stable",
+      "hash": "0x5578ded14869297292f00d7773bf89811b55ddddfe48a112e263f2b399eec1d8",
+      "block": "126107062",
+      "status": "success",
+      "gasWei": "689540000000"
+    },
+    {
+      "id": "margin-v1-seed-pool",
+      "hash": "0xdd310e7cdfd45992bf5e12975d483a8f9372c453a231c6229c7f134ebded4e19",
+      "block": "126107129",
+      "status": "success",
+      "gasWei": "2881770000000"
+    },
+    {
+      "id": "margin-v1-fund-short",
+      "hash": "0x56bc0549011e93ee896bb6be6eb400d16c5118e865d07921d841f4f502cfacd8",
+      "block": "126107206",
+      "status": "success",
+      "gasWei": "886490000000"
+    },
+    {
+      "id": "margin-v1-authorize-router",
+      "hash": "0xbc7824fe9abfdbb432302f25882cff3d948f1e8956f0689f3ad1ac44baac595e",
+      "block": "126107285",
+      "status": "success",
+      "gasWei": "613130000000"
+    },
+    {
+      "id": "margin-v1-unpause-router",
+      "hash": "0xcc1e7b13a8d60c93cb0c197deb2e876501a9d4d6e4a4791d1c275d0534e1f895",
+      "block": "126107344",
+      "status": "success",
+      "gasWei": "365950000000"
+    }
+  ]
+}
