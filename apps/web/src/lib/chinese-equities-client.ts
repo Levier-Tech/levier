@@ -192,7 +192,7 @@ export const initialChineseEquitiesPositions: ChineseEquityPosition[] = z
   .array(ChineseEquityPositionSchema)
   .parse(positionsJson);
 
-const POSITIONS_STORAGE_KEY = "levera_chinese_positions_v1";
+const POSITIONS_STORAGE_KEY = "levier_chinese_positions_v1";
 
 export function loadStoredChinesePositions(): ChineseEquityPosition[] {
   if (typeof window === "undefined") return initialChineseEquitiesPositions;

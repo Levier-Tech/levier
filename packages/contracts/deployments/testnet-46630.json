@@ -1,0 +1,86 @@
+{
+  "network": "TESTNET",
+  "chainId": 46630,
+  "networkName": "Robinhood Chain Testnet",
+  "deployerAddress": "0xFE29CF5C0c75E8c905128d0344160C3664f33B10",
+  "deploymentTimestamp": "2026-09-28T00:57:16.637Z",
+  "totalContracts": 8,
+  "totalGasUsed": 9292142,
+  "totalCostEth": 0.00009292142,
+  "note": "Phase 13.5 redeploy of Levier*-named contracts on real RH Testnet, superseding the source-level Phase 13 rename. Legacy Levera-named testnet.json (chain 31337, local fork) stays untouched per rebranding-development-plan.md §5.",
+  "contracts": [
+    {
+      "contractName": "LevierMarketRegistry",
+      "contractAddress": "0x41d7f4c434de83d1602c5a0bd548d1b985c8fff3",
+      "txHash": "0x5ad04ee650a4e6639bbd064490400e93fffe7769e67c5f7da06bc75ffef43f83",
+      "blockNumber": 125448045,
+      "gasUsed": 1413750,
+      "gasCostEth": 0.0000141375
+    },
+    {
+      "contractName": "LevierRouter",
+      "contractAddress": "0x23aa8e2c2025354553217f091f15ba1e1d5e6878",
+      "txHash": "0x6b6936e6e972302424db9561ceb56b310006d46abf964ab81c4f545e21655efd",
+      "blockNumber": 125448114,
+      "gasUsed": 519548,
+      "gasCostEth": 0.00000519548
+    },
+    {
+      "contractName": "LeverageRouter",
+      "contractAddress": "0xf284f47c169774d303ac92d46c88598f82a453d2",
+      "txHash": "0x7439c3fa3bb1c705ec853e16ce86f25892b3b32268f70e353870bcb0b3550199",
+      "blockNumber": 125454373,
+      "gasUsed": 561619,
+      "gasCostEth": 0.00000561619
+    },
+    {
+      "contractName": "ShortRouter",
+      "contractAddress": "0x8beabef1bc8a123abe915f088487c90e917de4ef",
+      "txHash": "0x560ba15346a5aa9b5a80f1b06354b5722682c636ddc89cd1d862a8885b84bd8a",
+      "blockNumber": 125454447,
+      "gasUsed": 530071,
+      "gasCostEth": 0.00000530071
+    },
+    {
+      "contractName": "AutoProtectModule",
+      "contractAddress": "0xe1578ca2519b23bc5fad31d021e6e69736f60365",
+      "txHash": "0x5ec49c1d5cdb761c79f54f42bfb1b1454d546645300dbd0ecd9ad230af2799e6",
+      "blockNumber": 125454534,
+      "gasUsed": 1187014,
+      "gasCostEth": 0.00001187014
+    },
+    {
+      "contractName": "LevierVault",
+      "contractAddress": "0xfe8bc5b71743a98c3864437ad86f8b8ab2ea049e",
+      "txHash": "0x4ff1710020bd152a693916723408672418add897f48c82545399280a7ff6c94c",
+      "blockNumber": 125454595,
+      "gasUsed": 1746582,
+      "gasCostEth": 0.00001746582
+    },
+    {
+      "contractName": "RhTestnetReferenceOracle",
+      "contractAddress": "0x8f0e3da3941570c945a930092b2a721eddeb2ad4",
+      "txHash": "0x2ddf5ad0cd02b7ecbc300facb88851eb8a74fd38157fa50bed0192c61030b84e",
+      "blockNumber": 125458250,
+      "gasUsed": 874039,
+      "gasCostEth": 0.00000874039
+    },
+    {
+      "contractName": "LevierPair",
+      "contractAddress": "0x43b3c72fa2e5b0b8ba8b610b7a39ce4c33ed38aa",
+      "txHash": "0x7b3b47857d03c446b59c896c084fc5e1fd9c641f04fc5caaf4faf9150ca9c525",
+      "blockNumber": 125458398,
+      "gasUsed": 2459519,
+      "gasCostEth": 0.00002459519,
+      "market": {
+        "marketId": "0x5f1c8f54170bee18d0d958454c78106f1271a5c6db6a2d607316e05f2ffc5d9d",
+        "collateralSymbol": "TSLA",
+        "debtSymbol": "USDG",
+        "collateral": "0xC9f9c86933092BbbfFF3CCb4b105A4A94bf3Bd4E",
+        "debt": "0x7E955252E15c84f5768B83c41a71F9eba181802F"
+      }
+    }
+  ],
+  "fundedLendingAcceptancePassed": true,
+  "marketStatusAfterFinalize": "PAUSED"
+}

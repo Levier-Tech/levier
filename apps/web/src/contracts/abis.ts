@@ -82,7 +82,7 @@ export const ShortRouterABI = [
   },
 ] as const;
 
-export const LeveraRouterABI = [
+export const LevierRouterABI = [
   {
     type: 'function',
     name: 'supplyCollateral',
@@ -125,7 +125,7 @@ export const LeveraRouterABI = [
   },
 ] as const;
 
-export const LeveraPairABI = [
+export const LevierPairABI = [
   {
     type: 'function',
     name: 'userPositions',
@@ -160,7 +160,7 @@ export const LeveraPairABI = [
   },
 ] as const;
 
-export const LeveraVaultABI = [
+export const LevierVaultABI = [
   {
     type: 'function',
     name: 'deposit',

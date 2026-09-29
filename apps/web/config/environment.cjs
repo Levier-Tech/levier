@@ -17,11 +17,11 @@ const protocolSchema = z
     usdg: address,
     oracle: address,
     registry: address,
-    leveraRouter: address,
+    levierRouter: address,
     leverageRouter: address,
     shortRouter: address,
     autoProtect: address,
-    leveraVault: address,
+    levierVault: address,
     tokens: z.record(z.string().regex(/^[A-Z0-9]+$/), address),
     pairs: z.record(z.string().regex(/^[A-Z0-9]+$/), address),
   })

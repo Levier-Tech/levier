@@ -5,11 +5,11 @@ export interface ProtocolAddresses {
   usdg: Address;
   oracle: Address;
   registry: Address;
-  leveraRouter: Address;
+  levierRouter: Address;
   leverageRouter: Address;
   shortRouter: Address;
   autoProtect: Address;
-  leveraVault: Address;
+  levierVault: Address;
   tokens: Record<string, Address>;
   pairs: Record<string, Address>;
 }

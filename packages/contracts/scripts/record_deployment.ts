@@ -40,10 +40,10 @@ interface DeploymentSummary {
 
 async function recordDeployment() {
   console.log('--------------------------------------------------');
-  console.log('LEVERA DEPLOYMENT AUDIT & GAS TRACKER');
+  console.log('LEVIER DEPLOYMENT AUDIT & GAS TRACKER');
   console.log('--------------------------------------------------');
 
-  const broadcastBase = path.resolve(process.cwd(), 'broadcast', 'DeployLevera.s.sol');
+  const broadcastBase = path.resolve(process.cwd(), 'broadcast', 'DeployLevier.s.sol');
   if (!fs.existsSync(broadcastBase)) {
     console.error('No broadcast directory found at:', broadcastBase);
     console.log('Please run forge script with --broadcast flag first.');
@@ -144,7 +144,7 @@ async function recordDeployment() {
 
   // 2. Write Markdown receipt
   const mdOutPath = path.join(outDir, 'DEPLOYMENT_RECEIPT.md');
-  let mdContent = `# Levera Protocol — On-Chain Deployment Audit Receipt\n\n`;
+  let mdContent = `# Levier Protocol — On-Chain Deployment Audit Receipt\n\n`;
   mdContent += `**Network:** ${networkName} (Chain ID: \`${chainId}\`)\n`;
   mdContent += `**Deployer Address:** \`${deployerAddress}\`\n`;
   mdContent += `**Timestamp:** ${summary.deploymentTimestamp}\n\n`;

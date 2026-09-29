@@ -233,6 +233,7 @@ try {
       "ENV_EXPORT_GUARD",
     );
     const addresses = JSON.parse(current.PROTOCOL_ADDRESSES);
+    addresses.usdg = env.USDG_ADDRESS;
     addresses.oracle = state.oracle;
     addresses.registry = state.registry;
     addresses.levierRouter = state.router;

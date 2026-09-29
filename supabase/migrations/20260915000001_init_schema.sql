@@ -1,5 +1,5 @@
 -- =============================================================================
--- LEVERA MARKETS DATABASE SCHEMA INITIALIZATION
+-- LEVIER MARKETS DATABASE SCHEMA INITIALIZATION
 -- Target Database: PostgreSQL (Supabase)
 -- Monorepo Specification: Phase 2 (Task 2.1)
 -- =============================================================================

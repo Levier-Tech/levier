@@ -9,7 +9,7 @@ import {
   type Hex,
   type PublicClient,
 } from "viem";
-import { LeveraPairABI } from "../contracts/generated/lending";
+import { LevierPairABI } from "../contracts/generated/lending";
 import type { LendingDeployment } from "./lending-client";
 import { boundedText } from "./rpc-proxy.mjs";
 const hash = z.string().regex(/^0x[0-9a-fA-F]{64}$/);
@@ -80,7 +80,7 @@ export async function verifyHistoryTransaction(
   if (same(tx.to, d.pair)) {
     let call;
     try {
-      call = decodeFunctionData({ abi: LeveraPairABI, data: tx.input });
+      call = decodeFunctionData({ abi: LevierPairABI, data: tx.input });
     } catch {
       return null;
     }
@@ -139,7 +139,7 @@ export async function verifyHistoryTransaction(
             matching.push(event.args.value);
         } else {
           const event = decodeEventLog({
-            abi: LeveraPairABI,
+            abi: LevierPairABI,
             data: log.data,
             topics: log.topics,
           });

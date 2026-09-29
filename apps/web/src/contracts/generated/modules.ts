@@ -763,7 +763,7 @@ export const AutoProtectModuleABI = [
     ]
   }
 ] as const;
-export const LeveraVaultABI = [
+export const LevierVaultABI = [
   {
     "type": "constructor",
     "inputs": [

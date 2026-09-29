@@ -4,7 +4,7 @@ import { env } from "../env.mjs";
 import { useState, useCallback } from "react";
 import { useAccount, useWriteContract, usePublicClient } from "wagmi";
 import { parseUnits } from "viem";
-import { LeveraVaultABI, TestnetERC20ABI } from "../contracts/abis";
+import { LevierVaultABI, TestnetERC20ABI } from "../contracts/abis";
 import { getAddresses } from "../contracts/addresses";
 import { NetworkMode } from "@levier/types";
 
@@ -35,7 +35,7 @@ export function useVaultDeposit(networkMode: NetworkMode) {
           address: addresses.usdg,
           abi: TestnetERC20ABI,
           functionName: "approve",
-          args: [addresses.leveraVault, units],
+          args: [addresses.levierVault, units],
         });
 
         if (publicClient) {
@@ -46,10 +46,10 @@ export function useVaultDeposit(networkMode: NetworkMode) {
             throw new Error("Transaction reverted");
         }
 
-        // 2. Deposit into LeveraVault
+        // 2. Deposit into LevierVault
         const depositHash = await writeContractAsync({
-          address: addresses.leveraVault,
-          abi: LeveraVaultABI,
+          address: addresses.levierVault,
+          abi: LevierVaultABI,
           functionName: "deposit",
           args: [units, address],
         });

@@ -1,0 +1,23 @@
+{
+  "capturedAt": "2026-09-28T01:10:27.617Z",
+  "chainId": 46630,
+  "simulationPassed": true,
+  "transactionsSubmitted": 0,
+  "contracts": [
+    "LeverageRouter",
+    "ShortRouter",
+    "AutoProtectModule",
+    "LevierVault"
+  ],
+  "verified": [
+    "Existing registry/router identity and authorization",
+    "Existing issuer-documented USDG, 6 decimals",
+    "All four modules begin closed",
+    "No incomplete router authorization",
+    "Vault starts empty without allocations"
+  ],
+  "limits": [
+    "Live-RPC dry run; no contracts were deployed by this command",
+    "Oracle/pair and funded lifecycle remain separate"
+  ]
+}
