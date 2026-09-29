@@ -24,6 +24,7 @@ Usage: levier <command>
   testnet deploy all --yes           One command, one confirmation ('deploy'), no more prompts
   testnet enable [--yes]             Enable the Railway site, run the price publisher (it activates the markets)
   testnet publisher                  Keep the price publisher running (auto-restart; markets stay open)
+  testnet preflight [wallet]         Read-only readiness check before testing or recording
   testnet status                     Show margin and lending status
   help                               Show this help
 EOF
@@ -58,6 +59,7 @@ case "${1:-help}:${2:-}" in
   testnet:deploy)  testnet_deploy "${3:-all}" "${4:-}" ;;
   testnet:enable)  "$SCRIPTS/enable-testnet-site.sh" "${@:3}" ;;
   testnet:publisher) exec "$SCRIPTS/run-publisher-loop.sh" ;;
+  testnet:preflight) exec "$SCRIPTS/preflight-testnet-site.sh" "${@:3}" ;;
   testnet:status)  pnpm rh:margin:status; pnpm rh:lending:status ;;
   help:*|-h:*|--help:*) usage ;;
   *) usage; exit 1 ;;
