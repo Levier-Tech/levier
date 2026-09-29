@@ -2,6 +2,7 @@
 
 import React from "react";
 
+import { X_URL } from "../lib/social";
 const FAQ_ITEMS = [
   {
     question: "What is Levier Markets?",
@@ -41,7 +42,7 @@ export function FAQSection() {
         <p className="faq-contact">
           Still have questions?{" "}
           <a
-            href="https://x.com/LeveraMarke6"
+            href={X_URL}
             target="_blank"
             rel="noopener noreferrer"
           >

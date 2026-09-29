@@ -7,6 +7,7 @@ import { WalletModal } from './WalletModal';
 import { MobileNavigation } from './MobileNavigation';
 import { useAccount } from 'wagmi';
 
+import { X_URL, X_LABEL, X_TITLE } from '../lib/social';
 export function Header() {
     const pathname = usePathname();
     const [isWalletModalOpen, setIsWalletModalOpen] = useState(false);
@@ -52,7 +53,25 @@ export function Header() {
             </a>
 
             <header className="header-container border-b border-[var(--line)] bg-[var(--bg)] fixed w-full top-0 left-0 right-0 z-50">
-                {/* LEFT NAVIGATION */}
+                {/* WORDMARK (far left) */}
+                <div className="flex items-center justify-start">
+                    <Link
+                        href="/"
+                        className="wordmark flex items-center gap-2.5"
+                        aria-label="Levier Markets home"
+                    >
+                        <img
+                            src="/assets/levier-logo-new-trimmed.png"
+                            alt="Levier Emblem"
+                            className="h-9 w-auto shrink-0 drop-shadow-[0_0_8px_rgba(196,255,69,0.25)]"
+                        />
+                        <span className="flex items-baseline tracking-tight">
+                            LEVIER
+                        </span>
+                    </Link>
+                </div>
+
+                {/* MAIN NAVIGATION */}
                 <nav className="nav-left" aria-label="Main navigation">
                     {isLanding ? (
                         <>
@@ -164,24 +183,6 @@ export function Header() {
                     )}
                 </nav>
 
-                {/* CENTER WORDMARK */}
-                <div className="flex items-center justify-center">
-                    <Link
-                        href="/"
-                        className="wordmark flex items-center gap-2.5"
-                        aria-label="Levier Markets home"
-                    >
-                        <img
-                            src="/assets/levier-logo-new-trimmed.png"
-                            alt="Levier Emblem"
-                            className="h-9 w-auto shrink-0 drop-shadow-[0_0_8px_rgba(196,255,69,0.25)]"
-                        />
-                        <span className="flex items-baseline tracking-tight">
-                            LEVIER
-                        </span>
-                    </Link>
-                </div>
-
                 {/* RIGHT NAVIGATION */}
                 <div className="nav-right">
                     <span className="chain-label">
@@ -203,11 +204,11 @@ export function Header() {
                                     : 'Connect'}
                             </button>
                             <a
-                                href="https://x.com/LeveraMarke6"
+                                href={X_URL}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                aria-label="Follow Levera on X (Twitter)"
-                                title="Follow Levera on X (@LeveraMarke6)"
+                                aria-label={X_LABEL}
+                                title={X_TITLE}
                                 className="p-2 border border-[var(--line)] text-[var(--muted)] hover:text-[var(--green)] hover:border-[var(--green)] rounded transition-colors flex items-center justify-center shrink-0"
                             >
                                 <svg
@@ -235,11 +236,11 @@ export function Header() {
                                 )}
                             </button>
                             <a
-                                href="https://x.com/LeveraMarke6"
+                                href={X_URL}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                aria-label="Follow Levera on X (Twitter)"
-                                title="Follow Levera on X (@LeveraMarke6)"
+                                aria-label={X_LABEL}
+                                title={X_TITLE}
                                 className="p-2 border border-[var(--line)] text-[var(--muted)] hover:text-[var(--green)] hover:border-[var(--green)] rounded transition-colors flex items-center justify-center shrink-0"
                             >
                                 <svg

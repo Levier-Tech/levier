@@ -4,6 +4,7 @@ import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
+import { X_URL, X_LABEL, X_TITLE } from "../lib/social";
 interface MobileNavigationProps {
   isOpen: boolean;
   onClose: () => void;
@@ -106,12 +107,12 @@ export function MobileNavigation({
       {/* Social / X Link */}
       <div className="py-3 border-b border-[#29311f] flex items-center">
         <a
-          href="https://x.com/LeveraMarke6"
+          href={X_URL}
           target="_blank"
           rel="noopener noreferrer"
           onClick={onClose}
-          aria-label="Follow Levera on X (Twitter)"
-          title="Follow Levera on X (@LeveraMarke6)"
+          aria-label={X_LABEL}
+          title={X_TITLE}
           className="p-2 border border-[#303629] text-[#c8cbc0] hover:text-[var(--green)] hover:border-[var(--green)] rounded transition-colors flex items-center justify-center"
         >
           <svg

@@ -3,6 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 
+import { X_URL, X_LABEL, X_TITLE } from '../lib/social';
 export function Footer() {
     const scrollToTop = (e: React.MouseEvent) => {
         e.preventDefault();
@@ -79,11 +80,11 @@ export function Footer() {
                     <div className="footer-links-group">
                         <span className="footer-links-label">Follow</span>
                         <a
-                            href="https://x.com/LeveraMarke6"
+                            href={X_URL}
                             target="_blank"
                             rel="noopener noreferrer"
-                            aria-label="Follow Levera on X (Twitter)"
-                            title="Follow Levera on X (@LeveraMarke6)"
+                            aria-label={X_LABEL}
+                            title={X_TITLE}
                             className="p-2 rounded border border-[var(--line)] bg-[var(--panel-subtle)] text-[var(--muted)] hover:text-[var(--green)] hover:border-[var(--green)] transition-all flex items-center justify-center shrink-0 w-fit"
                         >
                             <svg
@@ -104,11 +105,11 @@ export function Footer() {
             <div className="footer-bottom">
                 <span>© 2026 Levier Markets</span>
                 <a
-                    href="https://x.com/LeveraMarke6"
+                    href={X_URL}
                     target="_blank"
                     rel="noopener noreferrer"
-                    aria-label="Follow Levera on X (Twitter)"
-                    title="Follow Levera on X (@LeveraMarke6)"
+                    aria-label={X_LABEL}
+                    title={X_TITLE}
                     className="inline-flex items-center text-[var(--muted)] hover:text-[var(--green)] transition-colors"
                 >
                     <svg

@@ -142,7 +142,7 @@
   height: 100px;
   padding: 0 4.4%;
   display: grid;
-  grid-template-columns: 1fr auto 1fr;
+  grid-template-columns: auto minmax(0, 1fr) auto;
   align-items: center;
   gap: 24px;
   border-bottom: 1px solid var(--line);
@@ -157,6 +157,9 @@
   display: flex;
   gap: 28px;
   align-items: center;
+}
+.nav-left {
+  margin-left: clamp(16px, 3vw, 48px);
 }
 .nav-link,
 .products-menu summary {
@@ -1692,7 +1695,8 @@ button:hover .arrow-chip {
   }
 }
 
-@media (max-width: 900px) {
+/* Eight app links plus the wallet controls no longer fit beside the wordmark below this width, so the menu collapses earlier. */
+@media (max-width: 1150px) {
   .header-container {
     display: flex;
     justify-content: space-between;
