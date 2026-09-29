@@ -1,5 +1,5 @@
 {
-  "capturedAt": "2026-09-29T10:46:00.992Z",
+  "capturedAt": "2026-09-29T11:21:02.019Z",
   "chainId": 46630,
   "routerPaused": false,
   "sides": [
@@ -28,13 +28,13 @@
   },
   "tester": {
     "usdg": "0",
-    "gasEth": "0.00997047685"
+    "gasEth": "0.00995456947"
   },
   "publisher": {
     "status": "healthy",
     "processAlive": true,
     "heartbeatFresh": true,
-    "expiresAt": "2026-09-29T11:42:25.424Z"
+    "expiresAt": "2026-09-29T12:13:46.252Z"
   },
   "webGateConfigured": true,
   "readyForSupervisedBrowserTest": false,

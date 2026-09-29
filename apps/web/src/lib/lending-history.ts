@@ -19,6 +19,12 @@ export const historyCursorSchema = z
     block_number: z.number().int().nonnegative(),
     index: z.number().int().nonnegative(),
     items_count: z.number().int().positive().max(100),
+    // Blockscout adds these paging keys to next_page_params; each stays strictly validated.
+    value: z.string().regex(/^\d{1,78}$/).optional(),
+    hash: z.string().regex(/^0x[0-9a-fA-F]{64}$/).optional(),
+    inserted_at: z.string().max(40).regex(/^[0-9T:.+\-Z]+$/).optional(),
+    fee: z.string().regex(/^\d{1,78}$/).optional(),
+    filter: z.enum(["from", "to"]).optional(),
   })
   .strict();
 const explorerPage = z.object({
