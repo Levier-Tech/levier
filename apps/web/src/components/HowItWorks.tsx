@@ -3,7 +3,6 @@
 import dynamic from 'next/dynamic';
 import React, { useEffect, useRef, useState } from 'react';
 
-import { hasWebGL } from '../lib/webgl';
 import { HowItWorksFlat } from './HowItWorksFlat';
 
 // three.js only loads once the section has scrolled into view.
@@ -15,6 +14,15 @@ const STEPS = [
   { label: 'Auto-Protect', caption: 'Auto-Protect trims risk before liquidation' },
 ];
 const STEP_MS = 5000;
+
+function hasWebGL() {
+  try {
+    const canvas = document.createElement('canvas');
+    return Boolean(canvas.getContext('webgl2') || canvas.getContext('webgl'));
+  } catch {
+    return false;
+  }
+}
 
 export function HowItWorks() {
   const [step, setStep] = useState(0);
