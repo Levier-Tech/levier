@@ -3,9 +3,9 @@ pragma solidity ^0.8.24;
 
 import {Script} from "forge-std/Script.sol";
 import {IERC20Metadata} from "@openzeppelin/contracts/token/ERC20/extensions/IERC20Metadata.sol";
-import {LeveraPair} from "../src/core/LeveraPair.sol";
-import {LeveraMarketRegistry} from "../src/registry/LeveraMarketRegistry.sol";
-import {LeveraRouter} from "../src/routers/LeveraRouter.sol";
+import {LevierPair} from "../src/core/LevierPair.sol";
+import {LevierMarketRegistry} from "../src/registry/LevierMarketRegistry.sol";
+import {LevierRouter} from "../src/routers/LevierRouter.sol";
 
 interface IVerifiedPriceSource {
     function getPrice(address asset) external view returns (uint256);
@@ -87,16 +87,16 @@ contract DeployRhLending is Script {
         MarketInput memory m = readInput(vm.envString("RH_LENDING_MARKET_JSON"));
         bytes32 marketId = keccak256(abi.encodePacked(m.slug, m.collateral, m.debt));
         vm.startBroadcast(key);
-        LeveraMarketRegistry registry = new LeveraMarketRegistry(admin);
-        LeveraPair pair = new LeveraPair(marketId, m.collateral, m.debt, m.oracle, address(registry), admin);
-        LeveraRouter router = new LeveraRouter();
+        LevierMarketRegistry registry = new LevierMarketRegistry(admin);
+        LevierPair pair = new LevierPair(marketId, m.collateral, m.debt, m.oracle, address(registry), admin);
+        LevierRouter router = new LevierRouter();
         registry.addMarket(
             m.slug,
             m.collateral,
             m.debt,
             address(pair),
             m.oracle,
-            LeveraMarketRegistry.RiskTier.Experimental,
+            LevierMarketRegistry.RiskTier.Experimental,
             m.maxLtv,
             m.liquidationLtv,
             10_000,
@@ -105,7 +105,7 @@ contract DeployRhLending is Script {
         );
         registry.setAuthorizedRouter(address(router), true);
         // Remain paused until deployment identity, indexing and funding have been verified.
-        registry.setMarketStatus(marketId, LeveraMarketRegistry.MarketStatus.PAUSED);
+        registry.setMarketStatus(marketId, LevierMarketRegistry.MarketStatus.PAUSED);
         vm.stopBroadcast();
     }
 }

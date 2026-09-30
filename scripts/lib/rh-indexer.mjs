@@ -1,8 +1,8 @@
 import { createHash } from "node:crypto";
 import { v } from "./rh-live.mjs";
 import {
-  LeveraPairABI,
-  LeveraMarketRegistryABI,
+  LevierPairABI,
+  LevierMarketRegistryABI,
 } from "../../apps/web/src/contracts/generated/lending.ts";
 const same = (a, b) => String(a).toLowerCase() === String(b).toLowerCase();
 const names = {
@@ -12,7 +12,7 @@ const names = {
   DebtRepaid: "repay",
   PositionLiquidated: "liquidation",
 };
-export const financialEvents = LeveraPairABI.filter(
+export const financialEvents = LevierPairABI.filter(
   (x) => x.type === "event" && x.name in names,
 );
 export const descriptorHash = (d) =>
@@ -67,7 +67,7 @@ export async function verifyIndexerIdentity(client, d, start) {
     throw Error("INDEXER_START_NOT_DEPLOYMENT");
   const m = await client.readContract({
     address: d.registry,
-    abi: LeveraMarketRegistryABI,
+    abi: LevierMarketRegistryABI,
     functionName: "getMarket",
     args: [d.marketId],
     blockNumber: head,
@@ -231,7 +231,7 @@ export async function syncIndexer({
     for (const [user, p] of Object.entries(accounts)) {
       const observed = await client.readContract({
         address: d.pair,
-        abi: LeveraPairABI,
+        abi: LevierPairABI,
         functionName: "accounts",
         args: [user],
         blockNumber: to,
@@ -245,7 +245,7 @@ export async function syncIndexer({
       ["totalSupplyCollateral", "totalBorrowedDebt"].map((functionName) =>
         client.readContract({
           address: d.pair,
-          abi: LeveraPairABI,
+          abi: LevierPairABI,
           functionName,
           blockNumber: to,
         }),

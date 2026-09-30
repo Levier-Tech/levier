@@ -9,7 +9,7 @@ import {
   type Hex,
   type PublicClient,
 } from "viem";
-import { LeveraPairABI } from "../contracts/generated/lending";
+import { LevierPairABI } from "../contracts/generated/lending";
 import type { LendingDeployment } from "./lending-client";
 import { boundedText } from "./rpc-proxy.mjs";
 const hash = z.string().regex(/^0x[0-9a-fA-F]{64}$/);
@@ -19,6 +19,12 @@ export const historyCursorSchema = z
     block_number: z.number().int().nonnegative(),
     index: z.number().int().nonnegative(),
     items_count: z.number().int().positive().max(100),
+    // Blockscout adds these paging keys to next_page_params; each stays strictly validated.
+    value: z.string().regex(/^\d{1,78}$/).optional(),
+    hash: z.string().regex(/^0x[0-9a-fA-F]{64}$/).optional(),
+    inserted_at: z.string().max(40).regex(/^[0-9T:.+\-Z]+$/).optional(),
+    fee: z.string().regex(/^\d{1,78}$/).optional(),
+    filter: z.enum(["from", "to"]).optional(),
   })
   .strict();
 const explorerPage = z.object({
@@ -80,7 +86,7 @@ export async function verifyHistoryTransaction(
   if (same(tx.to, d.pair)) {
     let call;
     try {
-      call = decodeFunctionData({ abi: LeveraPairABI, data: tx.input });
+      call = decodeFunctionData({ abi: LevierPairABI, data: tx.input });
     } catch {
       return null;
     }
@@ -139,7 +145,7 @@ export async function verifyHistoryTransaction(
             matching.push(event.args.value);
         } else {
           const event = decodeEventLog({
-            abi: LeveraPairABI,
+            abi: LevierPairABI,
             data: log.data,
             topics: log.topics,
           });

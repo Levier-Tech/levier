@@ -1,4 +1,4 @@
-import { publicClient, supabase, LeveraPairABI, AutoProtectABI } from '../client.js';
+import { publicClient, supabase, LevierPairABI, AutoProtectABI } from '../client.js';
 import { config } from '../config.js';
 import { Address } from 'viem';
 
@@ -98,10 +98,10 @@ export async function scanPositions(): Promise<BreachCandidate[]> {
           continue;
         }
 
-        // Read on-chain position from LeveraPair
+        // Read on-chain position from LevierPair
         const positionData = await publicClient.readContract({
           address: pairAddress,
-          abi: LeveraPairABI,
+          abi: LevierPairABI,
           functionName: 'getPosition',
           args: [userAddr],
         });

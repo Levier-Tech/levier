@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createPublicClient, http, type Address } from "viem";
+import { createPublicClient, type Address } from "viem";
+import { retryingHttp } from "../../../../lib/lagging-node-retry";
 import { z } from "zod";
 import environment from "../../../../../config/environment.cjs";
 import { env } from "../../../../env.mjs";
@@ -47,7 +48,7 @@ export async function GET(request: NextRequest) {
     );
   try {
     const client = createPublicClient({
-      transport: http(server.RPC_URL, {
+      transport: retryingHttp(server.RPC_URL, {
         timeout: server.RPC_TIMEOUT_MS,
         retryCount: 0,
       }),
@@ -64,7 +65,8 @@ export async function GET(request: NextRequest) {
       maxResponseBytes: server.RPC_MAX_RESPONSE_BYTES,
     });
     return NextResponse.json(result, { headers });
-  } catch {
+  } catch (error) {
+    console.error("history verification failed:", String((error as { shortMessage?: string; message?: string })?.shortMessage ?? (error as Error)?.message).replace(/https?:\/\/\S+/g, "<url>").slice(0, 200));
     return NextResponse.json(
       { error: "Transaction history could not be verified. Please retry." },
       { status: 503, headers },

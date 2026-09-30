@@ -1,5 +1,5 @@
 // Generated from Foundry artifacts by scripts/generate-lending-abis.mjs. Do not edit.
-export const LeveraPairABI = [
+export const LevierPairABI = [
   {
     "type": "constructor",
     "inputs": [
@@ -353,7 +353,7 @@ export const LeveraPairABI = [
       {
         "name": "",
         "type": "address",
-        "internalType": "contract LeveraMarketRegistry"
+        "internalType": "contract LevierMarketRegistry"
       }
     ],
     "stateMutability": "view"
@@ -679,7 +679,7 @@ export const LeveraPairABI = [
     ]
   }
 ] as const;
-export const LeveraRouterABI = [
+export const LevierRouterABI = [
   {
     "type": "function",
     "name": "depositAndBorrow",
@@ -743,7 +743,7 @@ export const LeveraRouterABI = [
     ]
   }
 ] as const;
-export const LeveraMarketRegistryABI = [
+export const LevierMarketRegistryABI = [
   {
     "type": "constructor",
     "inputs": [
@@ -787,7 +787,7 @@ export const LeveraMarketRegistryABI = [
       {
         "name": "riskTier",
         "type": "uint8",
-        "internalType": "enum LeveraMarketRegistry.RiskTier"
+        "internalType": "enum LevierMarketRegistry.RiskTier"
       },
       {
         "name": "maxLtvBps",
@@ -857,7 +857,7 @@ export const LeveraMarketRegistryABI = [
       {
         "name": "",
         "type": "tuple",
-        "internalType": "struct LeveraMarketRegistry.MarketConfig",
+        "internalType": "struct LevierMarketRegistry.MarketConfig",
         "components": [
           {
             "name": "marketId",
@@ -892,12 +892,12 @@ export const LeveraMarketRegistryABI = [
           {
             "name": "riskTier",
             "type": "uint8",
-            "internalType": "enum LeveraMarketRegistry.RiskTier"
+            "internalType": "enum LevierMarketRegistry.RiskTier"
           },
           {
             "name": "status",
             "type": "uint8",
-            "internalType": "enum LeveraMarketRegistry.MarketStatus"
+            "internalType": "enum LevierMarketRegistry.MarketStatus"
           },
           {
             "name": "maxLtvBps",
@@ -1005,12 +1005,12 @@ export const LeveraMarketRegistryABI = [
       {
         "name": "riskTier",
         "type": "uint8",
-        "internalType": "enum LeveraMarketRegistry.RiskTier"
+        "internalType": "enum LevierMarketRegistry.RiskTier"
       },
       {
         "name": "status",
         "type": "uint8",
-        "internalType": "enum LeveraMarketRegistry.MarketStatus"
+        "internalType": "enum LevierMarketRegistry.MarketStatus"
       },
       {
         "name": "maxLtvBps",
@@ -1090,7 +1090,7 @@ export const LeveraMarketRegistryABI = [
       {
         "name": "newStatus",
         "type": "uint8",
-        "internalType": "enum LeveraMarketRegistry.MarketStatus"
+        "internalType": "enum LevierMarketRegistry.MarketStatus"
       }
     ],
     "outputs": [],
@@ -1144,7 +1144,7 @@ export const LeveraMarketRegistryABI = [
       {
         "name": "newTier",
         "type": "uint8",
-        "internalType": "enum LeveraMarketRegistry.RiskTier"
+        "internalType": "enum LevierMarketRegistry.RiskTier"
       },
       {
         "name": "maxLtvBps",
@@ -1191,7 +1191,7 @@ export const LeveraMarketRegistryABI = [
         "name": "riskTier",
         "type": "uint8",
         "indexed": false,
-        "internalType": "enum LeveraMarketRegistry.RiskTier"
+        "internalType": "enum LevierMarketRegistry.RiskTier"
       }
     ],
     "anonymous": false
@@ -1235,7 +1235,7 @@ export const LeveraMarketRegistryABI = [
         "name": "newTier",
         "type": "uint8",
         "indexed": false,
-        "internalType": "enum LeveraMarketRegistry.RiskTier"
+        "internalType": "enum LevierMarketRegistry.RiskTier"
       },
       {
         "name": "maxLtvBps",
@@ -1272,7 +1272,7 @@ export const LeveraMarketRegistryABI = [
         "name": "newStatus",
         "type": "uint8",
         "indexed": false,
-        "internalType": "enum LeveraMarketRegistry.MarketStatus"
+        "internalType": "enum LevierMarketRegistry.MarketStatus"
       }
     ],
     "anonymous": false

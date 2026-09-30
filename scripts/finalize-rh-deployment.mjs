@@ -41,14 +41,14 @@ try {
   await verifyModuleInputs(ctx, modules);
   const contracts = [];
   for (const [role, name] of [
-    ["registry", "LeveraMarketRegistry"],
-    ["router", "LeveraRouter"],
+    ["registry", "LevierMarketRegistry"],
+    ["router", "LevierRouter"],
     ...moduleSpecs(modules, ctx.deployer.address).map((s) => [
       s.role,
       s.contract,
     ]),
     ["oracle", "RhTestnetReferenceOracle"],
-    ["pair", "LeveraPair"],
+    ["pair", "LevierPair"],
   ]) {
     const address = state[role];
     const codeHash = await verifyRuntime(client, address, name);
@@ -80,7 +80,7 @@ try {
       args,
     });
   assert(
-    same(await read(state.pair, "LeveraPair", "owner"), ctx.deployer.address),
+    same(await read(state.pair, "LevierPair", "owner"), ctx.deployer.address),
     "PAIR_OWNER_MISMATCH",
   );
   const oracleExpected = {
@@ -103,7 +103,7 @@ try {
     );
   const market = await read(
     state.registry,
-    "LeveraMarketRegistry",
+    "LevierMarketRegistry",
     "getMarket",
     [state.marketId],
   );
@@ -128,7 +128,7 @@ try {
     "deploy-leverageRouter",
     "deploy-shortRouter",
     "deploy-autoProtect",
-    "deploy-leveraVault",
+    "deploy-levierVault",
   ]);
   for (const [operation, op] of Object.entries(state.operations)) {
     const receipt = await client.getTransactionReceipt({ hash: op.hash });
@@ -233,9 +233,10 @@ try {
       "ENV_EXPORT_GUARD",
     );
     const addresses = JSON.parse(current.PROTOCOL_ADDRESSES);
+    addresses.usdg = env.USDG_ADDRESS;
     addresses.oracle = state.oracle;
     addresses.registry = state.registry;
-    addresses.leveraRouter = state.router;
+    addresses.levierRouter = state.router;
     // This is the only registered/verified pair. Historical unverified pair entries are not exported.
     addresses.pairs = { [state.descriptor.collateralSymbol]: state.pair };
     const updates = {

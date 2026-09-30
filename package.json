@@ -2,6 +2,7 @@
   "name": "levier-monorepo",
   "private": true,
   "scripts": {
+    "levier": "scripts/levier",
     "build": "turbo run build --filter=!@levier/contracts",
     "build:backend": "turbo run build --filter=!@levier/web --filter=!@levier/contracts",
     "build:all": "turbo run build",

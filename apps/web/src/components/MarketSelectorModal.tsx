@@ -210,7 +210,7 @@ export function MarketSelectorModal({
                         </div>
                         <div
                           className={`text-xs font-mono font-medium ${
-                            m.change24h >= 0 ? "text-[var(--green)]" : "text-[#ff6b6b]"
+                            m.change24h >= 0 ? "text-[var(--green)]" : "text-[#d6153c]"
                           }`}
                         >
                           {m.change24h >= 0 ? "+" : ""}

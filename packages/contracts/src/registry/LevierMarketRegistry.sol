@@ -4,7 +4,7 @@ pragma solidity ^0.8.24;
 import "@openzeppelin/contracts/access/Ownable.sol";
 
 /**
- * @title LeveraMarketRegistry
+ * @title LevierMarketRegistry
  * @notice Central registry for isolated credit & leverage pairs.
  * @dev Stores market risk tiers (Tier A, Tier B, Tier C, Experimental) and economic bounds.
  */
@@ -16,7 +16,7 @@ interface IRegisteredPair {
     function registry() external view returns (address);
 }
 
-contract LeveraMarketRegistry is Ownable {
+contract LevierMarketRegistry is Ownable {
     enum RiskTier {
         TierA,
         TierB,

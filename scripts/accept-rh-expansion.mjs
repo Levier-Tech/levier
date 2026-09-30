@@ -31,8 +31,8 @@ let ctx,
   activated = false,
   completed = false;
 const runId = randomUUID();
-const registryAbi = artifact("LeveraMarketRegistry").abi,
-  pairAbi = artifact("LeveraPair").abi,
+const registryAbi = artifact("LevierMarketRegistry").abi,
+  pairAbi = artifact("LevierPair").abi,
   routerAbi = artifact("MarginRouter").abi;
 async function status(value) {
   for (const d of [long, margin.short]) {

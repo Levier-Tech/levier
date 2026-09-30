@@ -82,7 +82,7 @@ async function setStatus(status, operation) {
       routers: managedRouters.length,
     }),
   );
-  const abi = artifact("LeveraMarketRegistry").abi;
+  const abi = artifact("LevierMarketRegistry").abi;
   async function setRouters() {
     const routerAbi = artifact("MarginRouter").abi;
     for (const d of managedRouters) {
@@ -428,7 +428,7 @@ try {
           await submit(ctx, id, ctx.deployer, {
             to: d.registry,
             data: v.encodeFunctionData({
-              abi: artifact("LeveraMarketRegistry").abi,
+              abi: artifact("LevierMarketRegistry").abi,
               functionName: "setMarketStatus",
               args: [d.marketId, 0],
             }),

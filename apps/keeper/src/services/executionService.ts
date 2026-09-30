@@ -4,7 +4,7 @@ import {
   keeperAccount,
   supabase,
   AutoProtectABI,
-  LeveraPairABI,
+  LevierPairABI,
   ERC20ABI,
 } from "../client.js";
 import { config } from "../config.js";
@@ -64,7 +64,7 @@ export async function executeCandidateProtection(
     // 3. Get Pair's Debt Token (USDG)
     const debtTokenAddress = await publicClient.readContract({
       address: candidate.pairAddress,
-      abi: LeveraPairABI,
+      abi: LevierPairABI,
       functionName: "debtToken",
     });
 

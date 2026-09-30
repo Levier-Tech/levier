@@ -1,5 +1,6 @@
 import { parseReferenceTransport } from "../../apps/price-oracle/src/services/referenceTransport.ts";
 import { parseRobinhoodTransport } from "../../apps/price-oracle/src/services/robinhoodTransport.ts";
+import { appendFileSync, mkdirSync } from "node:fs";
 import { createRequire } from "node:module";
 import {
   artifact,
@@ -172,7 +173,28 @@ export async function publishReference(ctx, minimumFreshSeconds) {
     debtTimestamp: prices.debtTimestamp,
   };
 }
+function recordRedactedFailure(error) {
+  // Keep provider detail out of stdout, but leave a masked trace in the private journal directory for diagnosis.
+  try {
+    const mask = (text) =>
+      String(text ?? "")
+        .replace(/https?:\/\/\S+/g, "<url>")
+        .replace(/wss?:\/\/\S+/g, "<url>")
+        .replace(/0x[0-9a-fA-F]{64,}/g, "<hex>")
+        .slice(0, 900);
+    mkdirSync(".secrets/rh-live", { recursive: true, mode: 0o700 });
+    appendFileSync(
+      ".secrets/rh-live/publisher-errors.log",
+      `${new Date().toISOString()} ${error?.name ?? "Error"}: ${mask(error?.shortMessage ?? error?.message)}\n${mask(error?.stack)}\n`,
+      { mode: 0o600 },
+    );
+  } catch {}
+}
 export function safeCode(error) {
+  const coded =
+    typeof error?.message === "string" &&
+    /^[A-Z][A-Z0-9_]{2,90}$/.test(error.message);
+  if (!coded) recordRedactedFailure(error);
   return typeof error?.message === "string" &&
     /^[A-Z][A-Z0-9_]{2,90}$/.test(error.message)
     ? error.message

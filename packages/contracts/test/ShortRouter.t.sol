@@ -4,8 +4,8 @@ pragma solidity ^0.8.24;
 import "forge-std/Test.sol";
 import "../src/tokens/TestnetERC20.sol";
 import "../src/oracle/CompositeSanityOracle.sol";
-import "../src/registry/LeveraMarketRegistry.sol";
-import "../src/core/LeveraPair.sol";
+import "../src/registry/LevierMarketRegistry.sol";
+import "../src/core/LevierPair.sol";
 import "../src/routers/ShortRouter.sol";
 
 contract ShortRouterTest is Test {
@@ -15,8 +15,8 @@ contract ShortRouterTest is Test {
     TestnetERC20 nvda;
     TestnetERC20 usdg;
     CompositeSanityOracle oracle;
-    LeveraMarketRegistry registry;
-    LeveraPair shortPair;
+    LevierMarketRegistry registry;
+    LevierPair shortPair;
     ShortRouter shortRouter;
 
     bytes32 marketId;
@@ -31,12 +31,12 @@ contract ShortRouterTest is Test {
         oracle.setPrice(address(nvda), 250e18); // $250.00
         oracle.setPrice(address(usdg), 1e18); // $1.00
 
-        registry = new LeveraMarketRegistry(admin);
+        registry = new LevierMarketRegistry(admin);
 
         // For a Short Market: Collateral is USDG ($1), Debt is NVDA ($250)
         marketId = keccak256(abi.encodePacked("nvda-short-usdg", address(usdg), address(nvda)));
 
-        shortPair = new LeveraPair(
+        shortPair = new LevierPair(
             marketId,
             address(usdg), // collateralToken
             address(nvda), // debtToken
@@ -51,7 +51,7 @@ contract ShortRouterTest is Test {
             address(nvda),
             address(shortPair),
             address(oracle),
-            LeveraMarketRegistry.RiskTier.TierA,
+            LevierMarketRegistry.RiskTier.TierA,
             6000,
             7000,
             20000,

@@ -4,22 +4,22 @@ pragma solidity ^0.8.24;
 import "forge-std/Script.sol";
 import "../src/tokens/TestnetERC20.sol";
 import "../src/oracle/CompositeSanityOracle.sol";
-import "../src/registry/LeveraMarketRegistry.sol";
-import "../src/core/LeveraPair.sol";
-import "../src/vaults/LeveraVault.sol";
-import "../src/routers/LeveraRouter.sol";
+import "../src/registry/LevierMarketRegistry.sol";
+import "../src/core/LevierPair.sol";
+import "../src/vaults/LevierVault.sol";
+import "../src/routers/LevierRouter.sol";
 import "../src/routers/LeverageRouter.sol";
 import "../src/routers/ShortRouter.sol";
 import "../src/modules/AutoProtectModule.sol";
 
-contract DeployLevera is Script {
+contract DeployLevier is Script {
     function run() external {
         require(block.chainid == 31337, "Legacy deployment: local fixtures only");
         uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
         address deployer = vm.addr(deployerPrivateKey);
 
         console.log("=================================================");
-        console.log("STARTING LEVERA PROTOCOL PHASE 3 DEPLOYMENT");
+        console.log("STARTING LEVIER PROTOCOL PHASE 3 DEPLOYMENT");
         console.log("Deployer Address:", deployer);
         console.log("Chain ID:", block.chainid);
         console.log("=================================================");
@@ -42,37 +42,37 @@ contract DeployLevera is Script {
         oracle.setPrice(address(spy), 56020e16);  // $560.20
 
         // 3. Deploy Market Registry
-        LeveraMarketRegistry registry = new LeveraMarketRegistry(deployer);
+        LevierMarketRegistry registry = new LevierMarketRegistry(deployer);
 
         // 4. Deploy Isolated Pairs
         bytes32 nvdaMarketId = keccak256(abi.encodePacked("nvda-usdg-testnet", address(nvda), address(usdg)));
-        LeveraPair pairNvda = new LeveraPair(nvdaMarketId, address(nvda), address(usdg), address(oracle), address(registry), deployer);
-        registry.addMarket("nvda-usdg-testnet", address(nvda), address(usdg), address(pairNvda), address(oracle), LeveraMarketRegistry.RiskTier.TierA, 6000, 7000, 25000, 5_000_000e18, 3_000_000e18);
+        LevierPair pairNvda = new LevierPair(nvdaMarketId, address(nvda), address(usdg), address(oracle), address(registry), deployer);
+        registry.addMarket("nvda-usdg-testnet", address(nvda), address(usdg), address(pairNvda), address(oracle), LevierMarketRegistry.RiskTier.TierA, 6000, 7000, 25000, 5_000_000e18, 3_000_000e18);
 
         bytes32 aaplMarketId = keccak256(abi.encodePacked("aapl-usdg-testnet", address(aapl), address(usdg)));
-        LeveraPair pairAapl = new LeveraPair(aaplMarketId, address(aapl), address(usdg), address(oracle), address(registry), deployer);
-        registry.addMarket("aapl-usdg-testnet", address(aapl), address(usdg), address(pairAapl), address(oracle), LeveraMarketRegistry.RiskTier.TierA, 6000, 7000, 25000, 5_000_000e18, 3_000_000e18);
+        LevierPair pairAapl = new LevierPair(aaplMarketId, address(aapl), address(usdg), address(oracle), address(registry), deployer);
+        registry.addMarket("aapl-usdg-testnet", address(aapl), address(usdg), address(pairAapl), address(oracle), LevierMarketRegistry.RiskTier.TierA, 6000, 7000, 25000, 5_000_000e18, 3_000_000e18);
 
         bytes32 tslaMarketId = keccak256(abi.encodePacked("tsla-usdg-testnet", address(tsla), address(usdg)));
-        LeveraPair pairTsla = new LeveraPair(tslaMarketId, address(tsla), address(usdg), address(oracle), address(registry), deployer);
-        registry.addMarket("tsla-usdg-testnet", address(tsla), address(usdg), address(pairTsla), address(oracle), LeveraMarketRegistry.RiskTier.TierB, 5000, 6000, 20000, 3_000_000e18, 1_500_000e18);
+        LevierPair pairTsla = new LevierPair(tslaMarketId, address(tsla), address(usdg), address(oracle), address(registry), deployer);
+        registry.addMarket("tsla-usdg-testnet", address(tsla), address(usdg), address(pairTsla), address(oracle), LevierMarketRegistry.RiskTier.TierB, 5000, 6000, 20000, 3_000_000e18, 1_500_000e18);
 
         bytes32 spyMarketId = keccak256(abi.encodePacked("spy-usdg-testnet", address(spy), address(usdg)));
-        LeveraPair pairSpy = new LeveraPair(spyMarketId, address(spy), address(usdg), address(oracle), address(registry), deployer);
-        registry.addMarket("spy-usdg-testnet", address(spy), address(usdg), address(pairSpy), address(oracle), LeveraMarketRegistry.RiskTier.TierA, 7000, 8000, 25000, 10_000_000e18, 6_000_000e18);
+        LevierPair pairSpy = new LevierPair(spyMarketId, address(spy), address(usdg), address(oracle), address(registry), deployer);
+        registry.addMarket("spy-usdg-testnet", address(spy), address(usdg), address(pairSpy), address(oracle), LevierMarketRegistry.RiskTier.TierA, 7000, 8000, 25000, 10_000_000e18, 6_000_000e18);
 
         // 5. Deploy Yield Vault (ERC-4626)
-        LeveraVault vaultUsdg = new LeveraVault(
+        LevierVault vaultUsdg = new LevierVault(
             IERC20(address(usdg)),
-            "Levera USDG Yield Vault",
+            "Levier USDG Yield Vault",
             "lvUSDG",
-            "levera-usdg-vault-testnet",
+            "levier-usdg-vault-testnet",
             "Conservative",
             deployer
         );
 
         // 6. Deploy Routers and Safety Modules
-        LeveraRouter router = new LeveraRouter();
+        LevierRouter router = new LevierRouter();
         LeverageRouter leverageRouter = new LeverageRouter(deployer);
         ShortRouter shortRouter = new ShortRouter(deployer);
         AutoProtectModule autoProtect = new AutoProtectModule(deployer);
@@ -86,7 +86,7 @@ contract DeployLevera is Script {
         console.log("Market Registry:", address(registry));
         console.log("NVDA Pair:", address(pairNvda));
         console.log("USDG Yield Vault:", address(vaultUsdg));
-        console.log("Levera Router:", address(router));
+        console.log("Levier Router:", address(router));
         console.log("Leverage Router:", address(leverageRouter));
         console.log("AutoProtect Module:", address(autoProtect));
     }

@@ -22,6 +22,7 @@ const config: Config = {
           DEFAULT: '#c2ff47',
           bright: '#daff92',
           dark: '#9ecf35',
+          deep: '#48cc0e',
           muted: 'rgba(194, 255, 71, 0.15)',
         },
         brand: {
@@ -30,18 +31,24 @@ const config: Config = {
           dark: '#9ecf35',
           muted: 'rgba(194, 255, 71, 0.15)',
         },
+        // Secondary brand tones sampled from /assets/levier-logo.png (the lever pictogram).
+        silver: {
+          DEFAULT: '#a7a7a9',
+          light: '#c9cacc',
+        },
         muted: {
           DEFAULT: '#9b9b99',
           dark: '#72746d',
         },
         danger: {
-          DEFAULT: '#f94738',
-          muted: 'rgba(249, 71, 56, 0.15)',
+          DEFAULT: '#d6153c',
+          muted: 'rgba(214, 21, 60, 0.15)',
         },
       },
       fontFamily: {
         sans: ['Inter', 'Arial', 'sans-serif'],
-        display: ['Tomorrow', "'Courier New'", 'monospace'],
+        display: ['Fraunces', 'Georgia', 'serif'],
+        heroDisplay: ['Tomorrow', "'Courier New'", 'monospace'],
         mono: ['"JetBrains Mono"', 'monospace'],
       },
       borderRadius: {

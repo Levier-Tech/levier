@@ -8,20 +8,20 @@ import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "../oracle/CompositeSanityOracle.sol";
-import "../registry/LeveraMarketRegistry.sol";
+import "../registry/LevierMarketRegistry.sol";
 
 /**
- * @title LeveraPair
+ * @title LevierPair
  * @notice Isolated lending and leverage engine for a single collateral/debt token pair.
  */
-contract LeveraPair is ReentrancyGuard, Ownable {
+contract LevierPair is ReentrancyGuard, Ownable {
     using SafeERC20 for IERC20;
 
     bytes32 public immutable marketId;
     IERC20 public immutable collateralToken;
     IERC20 public immutable debtToken;
     CompositeSanityOracle public immutable oracle;
-    LeveraMarketRegistry public immutable registry;
+    LevierMarketRegistry public immutable registry;
 
     // User positions
     struct UserAccount {
@@ -70,7 +70,7 @@ contract LeveraPair is ReentrancyGuard, Ownable {
         collateralToken = IERC20(_collateralToken);
         debtToken = IERC20(_debtToken);
         oracle = CompositeSanityOracle(_oracle);
-        registry = LeveraMarketRegistry(_registry);
+        registry = LevierMarketRegistry(_registry);
     }
 
     function setOperator(address operator, bool approved) external {
@@ -114,8 +114,8 @@ contract LeveraPair is ReentrancyGuard, Ownable {
 
     function _depositCollateral(address recipient, uint256 amount) internal {
         require(amount > 0, "Pair: Amount must be > 0");
-        LeveraMarketRegistry.MarketConfig memory m = registry.getMarket(marketId);
-        require(m.status != LeveraMarketRegistry.MarketStatus.PAUSED, "Pair: Market is paused");
+        LevierMarketRegistry.MarketConfig memory m = registry.getMarket(marketId);
+        require(m.status != LevierMarketRegistry.MarketStatus.PAUSED, "Pair: Market is paused");
 
         require(recipient != address(0), "Pair: Invalid recipient");
         _receiveExact(collateralToken, amount);
@@ -177,8 +177,8 @@ contract LeveraPair is ReentrancyGuard, Ownable {
     function _borrow(address borrower, uint256 amount, address recipient) internal {
         require(amount > 0, "Pair: Amount must be > 0");
         require(recipient != address(0), "Pair: Invalid recipient");
-        LeveraMarketRegistry.MarketConfig memory m = registry.getMarket(marketId);
-        require(m.status == LeveraMarketRegistry.MarketStatus.NORMAL, "Pair: Market borrowing restricted");
+        LevierMarketRegistry.MarketConfig memory m = registry.getMarket(marketId);
+        require(m.status == LevierMarketRegistry.MarketStatus.NORMAL, "Pair: Market borrowing restricted");
 
         UserAccount storage acc = accounts[borrower];
         acc.debt += amount;
@@ -266,7 +266,7 @@ contract LeveraPair is ReentrancyGuard, Ownable {
         uint256 debtPrice = oracle.getPrice(address(debtToken));
         uint256 debtValueUsd = Math.mulDiv(acc.debt, debtPrice, debtUnit, Math.Rounding.Ceil);
 
-        LeveraMarketRegistry.MarketConfig memory m = registry.getMarket(marketId);
+        LevierMarketRegistry.MarketConfig memory m = registry.getMarket(marketId);
         uint256 maxBorrowAllowedUsd = Math.mulDiv(collateralValueUsd, m.maxLtvBps, 10_000);
 
         return debtValueUsd <= maxBorrowAllowedUsd;
@@ -282,7 +282,7 @@ contract LeveraPair is ReentrancyGuard, Ownable {
         uint256 debtPrice = oracle.getPrice(address(debtToken));
         uint256 debtValueUsd = Math.mulDiv(acc.debt, debtPrice, debtUnit, Math.Rounding.Ceil);
 
-        LeveraMarketRegistry.MarketConfig memory m = registry.getMarket(marketId);
+        LevierMarketRegistry.MarketConfig memory m = registry.getMarket(marketId);
         uint256 liquidationDebtThresholdUsd = Math.mulDiv(collateralValueUsd, m.liquidationLtvBps, 10_000);
 
         return debtValueUsd > liquidationDebtThresholdUsd;
@@ -313,7 +313,7 @@ contract LeveraPair is ReentrancyGuard, Ownable {
         } else if (collateralValueUsd == 0) {
             healthFactorBps = 0;
         } else {
-            LeveraMarketRegistry.MarketConfig memory m = registry.getMarket(marketId);
+            LevierMarketRegistry.MarketConfig memory m = registry.getMarket(marketId);
             uint256 maxDebtUsd = Math.mulDiv(collateralValueUsd, m.liquidationLtvBps, 10_000);
             healthFactorBps = Math.mulDiv(maxDebtUsd, 10_000, debtValueUsd);
         }

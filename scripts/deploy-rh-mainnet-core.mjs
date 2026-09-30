@@ -21,11 +21,11 @@ const { privateKeyToAccount } = require("viem/accounts");
 const profile = ".env.mainnet.core.local";
 const directory = ".secrets/rh-mainnet-core";
 const specs = [
-  ["LeveraMarketRegistry", "MAINNET_MARKET_REGISTRY_ADDRESS", true],
-  ["LeveraRouter", "MAINNET_LENDING_ROUTER_ADDRESS", false],
+  ["LevierMarketRegistry", "MAINNET_MARKET_REGISTRY_ADDRESS", true],
+  ["LevierRouter", "MAINNET_LENDING_ROUTER_ADDRESS", false],
   ["AutoProtectModule", "MAINNET_AUTO_PROTECT_ADDRESS", true],
   ["ShortRouter", "MAINNET_SHORT_ROUTER_ADDRESS", true],
-  ["LeveraVault", "MAINNET_LEVERA_VAULT_ADDRESS", true],
+  ["LevierVault", "MAINNET_LEVIER_VAULT_ADDRESS", true],
 ];
 const check = (ok, code) => {
   if (!ok) throw Error(code);
@@ -72,7 +72,7 @@ function artifact(name, owner, owned, env) {
     "ARTIFACT_BYTECODE_REQUIRED",
   );
   const args =
-    name === "LeveraVault"
+    name === "LevierVault"
       ? [
           env.MAINNET_VAULT_ASSET_ADDRESS,
           env.MAINNET_VAULT_NAME,
@@ -316,7 +316,7 @@ try {
           normalizeRuntime(a.runtime, a.immutableReferences),
       "COMPILED_RUNTIME_MISMATCH",
     );
-    if (a.name === "LeveraVault") {
+    if (a.name === "LevierVault") {
       const [asset, decimals] = await Promise.all(
         ["asset", "decimals"].map((functionName) =>
           client.readContract({
@@ -429,7 +429,7 @@ try {
         if (state.operations[a.name]) continue;
         stage = `deploy-${a.name}`;
         await assertChain();
-        if (a.name === "LeveraVault") await verifyAsset();
+        if (a.name === "LevierVault") await verifyAsset();
         const nextNonce = await nonce();
         const address = v.getContractAddress({
           from: account.address,

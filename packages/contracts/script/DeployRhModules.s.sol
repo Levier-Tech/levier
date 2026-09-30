@@ -3,10 +3,10 @@ pragma solidity ^0.8.24;
 
 import {Script} from "forge-std/Script.sol";
 import {IERC20Metadata} from "@openzeppelin/contracts/token/ERC20/extensions/IERC20Metadata.sol";
-import {LeveraMarketRegistry} from "../src/registry/LeveraMarketRegistry.sol";
+import {LevierMarketRegistry} from "../src/registry/LevierMarketRegistry.sol";
 import {LeverageRouter} from "../src/routers/LeverageRouter.sol";
 import {ShortRouter} from "../src/routers/ShortRouter.sol";
-import {LeveraVault, IERC20} from "../src/vaults/LeveraVault.sol";
+import {LevierVault, IERC20} from "../src/vaults/LevierVault.sol";
 import {AutoProtectModule} from "../src/modules/AutoProtectModule.sol";
 
 /// @notice Simulate the development modules against existing RH-testnet infrastructure.
@@ -33,8 +33,8 @@ contract DeployRhModules is Script {
             "Modules: Registry identity mismatch");
         require(router.code.length > 0 && router.codehash == vm.parseJsonBytes32(json, ".lendingRouterCodeHash"),
             "Modules: Router identity mismatch");
-        require(LeveraMarketRegistry(registry).owner() == admin
-            && LeveraMarketRegistry(registry).isAuthorizedRouter(router), "Modules: Base configuration mismatch");
+        require(LevierMarketRegistry(registry).owner() == admin
+            && LevierMarketRegistry(registry).isAuthorizedRouter(router), "Modules: Base configuration mismatch");
         require(debt.code.length > 0 && debt.codehash == vm.parseJsonBytes32(json, ".debtCodeHash")
             && debt == vm.envAddress("USDG_ISSUER_TESTNET_ADDRESS"), "Modules: Debt identity mismatch");
         require(IERC20Metadata(debt).decimals() == 6
@@ -50,7 +50,7 @@ contract DeployRhModules is Script {
         LeverageRouter longRouter = new LeverageRouter(admin);
         ShortRouter shortRouter = new ShortRouter(admin);
         AutoProtectModule protect = new AutoProtectModule(admin);
-        LeveraVault vault = new LeveraVault(IERC20(debt), name, symbol, slug, tier, admin);
+        LevierVault vault = new LevierVault(IERC20(debt), name, symbol, slug, tier, admin);
         vm.stopBroadcast();
 
         require(longRouter.isPaused() && shortRouter.isPaused() && protect.isPaused(), "Modules: Execution open");
@@ -58,7 +58,7 @@ contract DeployRhModules is Script {
             "Modules: Vault deposits open");
         require(vault.totalAssets() == 0 && vault.totalSupply() == 0 && vault.getAllocationsCount() == 0,
             "Modules: Unexpected vault funds or allocation");
-        require(!LeveraMarketRegistry(registry).isAuthorizedRouter(address(longRouter))
-            && !LeveraMarketRegistry(registry).isAuthorizedRouter(address(shortRouter)), "Modules: Router authorized");
+        require(!LevierMarketRegistry(registry).isAuthorizedRouter(address(longRouter))
+            && !LevierMarketRegistry(registry).isAuthorizedRouter(address(shortRouter)), "Modules: Router authorized");
     }
 }

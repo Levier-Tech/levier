@@ -7,8 +7,8 @@ import {Math} from "@openzeppelin/contracts/utils/math/Math.sol";
 import {RhTestnetReferenceOracle} from "../src/oracle/RhTestnetReferenceOracle.sol";
 import {RhShortReferenceOracle} from "../src/trading/RhShortReferenceOracle.sol";
 import {MarginRouter} from "../src/trading/MarginRouter.sol";
-import {LeveraPair} from "../src/core/LeveraPair.sol";
-import {LeveraMarketRegistry} from "../src/registry/LeveraMarketRegistry.sol";
+import {LevierPair} from "../src/core/LevierPair.sol";
+import {LevierMarketRegistry} from "../src/registry/LevierMarketRegistry.sol";
 
 interface IExpansionFactory {
     function getPair(address, address) external view returns (address);
@@ -28,7 +28,7 @@ contract PrepareRhExpansion is Script {
     address private owner;
     address private publisher;
     address private stable;
-    LeveraMarketRegistry private registry;
+    LevierMarketRegistry private registry;
     IExpansionFactory private factory;
 
     function u(string memory path) private view returns (uint256) {
@@ -56,7 +56,7 @@ contract PrepareRhExpansion is Script {
         owner = a(".owner");
         publisher = a(".publisher");
         stable = a(".stable");
-        registry = LeveraMarketRegistry(a(".registry"));
+        registry = LevierMarketRegistry(a(".registry"));
         factory = IExpansionFactory(a(".factory"));
         require(
             address(registry).codehash == b(".registryCodeHash") && registry.owner() == owner,
@@ -109,11 +109,11 @@ contract PrepareRhExpansion is Script {
             ),
             u(string.concat(p, ".binding.maxDeviationBps"))
         );
-        LeveraPair longPair = new LeveraPair(longId, stock, stable, address(source), address(registry), owner);
+        LevierPair longPair = new LevierPair(longId, stock, stable, address(source), address(registry), owner);
         RhShortReferenceOracle reverse = new RhShortReferenceOracle(
             address(source), binding, stock, stable, u(string.concat(p, ".binding.maxSpreadBps"))
         );
-        LeveraPair shortPair = new LeveraPair(shortId, stable, stock, address(reverse), address(registry), owner);
+        LevierPair shortPair = new LevierPair(shortId, stable, stock, address(reverse), address(registry), owner);
         registerPair(longSlug, longPair, string.concat(p, ".longRisk"));
         registerPair(shortSlug, shortPair, string.concat(p, ".shortRisk"));
         require(factory.getPair(stock, stable) == address(0), "Expansion: Pool already exists; reconcile");
@@ -148,19 +148,19 @@ contract PrepareRhExpansion is Script {
         );
         vm.stopBroadcast();
         vm.startBroadcast(owner);
-        registry.setMarketStatus(longId, LeveraMarketRegistry.MarketStatus.NORMAL);
-        registry.setMarketStatus(shortId, LeveraMarketRegistry.MarketStatus.NORMAL);
+        registry.setMarketStatus(longId, LevierMarketRegistry.MarketStatus.NORMAL);
+        registry.setMarketStatus(shortId, LevierMarketRegistry.MarketStatus.NORMAL);
         router.setPaused(false);
         directLending(longPair, p);
         roundTrip(router, longPair, false, p);
         roundTrip(router, shortPair, true, p);
         router.setPaused(true);
-        registry.setMarketStatus(longId, LeveraMarketRegistry.MarketStatus.PAUSED);
-        registry.setMarketStatus(shortId, LeveraMarketRegistry.MarketStatus.PAUSED);
+        registry.setMarketStatus(longId, LevierMarketRegistry.MarketStatus.PAUSED);
+        registry.setMarketStatus(shortId, LevierMarketRegistry.MarketStatus.PAUSED);
         vm.stopBroadcast();
         require(
-            router.isPaused() && registry.getMarket(longId).status == LeveraMarketRegistry.MarketStatus.PAUSED
-                && registry.getMarket(shortId).status == LeveraMarketRegistry.MarketStatus.PAUSED,
+            router.isPaused() && registry.getMarket(longId).status == LevierMarketRegistry.MarketStatus.PAUSED
+                && registry.getMarket(shortId).status == LevierMarketRegistry.MarketStatus.PAUSED,
             "Expansion: Final state must be closed"
         );
         (uint256 stockReserve, uint256 stableReserve) = router.reserves();
@@ -177,31 +177,31 @@ contract PrepareRhExpansion is Script {
         );
     }
 
-    function registerPair(string memory slug, LeveraPair pair, string memory risk) private {
+    function registerPair(string memory slug, LevierPair pair, string memory risk) private {
         registry.addMarket(
             slug,
             address(pair.collateralToken()),
             address(pair.debtToken()),
             address(pair),
             address(pair.oracle()),
-            LeveraMarketRegistry.RiskTier.Experimental,
+            LevierMarketRegistry.RiskTier.Experimental,
             0,
             u(string.concat(risk, ".liquidationLtvBps")),
             u(string.concat(risk, ".maxLeverageBps")),
             u(string.concat(risk, ".supplyCapRaw")),
             u(string.concat(risk, ".borrowCapRaw"))
         );
-        registry.setMarketStatus(pair.marketId(), LeveraMarketRegistry.MarketStatus.PAUSED);
+        registry.setMarketStatus(pair.marketId(), LevierMarketRegistry.MarketStatus.PAUSED);
         registry.updateRiskTier(
             pair.marketId(),
-            LeveraMarketRegistry.RiskTier.Experimental,
+            LevierMarketRegistry.RiskTier.Experimental,
             u(string.concat(risk, ".maxLtvBps")),
             u(string.concat(risk, ".liquidationLtvBps")),
             u(string.concat(risk, ".maxLeverageBps"))
         );
     }
 
-    function directLending(LeveraPair pair, string memory p) private {
+    function directLending(LevierPair pair, string memory p) private {
         uint256 collateral = u(string.concat(p, ".acceptanceCollateralRaw"));
         uint256 debt = u(".acceptanceDebtRaw");
         uint256 stockBefore = pair.collateralToken().balanceOf(owner);
@@ -220,7 +220,7 @@ contract PrepareRhExpansion is Script {
         require(c == 0 && d == 0, "Expansion: Lending debt remains");
     }
 
-    function roundTrip(MarginRouter router, LeveraPair pair, bool isShort, string memory p) private {
+    function roundTrip(MarginRouter router, LevierPair pair, bool isShort, string memory p) private {
         uint256 margin = u(".acceptanceMarginRaw");
         uint256 debt;
         if (isShort) {

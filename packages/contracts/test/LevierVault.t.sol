@@ -3,9 +3,9 @@ pragma solidity ^0.8.24;
 
 import "forge-std/Test.sol";
 import "../src/tokens/TestnetERC20.sol";
-import "../src/vaults/LeveraVault.sol";
+import "../src/vaults/LevierVault.sol";
 
-contract LeveraVaultTest is Test {
+contract LevierVaultTest is Test {
     address admin = address(0xAD);
     address alice = address(0xA1);
     address bob = address(0xB2);
@@ -13,16 +13,16 @@ contract LeveraVaultTest is Test {
     address mockPair2 = address(0x2222);
 
     TestnetERC20 usdg;
-    LeveraVault vault;
+    LevierVault vault;
 
     function setUp() public {
         vm.startPrank(admin);
         usdg = new TestnetERC20("Global Dollar", "USDG", 18, 1_000_000e18, admin);
-        vault = new LeveraVault(
+        vault = new LevierVault(
             IERC20(address(usdg)),
-            "Levera USDG Yield Vault",
+            "Levier USDG Yield Vault",
             "lvUSDG",
-            "levera-usdg-vault-testnet",
+            "levier-usdg-vault-testnet",
             "Conservative",
             admin
         );
@@ -35,9 +35,9 @@ contract LeveraVaultTest is Test {
 
     function testInitialState() public view {
         assertEq(address(vault.asset()), address(usdg));
-        assertEq(vault.name(), "Levera USDG Yield Vault");
+        assertEq(vault.name(), "Levier USDG Yield Vault");
         assertEq(vault.symbol(), "lvUSDG");
-        assertEq(vault.vaultSlug(), "levera-usdg-vault-testnet");
+        assertEq(vault.vaultSlug(), "levier-usdg-vault-testnet");
         assertEq(vault.riskTier(), "Conservative");
         assertEq(vault.totalAssets(), 0);
         assertEq(vault.totalSupply(), 0);

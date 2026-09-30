@@ -13,8 +13,31 @@ import { parseUnits } from "viem";
 import { toast, Toaster } from "react-hot-toast";
 import ERC20ABI from "@/lib/contracts/TestnetERC20.json";
 import { MarketSelectorModal } from "@/components/MarketSelectorModal";
+import { AppPage } from "@/components/AppPage";
+import { MarginTradePanel } from "@/components/MarginTradePanel";
+import { marketDeployments } from "@/lib/market-deployments";
 
+// Configured stock / USDG markets trade through the margin router; anything else falls back to the Pons workspace.
 export default function TradePage() {
+  const searchParams = useSearchParams();
+  const asset = (searchParams.get("asset") || searchParams.get("assets") || "").toUpperCase();
+  const configured = asset
+    ? marketDeployments.find((row) => row.symbol.toUpperCase() === asset)
+    : marketDeployments.find((row) => row.enabled);
+  if (configured)
+    return (
+      <AppPage
+        eyebrow={`${configured.symbol} / USDG`}
+        title="Trade with USDG margin."
+        description="Open or close a Long or Short position. Quotes include swap fees and price impact; stale prices or paused markets block new exposure."
+      >
+        <MarginTradePanel market={configured} />
+      </AppPage>
+    );
+  return <PonsTradeWorkspace />;
+}
+
+function PonsTradeWorkspace() {
   const searchParams = useSearchParams();
   const assetQuery = searchParams.get("asset") || searchParams.get("assets");
   

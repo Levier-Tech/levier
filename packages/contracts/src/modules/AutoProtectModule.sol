@@ -5,7 +5,7 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/math/Math.sol";
 import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
-import "../core/LeveraPair.sol";
+import "../core/LevierPair.sol";
 
 /**
  * @title AutoProtectModule
@@ -85,7 +85,7 @@ contract AutoProtectModule is Ownable, ReentrancyGuard {
         Config memory cfg = userConfigs[borrower][pairAddress];
         require(cfg.isEnabled, "AutoProtect: Safeguard not enabled for user");
 
-        LeveraPair pair = LeveraPair(pairAddress);
+        LevierPair pair = LevierPair(pairAddress);
         (, uint256 debtAmount, uint256 collateralValueUsd,) = pair.getPosition(borrower);
 
         require(collateralValueUsd > 0 && debtAmount > 0, "AutoProtect: No active leveraged position");

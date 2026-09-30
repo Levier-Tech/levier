@@ -12,21 +12,21 @@ Levier Markets is the credit and leverage layer built for tokenized assets (equi
 User / Web3 Wallet
        │
        ▼
-  LeveraRouter ─────────────┐
+  LevierRouter ─────────────┐
        │                     │
        ├── LeverageRouter    │  (Atomic Long & Multiply)
        ├── ShortRouter       │  (Atomic Short)
        └── AutoProtectModule │  (Keeper Deleverage)
               │
               ▼
-       LeveraPair (Isolated Lending)
+       LevierPair (Isolated Lending)
               │
               ▼
    RhTestnetReferenceOracle
               │
-       LeveraMarketRegistry (Risk Tiers A/B/C/Experimental)
+       LevierMarketRegistry (Risk Tiers A/B/C/Experimental)
               │
-       LeveraVault (ERC-4626 Yield)
+       LevierVault (ERC-4626 Yield)
 ```
 
 ---
@@ -39,14 +39,16 @@ User / Web3 Wallet
 
 | Contract | Address | State |
 | :--- | :--- | :--- |
-| `LeveraMarketRegistry` | [`0x4c9b…c028`](https://explorer.testnet.chain.robinhood.com/address/0x4c9bebb141b0fa7708d54ee7f191543b7094c028) | 1 registered market; owner verified |
-| `LeveraRouter` | [`0x09e7…f7f1`](https://explorer.testnet.chain.robinhood.com/address/0x09e7915e04301af563e892589d79ad11294cf7f1) | Authorized in registry |
-| `LeverageRouter` | [`0x8418…8079`](https://explorer.testnet.chain.robinhood.com/address/0x84185563fc617733331fcaee61ee20d8f2f08079) | Paused; swaps/close incomplete |
-| `ShortRouter` | [`0x8dd0…6601`](https://explorer.testnet.chain.robinhood.com/address/0x8dd0c5eb6d58ea121e9663eb740acb4a2b956601) | Paused; reverse market incomplete |
-| `AutoProtectModule` | [`0xca7f…d97`](https://explorer.testnet.chain.robinhood.com/address/0xca7ff6017401cf2f0f77aa740f577c54c6358d97) | Paused; deleveraging incomplete |
-| `LeveraVault` | [`0x122c…f628`](https://explorer.testnet.chain.robinhood.com/address/0x122c4da3276d4981edb941a3d3dd4da8985df628) | Deposit/mint closed |
-| `RhTestnetReferenceOracle` | [`0x1dc0…d488`](https://explorer.testnet.chain.robinhood.com/address/0x1dc060daa19a8b3f090b3eb4bd866ace4dd5e488) | 3 real price publications |
-| `LeveraPair` (TSLA/USDG) | [`0xaf36…08d5`](https://explorer.testnet.chain.robinhood.com/address/0xaf36b862f9d0b3eb19c0318e92d8f07e571608d5) | Lifecycle passed; paused |
+| `LevierMarketRegistry` | [`0x41d7…fff3`](https://explorer.testnet.chain.robinhood.com/address/0x41d7f4c434de83d1602c5a0bd548d1b985c8fff3) | 1 registered market; owner verified |
+| `LevierRouter` | [`0x23aa…6878`](https://explorer.testnet.chain.robinhood.com/address/0x23aa8e2c2025354553217f091f15ba1e1d5e6878) | Authorized in registry |
+| `LeverageRouter` | [`0xf284…53d2`](https://explorer.testnet.chain.robinhood.com/address/0xf284f47c169774d303ac92d46c88598f82a453d2) | Paused; swaps/close incomplete |
+| `ShortRouter` | [`0x8bea…e4ef`](https://explorer.testnet.chain.robinhood.com/address/0x8beabef1bc8a123abe915f088487c90e917de4ef) | Paused; reverse market incomplete |
+| `AutoProtectModule` | [`0xe157…0365`](https://explorer.testnet.chain.robinhood.com/address/0xe1578ca2519b23bc5fad31d021e6e69736f60365) | Paused; deleveraging incomplete |
+| `LevierVault` | [`0xfe8b…049e`](https://explorer.testnet.chain.robinhood.com/address/0xfe8bc5b71743a98c3864437ad86f8b8ab2ea049e) | Deposit/mint closed |
+| `RhTestnetReferenceOracle` | [`0x8f0e…2ad4`](https://explorer.testnet.chain.robinhood.com/address/0x8f0e3da3941570c945a930092b2a721eddeb2ad4) | Real price publications |
+| `LevierPair` (TSLA/USDG) | [`0x43b3…38aa`](https://explorer.testnet.chain.robinhood.com/address/0x43b3c72fa2e5b0b8ba8b610b7a39ce4c33ed38aa) | Lifecycle passed; paused |
+
+Full record: [`packages/contracts/deployments/testnet-46630.json`](packages/contracts/deployments/testnet-46630.json).
 
 ### Remaining Work
 
@@ -91,11 +93,11 @@ levier/                                 # Monorepo root (Turborepo + pnpm)
 ├── packages/
 │   ├── contracts/                      # Foundry smart contracts (Solidity 0.8.24)
 │   │   ├── src/                        # Contract source code
-│   │   │   ├── core/                   # LeveraPair (Isolated Lending Engine)
-│   │   │   ├── registry/               # LeveraMarketRegistry (Risk Tiers)
-│   │   │   ├── routers/                # LeveraRouter, LeverageRouter, ShortRouter
+│   │   │   ├── core/                   # LevierPair (Isolated Lending Engine)
+│   │   │   ├── registry/               # LevierMarketRegistry (Risk Tiers)
+│   │   │   ├── routers/                # LevierRouter, LeverageRouter, ShortRouter
 │   │   │   ├── modules/                # AutoProtectModule (Keeper Deleverage)
-│   │   │   ├── vaults/                 # LeveraVault (ERC-4626)
+│   │   │   ├── vaults/                 # LevierVault (ERC-4626)
 │   │   │   ├── oracle/                 # RhTestnetReferenceOracle
 │   │   │   └── interfaces/             # Contract interfaces
 │   │   ├── test/                       # Foundry unit & fuzz tests
@@ -125,7 +127,7 @@ levier/                                 # Monorepo root (Turborepo + pnpm)
 
 ```mermaid
 graph TD
-    User([User / Web3 Wallet]) -->|Approve & Interact| Router[LeveraRouter.sol]
+    User([User / Web3 Wallet]) -->|Approve & Interact| Router[LevierRouter.sol]
     Keeper([Keeper Bot]) -->|Trigger LTV Breach| AutoProtect[AutoProtectModule.sol]
 
     subgraph Execution Routers
@@ -134,14 +136,14 @@ graph TD
     end
 
     subgraph Core Lending & Registry
-        Router --> Registry[LeveraMarketRegistry.sol / Risk Tiers A,B,C]
-        LeverageRouter --> Pairs[LeveraPair.sol / Isolated Collateral & Debt]
+        Router --> Registry[LevierMarketRegistry.sol / Risk Tiers A,B,C]
+        LeverageRouter --> Pairs[LevierPair.sol / Isolated Collateral & Debt]
         ShortRouter --> Pairs
         AutoProtect --> Pairs
     end
 
     subgraph Yield Vaults
-        LP([Liquidity Provider]) --> Vault[LeveraVault.sol / ERC-4626]
+        LP([Liquidity Provider]) --> Vault[LevierVault.sol / ERC-4626]
         Vault --> Pairs
     end
 
@@ -155,13 +157,13 @@ graph TD
 
 | Contract | Role |
 | :--- | :--- |
-| **LeveraMarketRegistry** | Stores supported markets with risk parameters: LLTV, oracle, caps, status, risk tier (`Tier A` / `Tier B` / `Tier C` / `Experimental`). Controls market add, pause, and configuration. |
-| **LeveraPair** | Isolated lending engine per asset pair. Handles collateral deposits, stablecoin borrowing, Max LTV checks, dynamic interest rate model, and on-chain liquidation with controlled penalties. |
-| **LeveraRouter** | Main user entry point. Routes supply/borrow/repay/withdraw actions with permit/transfer management in a single transaction. |
+| **LevierMarketRegistry** | Stores supported markets with risk parameters: LLTV, oracle, caps, status, risk tier (`Tier A` / `Tier B` / `Tier C` / `Experimental`). Controls market add, pause, and configuration. |
+| **LevierPair** | Isolated lending engine per asset pair. Handles collateral deposits, stablecoin borrowing, Max LTV checks, dynamic interest rate model, and on-chain liquidation with controlled penalties. |
+| **LevierRouter** | Main user entry point. Routes supply/borrow/repay/withdraw actions with permit/transfer management in a single transaction. |
 | **LeverageRouter** | Atomic multi-step execution for **Long** & **Multiply** positions (deposit → borrow → swap → re-supply) up to 2.5x with slippage protection and oracle sanity checks. |
 | **ShortRouter** | Atomic short execution: deposit stablecoin collateral → borrow tokenized stock → sell for stablecoin to lock short position. |
 | **AutoProtectModule** | Stores user-configured deleverage rules (`triggerLtv`, `targetLtv`, `maxDeleverage`). Keeper bots execute deleveraging only when LTV breach is proven on-chain. |
-| **LeveraVault** | ERC-4626 yield vault accepting stablecoin deposits and routing liquidity across isolated lending pairs for supplier APY. |
+| **LevierVault** | ERC-4626 yield vault accepting stablecoin deposits and routing liquidity across isolated lending pairs for supplier APY. |
 | **RhTestnetReferenceOracle** | Centralized testnet-only oracle with real reference prices (Robinhood TSLA quotes, Kraken USDG/USD). Immutable publisher/binding. Max age, deviation checks, and stale-data blocking. |
 
 ### Compiler & Toolchain

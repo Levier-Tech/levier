@@ -80,7 +80,7 @@ export const AutoProtectABI = [
   },
 ] as const;
 
-export const LeveraPairABI = [
+export const LevierPairABI = [
   {
     type: 'function',
     name: 'getPosition',

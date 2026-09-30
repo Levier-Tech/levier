@@ -86,7 +86,7 @@ export const MarginRouterABI = [
       {
         "name": "",
         "type": "address",
-        "internalType": "contract LeveraPair"
+        "internalType": "contract LevierPair"
       }
     ],
     "stateMutability": "view"
@@ -302,7 +302,7 @@ export const MarginRouterABI = [
       {
         "name": "",
         "type": "address",
-        "internalType": "contract LeveraPair"
+        "internalType": "contract LevierPair"
       }
     ],
     "stateMutability": "view"

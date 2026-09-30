@@ -39,3 +39,42 @@
 | **LeverageRouter** | `0x4ed7c70f96b99c776995fb64377f0d4ab3b0e1c1` | 668,709 | 0.000669 ETH | $2.3405 | [`0xdf6f44b3...`](https://testnet.robinhood.com/tx/0xdf6f44b32d235cc7784fa679858ac4d467000d02e0aa995f9bc512a0495ac99c) |
 | **ShortRouter** | `0x322813fd9a801c5507c9de605d63cea4f2ce6c44` | 628,915 | 0.000629 ETH | $2.2012 | [`0xf466a94d...`](https://testnet.robinhood.com/tx/0xf466a94d26bb51a2d08632d9faa93634d90344fc252eac699bdf8e4373dae09a) |
 | **AutoProtectModule** | `0xa85233c63b9ee964add6f2cffe00fd84eb32338f` | 960,863 | 0.000961 ETH | $3.3630 | [`0x27941d35...`](https://testnet.robinhood.com/tx/0x27941d357dccc6ac0dd828d27ecff4936df264d0d1424a599d388da6fe7f0926) |
+
+---
+
+# Levier Protocol — On-Chain Deployment Audit Receipt (Phase 13.5)
+
+**Network:** TESTNET (Chain ID: `46630`, Robinhood Chain Testnet — real, not a local fork)
+**Deployer Address:** `0xFE29CF5C0c75E8c905128d0344160C3664f33B10`
+**Timestamp:** 2026-09-28T00:57:16.637Z
+
+This is a **new** entry, added alongside the legacy record above per
+`rebranding-development-plan.md` §5 / Phase 13.5 — the legacy Levera-named
+record (chain 31337, local fork) is historical and stays untouched.
+
+## 📊 Deployment Cost Summary
+
+| Total Contracts | Total Gas Used | Total Cost (ETH) |
+| :--- | :--- | :--- |
+| **8** | **9,292,142 units** | **0.00009292 ETH** |
+
+## 📜 Deployed Contracts Breakdown
+
+| Contract Name | Contract Address | Gas Used | Cost (ETH) | Tx Hash |
+| :--- | :--- | :--- | :--- | :--- |
+| **LevierMarketRegistry** | `0x41d7f4c434de83d1602c5a0bd548d1b985c8fff3` | 1,413,750 | 0.0000141375 ETH | [`0x5ad04ee6...`](https://explorer.testnet.chain.robinhood.com/tx/0x5ad04ee650a4e6639bbd064490400e93fffe7769e67c5f7da06bc75ffef43f83) |
+| **LevierRouter** | `0x23aa8e2c2025354553217f091f15ba1e1d5e6878` | 519,548 | 0.00000519548 ETH | [`0x6b6936e6...`](https://explorer.testnet.chain.robinhood.com/tx/0x6b6936e6e972302424db9561ceb56b310006d46abf964ab81c4f545e21655efd) |
+| **LeverageRouter** | `0xf284f47c169774d303ac92d46c88598f82a453d2` | 561,619 | 0.00000561619 ETH | [`0x7439c3fa...`](https://explorer.testnet.chain.robinhood.com/tx/0x7439c3fa3bb1c705ec853e16ce86f25892b3b32268f70e353870bcb0b3550199) |
+| **ShortRouter** | `0x8beabef1bc8a123abe915f088487c90e917de4ef` | 530,071 | 0.00000530071 ETH | [`0x560ba153...`](https://explorer.testnet.chain.robinhood.com/tx/0x560ba15346a5aa9b5a80f1b06354b5722682c636ddc89cd1d862a8885b84bd8a) |
+| **AutoProtectModule** | `0xe1578ca2519b23bc5fad31d021e6e69736f60365` | 1,187,014 | 0.00001187014 ETH | [`0x5ec49c1d...`](https://explorer.testnet.chain.robinhood.com/tx/0x5ec49c1d5cdb761c79f54f42bfb1b1454d546645300dbd0ecd9ad230af2799e6) |
+| **LevierVault** | `0xfe8bc5b71743a98c3864437ad86f8b8ab2ea049e` | 1,746,582 | 0.00001746582 ETH | [`0x4ff17100...`](https://explorer.testnet.chain.robinhood.com/tx/0x4ff1710020bd152a693916723408672418add897f48c82545399280a7ff6c94c) |
+| **RhTestnetReferenceOracle** | `0x8f0e3da3941570c945a930092b2a721eddeb2ad4` | 874,039 | 0.00000874039 ETH | [`0x2ddf5ad0...`](https://explorer.testnet.chain.robinhood.com/tx/0x2ddf5ad0cd02b7ecbc300facb88851eb8a74fd38157fa50bed0192c61030b84e) |
+| **LevierPair** (TSLA/USDG) | `0x43b3c72fa2e5b0b8ba8b610b7a39ce4c33ed38aa` | 2,459,519 | 0.00002459519 ETH | [`0x7b3b4785...`](https://explorer.testnet.chain.robinhood.com/tx/0x7b3b47857d03c446b59c896c084fc5e1fd9c641f04fc5caaf4faf9150ca9c525) |
+
+## Lifecycle Verification
+
+Funded deposit → borrow → repay → withdraw lifecycle **PASSED** with real
+TSLA/USDG (market ID `0x5f1c8f54170bee18d0d958454c78106f1271a5c6db6a2d607316e05f2ffc5d9d`),
+parity with the original Levera-named deployment's result. Market left
+**PAUSED** after acceptance, matching the legacy deployment's state.
+Full machine-readable record: `packages/contracts/deployments/testnet-46630.json`.

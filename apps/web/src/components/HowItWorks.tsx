@@ -1,89 +1,186 @@
 'use client';
 
-import React from 'react';
-import { ArrowRight, ShieldAlert, Layers, Cpu } from 'lucide-react';
+import dynamic from 'next/dynamic';
+import React, { useEffect, useRef, useState } from 'react';
+
+import { HowItWorksFlat } from './HowItWorksFlat';
+
+// three.js only loads once the section has scrolled into view.
+const HowItWorksScene = dynamic(() => import('./HowItWorksScene'), { ssr: false });
+
+const STEPS = [
+  { label: 'Deposit', caption: 'Lock TSLA as collateral' },
+  { label: 'Borrow or trade', caption: 'Borrow USDG, or go Long or Short' },
+  { label: 'Auto-Protect', caption: 'Auto-Protect trims risk before liquidation' },
+];
+const STEP_MS = 5000;
+
+function hasWebGL() {
+  try {
+    const canvas = document.createElement('canvas');
+    return Boolean(canvas.getContext('webgl2') || canvas.getContext('webgl'));
+  } catch {
+    return false;
+  }
+}
 
 export function HowItWorks() {
-  const steps = [
-    {
-      number: '01',
-      title: 'SUPPLY TOKENIZED EQUITY',
-      description: 'Deposit tokenized shares (NVDA, AAPL, TSLA, SPY) into isolated collateral markets on Robinhood Chain.',
-      badge: 'ISOLATED VAULT',
-      icon: Layers,
-    },
-    {
-      number: '02',
-      title: 'CHOOSE CREDIT STRATEGY',
-      description: 'Borrow USDC instantly, open 1-click 2.0x leveraged long/short positions, or deposit stablecoins for yield.',
-      badge: '1-CLICK MARGIN ROUTER',
-      icon: Cpu,
-    },
-    {
-      number: '03',
-      title: 'AUTO-PROTECT GUARD',
-      description: 'Set custom safety thresholds. Decentralized keepers automatically deleverage positions before forced liquidation.',
-      badge: 'PROTECTED DELEVERAGE',
-      icon: ShieldAlert,
-    },
-  ];
+  const [step, setStep] = useState(0);
+  const [inView, setInView] = useState(false);
+  const [revealed, setRevealed] = useState(false);
+  const [paused, setPaused] = useState(false);
+  const [touched, setTouched] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  const [reduceMotion, setReduceMotion] = useState(false);
+  const [webgl, setWebgl] = useState<boolean | null>(null);
+  const [sceneFailed, setSceneFailed] = useState(false);
+
+  const sectionRef = useRef<HTMLElement>(null);
+  const tabRefs = useRef<Array<HTMLButtonElement | null>>([]);
+
+  useEffect(() => {
+    setWebgl(hasWebGL());
+  }, []);
+
+  // Narrow screens show a crop of the flat drawing centered on the active scene.
+  useEffect(() => {
+    const query = window.matchMedia('(max-width: 760px)');
+    const update = () => setIsMobile(query.matches);
+    update();
+    query.addEventListener('change', update);
+    return () => query.removeEventListener('change', update);
+  }, []);
+
+  useEffect(() => {
+    const query = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const update = () => setReduceMotion(query.matches);
+    update();
+    query.addEventListener('change', update);
+    return () => query.removeEventListener('change', update);
+  }, []);
+
+  // The loop only runs while the section is on screen; re-entering resumes it.
+  useEffect(() => {
+    const node = sectionRef.current;
+    if (!node) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries[0].isIntersecting;
+        setInView(visible);
+        if (visible) {
+          setRevealed(true);
+          setPaused(false);
+        }
+      },
+      { threshold: 0.35 },
+    );
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (!inView || paused || reduceMotion) return;
+    const id = window.setTimeout(() => setStep((s) => (s + 1) % STEPS.length), STEP_MS);
+    return () => window.clearTimeout(id);
+  }, [inView, paused, reduceMotion, step]);
+
+  const goTo = (next: number, focus = false) => {
+    setPaused(true);
+    setTouched(true);
+    setStep(next);
+    if (focus) tabRefs.current[next]?.focus();
+  };
+
+  const onTabKey = (event: React.KeyboardEvent, index: number) => {
+    if (event.key === 'ArrowRight') {
+      event.preventDefault();
+      goTo((index + 1) % STEPS.length, true);
+    } else if (event.key === 'ArrowLeft') {
+      event.preventDefault();
+      goTo((index + STEPS.length - 1) % STEPS.length, true);
+    } else if (event.key === 'Home') {
+      event.preventDefault();
+      goTo(0, true);
+    } else if (event.key === 'End') {
+      event.preventDefault();
+      goTo(STEPS.length - 1, true);
+    }
+  };
+
+  // 3D by default. Reduced motion, no WebGL, or a lost context falls back to the flat drawing.
+  const flat = reduceMotion || webgl === false || sceneFailed;
+  const timed = inView && !paused && !reduceMotion;
 
   return (
-    <section className="space-y-8 font-mono">
-      <div className="border-b border-white/10 pb-4 flex justify-between items-end">
-        <div>
-          <span className="text-xs text-[#008000] font-bold block uppercase tracking-widest">
-            [PROTOCOL WORKFLOW]
-          </span>
-          <h2 className="text-2xl sm:text-4xl font-normal tracking-tight text-white uppercase font-mono mt-1">
-            HOW LEVIER WORKS
-          </h2>
-        </div>
-        <span className="text-xs text-[#8A8D88] uppercase hidden sm:block">
-          [3-STEP MARGIN EXECUTION]
-        </span>
+    <section
+      ref={sectionRef}
+      className="hiw section-wrap"
+      id="how-it-works"
+      aria-labelledby="how-it-works-title"
+    >
+      <div className="section-topline">
+        <span>02 / THE MECHANICS</span>
+        <span>HOW A POSITION WORKS</span>
       </div>
+      <h2 className="section-title" id="how-it-works-title">
+        Deposit. Borrow.{' '}
+        <br className="hiw-br" />
+        <span>Stay protected.</span>
+      </h2>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 relative">
-        {steps.map((step, idx) => {
-          const Icon = step.icon;
-          return (
-            <div
-              key={idx}
-              className="bg-[#080908] border border-white/15 p-6 sm:p-8 rounded-sm space-y-6 flex flex-col justify-between hover:border-[#008000]/50 transition-all group"
+      <div
+        className={`hiw-stage${revealed ? ' is-playing' : ''}`}
+        id="hiw-stage"
+        role="tabpanel"
+        aria-labelledby={`hiw-tab-${step}`}
+      >
+        {flat ? (
+          <HowItWorksFlat step={step} isMobile={isMobile} />
+        ) : (
+          <div
+            className="hiw-visual"
+            role="img"
+            aria-label="A 3D drawing of one position. Shares drop into a vault, USDG comes out to borrow, the position grows to 1.25 times for a Long or Short, and a guard trims it before the liquidation line reaches it."
+          >
+            {revealed && webgl && (
+              <HowItWorksScene step={step} active={inView} onFail={() => setSceneFailed(true)} />
+            )}
+          </div>
+        )}
+
+        <p className="hiw-caption" key={step}>
+          {STEPS[step].caption}
+          {step === 2 && <span className="hiw-testnet">Testnet</span>}
+        </p>
+
+        <div
+          className="hiw-tabs"
+          role="tablist"
+          aria-label="Steps"
+          style={{ ['--hiw-step' as string]: `${STEP_MS}ms` }}
+        >
+          {STEPS.map((s, i) => (
+            <button
+              key={s.label}
+              ref={(el) => {
+                tabRefs.current[i] = el;
+              }}
+              role="tab"
+              id={`hiw-tab-${i}`}
+              aria-selected={step === i}
+              aria-controls="hiw-stage"
+              tabIndex={step === i ? 0 : -1}
+              className={`hiw-tab${step === i ? ' is-active' : ''}${step === i && timed ? ' is-timed' : ''}`}
+              onClick={() => goTo(i)}
+              onKeyDown={(e) => onTabKey(e, i)}
             >
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <span className="text-3xl sm:text-4xl font-bold text-[#008000] tracking-tighter">
-                    {step.number}
-                  </span>
-                  <div className="p-2 bg-[#050505] border border-white/10 rounded-sm text-[#008000] group-hover:bg-[#008000] group-hover:text-white transition-colors">
-                    <Icon className="w-5 h-5" />
-                  </div>
-                </div>
-
-                <span className="text-[10px] text-[#008000] bg-[#008000]/10 border border-[#008000]/30 px-2 py-0.5 rounded-sm inline-block font-bold tracking-wider">
-                  {step.badge}
-                </span>
-
-                <h3 className="text-xl font-normal text-white uppercase tracking-tight font-sans">
-                  {step.title}
-                </h3>
-
-                <p className="text-xs text-[#8A8D88] leading-relaxed uppercase">
-                  {step.description}
-                </p>
-              </div>
-
-              {idx < steps.length - 1 && (
-                <div className="hidden md:flex items-center gap-2 text-[10px] text-[#008000] pt-4 border-t border-white/5">
-                  <span>NEXT STEP</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
-                </div>
-              )}
-            </div>
-          );
-        })}
+              {s.label}
+            </button>
+          ))}
+        </div>
+        <span className="sr-only" aria-live="polite">
+          {touched ? STEPS[step].caption : ''}
+        </span>
       </div>
     </section>
   );

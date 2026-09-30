@@ -73,7 +73,7 @@ export function OracleHealthIndicator({ status, loading }: OracleHealthIndicator
           border-color: rgba(245, 166, 35, 0.2);
         }
         .oracle-indicator.critical {
-          color: #ff6b6b;
+          color: #d6153c;
           background: rgba(255, 107, 107, 0.1);
           border-color: rgba(255, 107, 107, 0.2);
         }

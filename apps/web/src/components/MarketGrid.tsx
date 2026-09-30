@@ -23,7 +23,7 @@ export function MarketGrid({ markets }: MarketGridProps) {
     >
       {/* Topline */}
       <div className="section-topline">
-        <span>02 / THE ASSETS</span>
+        <span>04 / THE ASSETS</span>
         <span>PLANNED MARKET UNIVERSE</span>
       </div>
 
@@ -69,6 +69,38 @@ export function MarketGrid({ markets }: MarketGridProps) {
         <div className="flex items-center gap-6">
           <Link href="/markets" className="text-action">
             View all planned markets <span>↗</span>
+          </Link>
+        </div>
+      </div>
+
+      {/* Market Cross-Links — same real surfaces listed on /markets */}
+      <div className="market-crosslinks">
+        <div className="app-panel pons-crosslink">
+          <div className="app-section-label">
+            <span>Pons graduated assets</span>
+          </div>
+          <h3>Pons Markets</h3>
+          <p className="app-note">
+            Tokens that graduate from Pons bonding curves become candidates
+            for leverage trading. Discover eligible assets and their market
+            parameters.
+          </p>
+          <Link className="app-button secondary" href="/markets/pons">
+            Explore Pons markets ↗
+          </Link>
+        </div>
+        <div className="app-panel china-crosslink">
+          <div className="app-section-label">
+            <span>Chinese Equities · Robinhood Chain</span>
+          </div>
+          <h3>Tokenized Chinese Equities</h3>
+          <p className="app-note">
+            Discover tokenized exposure to leading Chinese companies through
+            verified US-listed ADRs on Robinhood Chain, featuring isolated
+            USDG credit and spot-backed leverage.
+          </p>
+          <Link className="app-button" href="/markets/china">
+            Explore China markets ↗
           </Link>
         </div>
       </div>

@@ -51,7 +51,7 @@ app.get("/health", (_req, res) => {
     writesEnabled: config.TRADING_ENABLED,
     databaseVerified: false,
     reason: "Deployment and canonical indexing require verification",
-    service: "Levera Markets REST API",
+    service: "Levier Markets REST API",
     version: "1.0.0",
     mode: config.NODE_ENV,
     defaultNetwork: config.NETWORK_MODE,
@@ -90,10 +90,10 @@ app.use(
 const PORT = parseInt(config.PORT, 10);
 app.listen(PORT, config.API_BIND_HOST, () => {
   console.log(
-    `[Levera API] Microservice listening on http://${config.API_BIND_HOST}:${PORT}`,
+    `[Levier API] Microservice listening on http://${config.API_BIND_HOST}:${PORT}`,
   );
-  console.log(`[Levera API] Default Network: ${config.NETWORK_MODE}`);
-  console.log(`[Levera API] Supabase Live Mode: ${isLiveSupabase}`);
+  console.log(`[Levier API] Default Network: ${config.NETWORK_MODE}`);
+  console.log(`[Levier API] Supabase Live Mode: ${isLiveSupabase}`);
 });
 
 export default app;

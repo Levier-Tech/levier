@@ -4,16 +4,16 @@ const root = new URL("../", import.meta.url);
 const groups = {
   margin: ["MarginRouter", "RhShortReferenceOracle"],
   lending: [
-    "LeveraPair",
-    "LeveraRouter",
-    "LeveraMarketRegistry",
+    "LevierPair",
+    "LevierRouter",
+    "LevierMarketRegistry",
     "VerifiedFeedOracle",
   ],
   modules: [
     "LeverageRouter",
     "ShortRouter",
     "AutoProtectModule",
-    "LeveraVault",
+    "LevierVault",
     "RhTestnetReferenceOracle",
   ],
 };

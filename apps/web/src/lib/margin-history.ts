@@ -9,7 +9,7 @@ import {
   type PublicClient,
 } from "viem";
 import { MarginRouterABI } from "../contracts/generated/margin";
-import { LeveraPairABI } from "../contracts/generated/lending";
+import { LevierPairABI } from "../contracts/generated/lending";
 import {
   discoverWalletTransactions,
   HistoryError,
@@ -77,7 +77,7 @@ export async function verifyMarginHistoryTransaction(
       requested = call.args[1];
       amountKind = "allowance";
     } else if (same(tx.to, long.pair) || same(tx.to, d.short.pair)) {
-      const call = decodeFunctionData({ abi: LeveraPairABI, data: tx.input });
+      const call = decodeFunctionData({ abi: LevierPairABI, data: tx.input });
       if (call.functionName !== "setOperator" || !same(call.args[0], d.router))
         return null;
       action = "operator";
@@ -114,7 +114,7 @@ export async function verifyMarginHistoryTransaction(
             action === "approval"
               ? erc20Abi
               : action === "operator"
-                ? LeveraPairABI
+                ? LevierPairABI
                 : MarginRouterABI,
           data: log.data,
           topics: log.topics,

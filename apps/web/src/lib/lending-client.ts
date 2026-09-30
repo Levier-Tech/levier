@@ -13,8 +13,8 @@ import {
   type WalletClient,
 } from "viem";
 import {
-  LeveraPairABI,
-  LeveraMarketRegistryABI,
+  LevierPairABI,
+  LevierMarketRegistryABI,
 } from "../contracts/generated/lending";
 
 export type LendingDeployment = {
@@ -97,7 +97,7 @@ export async function readLendingSnapshot(
   }
   const pair = {
     address: deployment.pair,
-    abi: LeveraPairABI,
+    abi: LevierPairABI,
     blockNumber,
   } as const;
   const [
@@ -157,7 +157,7 @@ export async function readLendingSnapshot(
     await Promise.all([
       client.readContract({
         address: registry,
-        abi: LeveraMarketRegistryABI,
+        abi: LevierMarketRegistryABI,
         functionName: "getMarket",
         args: [marketId],
         blockNumber,
@@ -316,7 +316,7 @@ export function verifyPairEvent(
     if (!same(log.address, deployment.pair)) continue;
     try {
       const event = decodeEventLog({
-        abi: LeveraPairABI,
+        abi: LevierPairABI,
         data: log.data,
         topics: [...log.topics] as [Hex, ...Hex[]],
       });
@@ -472,7 +472,7 @@ export async function executeLendingAction(options: {
     withdraw: "withdrawCollateral",
   }[action] as "depositCollateral" | "borrow" | "repay" | "withdrawCollateral";
   const data = encodeFunctionData({
-    abi: LeveraPairABI,
+    abi: LevierPairABI,
     functionName,
     args: [amount],
   });

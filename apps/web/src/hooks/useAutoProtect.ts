@@ -66,7 +66,7 @@ export function useAutoProtect(networkMode: NetworkMode) {
             isEnabled: true,
           });
         } catch (syncErr) {
-          console.warn("Could not sync rule via Levera API:", syncErr);
+          console.warn("Could not sync rule via Levier API:", syncErr);
         }
 
         setTxHash(hash);

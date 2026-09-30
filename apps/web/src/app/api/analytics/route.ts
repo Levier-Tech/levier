@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createPublicClient, http } from "viem";
+import { createPublicClient } from "viem";
+import { retryingHttp } from "../../../lib/lagging-node-retry";
 import environment from "../../../../config/environment.cjs";
 import { env } from "../../../env.mjs";
 import {
@@ -40,7 +41,7 @@ export async function GET(request: NextRequest) {
         ],
       );
       const client = createPublicClient({
-        transport: http(server.RPC_URL, {
+        transport: retryingHttp(server.RPC_URL, {
           timeout: server.RPC_TIMEOUT_MS,
           retryCount: 0,
         }),

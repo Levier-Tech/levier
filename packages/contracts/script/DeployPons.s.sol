@@ -24,7 +24,11 @@ contract DeployPons is Script {
         vm.startBroadcast(deployerPrivateKey);
 
         // 1. Deploy Testnet Tokens
-        TestnetERC20 usdg = new TestnetERC20("Global Dollar", "USDG", 18, 50_000_000e18, deployer);
+        // Reuse the real faucet USDG when USDG_ADDRESS is set; otherwise deploy a mock (local only).
+        address usdgAddress = vm.envOr("USDG_ADDRESS", address(0));
+        TestnetERC20 usdg = usdgAddress == address(0)
+            ? new TestnetERC20("Global Dollar", "USDG", 18, 50_000_000e18, deployer)
+            : TestnetERC20(usdgAddress);
         TestnetERC20 pmeme = new TestnetERC20("Pons Meme Token", "PMEME", 18, 1_000_000e18, deployer);
         TestnetERC20 pgov = new TestnetERC20("Pons Governance", "PGOV", 18, 1_000_000e18, deployer);
 
@@ -121,7 +125,8 @@ contract DeployPons is Script {
         finalJson = vm.serializeAddress("addresses", "LeveragePositionManager", address(positionManager));
         finalJson = vm.serializeAddress("addresses", "PonsAutoProtectModule", address(autoProtect));
 
-        vm.writeJson(finalJson, "deployments.json");
+        // Separate file: deployments.json is the legacy record and must stay untouched.
+        vm.writeJson(finalJson, "deployments/pons-testnet-46630.json");
 
         console.log("DEPLOYMENT COMPLETED SUCCESSFULLY");
         console.log("USDG:", address(usdg));

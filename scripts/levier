@@ -1,0 +1,66 @@
+#!/usr/bin/env bash
+# levier: project command dispatcher.
+#   levier testnet deploy [pons|margin|all]   interactive RH Testnet (46630) deploy
+#   levier testnet status                     margin + lending status
+#   levier help
+# Bare `levier` on PATH: ln -sf "$(pwd)/scripts/levier" ~/.local/bin/levier
+set -euo pipefail
+
+# Resolve through symlinks so the repo root is found when invoked from PATH.
+SOURCE="${BASH_SOURCE[0]}"
+while [ -L "$SOURCE" ]; do
+  DIR="$(cd "$(dirname "$SOURCE")" && pwd)"
+  SOURCE="$(readlink "$SOURCE")"
+  [[ "$SOURCE" != /* ]] && SOURCE="$DIR/$SOURCE"
+done
+SCRIPTS="$(cd "$(dirname "$SOURCE")" && pwd)"
+ROOT="$(cd "$SCRIPTS/.." && pwd)"
+
+usage() {
+  cat <<'EOF'
+Usage: levier <command>
+
+  testnet deploy [pons|margin|all]   Interactive deploy on RH Testnet (default: all)
+  testnet deploy all --yes           One command, one confirmation ('deploy'), no more prompts
+  testnet enable [--yes]             Enable the Railway site, run the price publisher (it activates the markets)
+  testnet publisher                  Keep the price publisher running (auto-restart; markets stay open)
+  testnet preflight [wallet]         Read-only readiness check before testing or recording
+  testnet status                     Show margin and lending status
+  help                               Show this help
+EOF
+}
+
+testnet_deploy() {
+  local target="${1:-all}"
+  if [ "${2:-}" = "--yes" ]; then
+    echo "About to BROADCAST '$target' on RH Testnet (chain 46630) with no further prompts."
+    read -r -p "Type 'deploy' to continue: " reply
+    [ "$reply" = "deploy" ] || { echo "Aborted."; exit 1; }
+    export LEVIER_YES=1
+  fi
+  case "$target" in
+    pons)   "$SCRIPTS/deploy-pons-testnet.sh" ;;
+    margin) "$SCRIPTS/deploy-margin-testnet.sh" ;;
+    all)
+      # Pons is already live once its record exists; skip unless FORCE_PONS=1.
+      if [ -f "$ROOT/packages/contracts/deployments/pons-testnet-46630.json" ] && [ "${FORCE_PONS:-}" != "1" ]; then
+        echo "Pons group already deployed (pons-testnet-46630.json exists), skipping. FORCE_PONS=1 to redeploy."
+      else
+        "$SCRIPTS/deploy-pons-testnet.sh"
+      fi
+      "$SCRIPTS/deploy-margin-testnet.sh"
+      ;;
+    *) echo "Unknown target: $1 (use pons, margin or all)"; exit 1 ;;
+  esac
+}
+
+cd "$ROOT"
+case "${1:-help}:${2:-}" in
+  testnet:deploy)  testnet_deploy "${3:-all}" "${4:-}" ;;
+  testnet:enable)  "$SCRIPTS/enable-testnet-site.sh" "${@:3}" ;;
+  testnet:publisher) exec "$SCRIPTS/run-publisher-loop.sh" ;;
+  testnet:preflight) exec "$SCRIPTS/preflight-testnet-site.sh" "${@:3}" ;;
+  testnet:status)  pnpm rh:margin:status; pnpm rh:lending:status ;;
+  help:*|-h:*|--help:*) usage ;;
+  *) usage; exit 1 ;;
+esac

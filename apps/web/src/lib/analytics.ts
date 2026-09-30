@@ -1,8 +1,8 @@
 import { erc20Abi, keccak256, parseAbi, type PublicClient } from "viem";
 import { z } from "zod";
 import {
-  LeveraPairABI,
-  LeveraMarketRegistryABI,
+  LevierPairABI,
+  LevierMarketRegistryABI,
 } from "../contracts/generated/lending";
 import { MarginRouterABI } from "../contracts/generated/margin";
 import { readLendingSnapshot, type LendingDeployment } from "./lending-client";
@@ -176,13 +176,13 @@ export async function readAnalyticsSnapshot(
           [
             client.readContract({
               address: d.pair,
-              abi: LeveraPairABI,
+              abi: LevierPairABI,
               functionName: "totalSupplyCollateral",
               blockNumber,
             }),
             client.readContract({
               address: d.pair,
-              abi: LeveraPairABI,
+              abi: LevierPairABI,
               functionName: "totalBorrowedDebt",
               blockNumber,
             }),
@@ -195,7 +195,7 @@ export async function readAnalyticsSnapshot(
             }),
             client.readContract({
               address: d.registry,
-              abi: LeveraMarketRegistryABI,
+              abi: LevierMarketRegistryABI,
               functionName: "getMarket",
               args: [d.marketId],
               blockNumber,
@@ -325,7 +325,7 @@ export async function readAnalyticsSnapshot(
         }),
         client.readContract({
           address: long.registry,
-          abi: LeveraMarketRegistryABI,
+          abi: LevierMarketRegistryABI,
           functionName: "isAuthorizedRouter",
           args: [d.router],
           blockNumber,

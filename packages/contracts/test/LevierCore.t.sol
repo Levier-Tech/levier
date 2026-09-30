@@ -4,14 +4,14 @@ pragma solidity ^0.8.24;
 import "forge-std/Test.sol";
 import "../src/tokens/TestnetERC20.sol";
 import "../src/oracle/CompositeSanityOracle.sol";
-import "../src/registry/LeveraMarketRegistry.sol";
-import "../src/core/LeveraPair.sol";
-import "../src/vaults/LeveraVault.sol";
-import "../src/routers/LeveraRouter.sol";
+import "../src/registry/LevierMarketRegistry.sol";
+import "../src/core/LevierPair.sol";
+import "../src/vaults/LevierVault.sol";
+import "../src/routers/LevierRouter.sol";
 import "../src/routers/LeverageRouter.sol";
 import "../src/modules/AutoProtectModule.sol";
 
-contract LeveraCoreTest is Test {
+contract LevierCoreTest is Test {
     address admin = address(0xAD);
     address alice = address(0xA1);
     address bob = address(0xB2);
@@ -20,10 +20,10 @@ contract LeveraCoreTest is Test {
     TestnetERC20 nvda;
     TestnetERC20 usdg;
     CompositeSanityOracle oracle;
-    LeveraMarketRegistry registry;
-    LeveraPair pair;
-    LeveraVault vault;
-    LeveraRouter router;
+    LevierMarketRegistry registry;
+    LevierPair pair;
+    LevierVault vault;
+    LevierRouter router;
     LeverageRouter leverageRouter;
     AutoProtectModule autoProtect;
 
@@ -42,13 +42,13 @@ contract LeveraCoreTest is Test {
         oracle.setPrice(address(usdg), 1e18);
 
         // 3. Deploy Registry
-        registry = new LeveraMarketRegistry(admin);
+        registry = new LevierMarketRegistry(admin);
 
         // 4. Deploy Dummy Pair Address for pre-calculation
         marketId = keccak256(abi.encodePacked("nvda-usdg-testnet", address(nvda), address(usdg)));
 
         // 5. Deploy Pair
-        pair = new LeveraPair(marketId, address(nvda), address(usdg), address(oracle), address(registry), admin);
+        pair = new LevierPair(marketId, address(nvda), address(usdg), address(oracle), address(registry), admin);
 
         // Register Market in Registry
         registry.addMarket(
@@ -57,7 +57,7 @@ contract LeveraCoreTest is Test {
             address(usdg),
             address(pair),
             address(oracle),
-            LeveraMarketRegistry.RiskTier.TierA,
+            LevierMarketRegistry.RiskTier.TierA,
             6000, // 60% Max LTV
             7000, // 70% Liquidation LTV
             25000, // 2.5x Max Leverage
@@ -66,17 +66,17 @@ contract LeveraCoreTest is Test {
         );
 
         // 6. Deploy Vault
-        vault = new LeveraVault(
+        vault = new LevierVault(
             IERC20(address(usdg)),
-            "Levera USDG Yield Vault",
+            "Levier USDG Yield Vault",
             "lvUSDG",
-            "levera-usdg-vault-testnet",
+            "levier-usdg-vault-testnet",
             "Conservative",
             admin
         );
 
         // 7. Deploy Routers
-        router = new LeveraRouter();
+        router = new LevierRouter();
         leverageRouter = new LeverageRouter(admin);
         vault.setDepositsPaused(false);
         leverageRouter.setPaused(false);

@@ -10,7 +10,7 @@ import {
 } from "viem";
 import { ensureGasBalance } from "./transaction-feedback";
 import { MarginRouterABI } from "../contracts/generated/margin";
-import { LeveraPairABI } from "../contracts/generated/lending";
+import { LevierPairABI } from "../contracts/generated/lending";
 import {
   readLendingSnapshot,
   type LendingDeployment,
@@ -409,7 +409,7 @@ export async function executeMarginAction(options: {
   const operator = () =>
     client.readContract({
       address: pair,
-      abi: LeveraPairABI,
+      abi: LevierPairABI,
       functionName: "approvedOperators",
       args: [account, d.router],
     });
@@ -417,7 +417,7 @@ export async function executeMarginAction(options: {
     await send(
       pair,
       encodeFunctionData({
-        abi: LeveraPairABI,
+        abi: LevierPairABI,
         functionName: "setOperator",
         args: [d.router, true],
       }),
@@ -488,7 +488,7 @@ export async function executeMarginAction(options: {
   }
   const position = await client.readContract({
     address: pair,
-    abi: LeveraPairABI,
+    abi: LevierPairABI,
     functionName: "accounts",
     args: [account],
     blockNumber: receipt.blockNumber,
