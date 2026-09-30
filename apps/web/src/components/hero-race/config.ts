@@ -36,4 +36,5 @@ export const BIKE_MODEL_CONFIG = {
   rotationY: 0,
   paintNames: /livery/i,
   wheelNames: /tyre|tire/i,
+  rimNames: /rim/i,
 };

@@ -207,6 +207,33 @@ function toFloat(source: THREE.BufferGeometry) {
   return geometry;
 }
 
+// Splits a geometry into one piece per axle (each triangle goes to the nearest axle along X), each piece
+// re-centred on its axle.
+function splitByAxle(geometry: THREE.BufferGeometry, axles: THREE.Vector3[]) {
+  if (!axles.length) return [];
+  const pos = geometry.attributes.position;
+  const index = geometry.index;
+  const count = index ? index.count : pos.count;
+  const lists: number[][] = axles.map(() => []);
+  for (let i = 0; i < count; i += 3) {
+    const a = index ? index.getX(i) : i;
+    const b = index ? index.getX(i + 1) : i + 1;
+    const c = index ? index.getX(i + 2) : i + 2;
+    const cx = (pos.getX(a) + pos.getX(b) + pos.getX(c)) / 3;
+    let best = 0;
+    axles.forEach((axle, k) => {
+      if (Math.abs(axle.x - cx) < Math.abs(axles[best].x - cx)) best = k;
+    });
+    lists[best].push(a, b, c);
+  }
+  return axles.map((axle, k) => {
+    const part = geometry.clone();
+    part.setIndex(lists[k]);
+    part.translate(-axle.x, -axle.y, -axle.z);
+    return { geometry: part, axle };
+  });
+}
+
 export interface BikeModel {
   /** Static parts, flattened into bike space (meters, +X forward, ground at y = 0). */
   body: THREE.Group;
@@ -236,6 +263,7 @@ export async function loadBikeModel(url: string): Promise<BikeModel | null> {
       .multiply(new THREE.Matrix4().makeTranslation(-center.x, -box.min.y, -center.z));
     const body = new THREE.Group();
     const wheels: THREE.Mesh[] = [];
+    const rims: THREE.Mesh[] = [];
     let paint: THREE.Material | null = null;
     const meshes: THREE.Mesh[] = [];
     scene.traverse((o) => {
@@ -257,7 +285,9 @@ export async function loadBikeModel(url: string): Promise<BikeModel | null> {
       }
       const flat = new THREE.Mesh(geometry, material);
       if (BIKE_MODEL_CONFIG.paintNames.test(material.name)) paint = material;
-      if (BIKE_MODEL_CONFIG.wheelNames.test(material.name)) {
+      if (BIKE_MODEL_CONFIG.rimNames.test(material.name)) {
+        rims.push(flat);
+      } else if (BIKE_MODEL_CONFIG.wheelNames.test(material.name)) {
         geometry.computeBoundingBox();
         const c = geometry.boundingBox!.getCenter(new THREE.Vector3());
         geometry.translate(-c.x, -c.y, -c.z);
@@ -265,6 +295,16 @@ export async function loadBikeModel(url: string): Promise<BikeModel | null> {
         wheels.push(flat);
       } else {
         body.add(flat);
+      }
+    }
+    // Both rims come as one mesh. Split it front/back by triangle and pivot each half on its tyre's axle,
+    // so the spokes turn with the wheel.
+    const axles = wheels.map((w) => w.position.clone());
+    for (const rim of rims) {
+      for (const part of splitByAxle(rim.geometry, axles)) {
+        const mesh = new THREE.Mesh(part.geometry, rim.material);
+        mesh.position.copy(part.axle);
+        wheels.push(mesh);
       }
     }
     return { body, wheels, paint };

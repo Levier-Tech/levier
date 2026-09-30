@@ -21,8 +21,8 @@ interface HeroRaceProps {
   onSelectAsset?: (ticker: string) => void;
 }
 
-// Cinematic MotoGP loop with a live-price leaderboard. The stock-card carousel stays as the fallback
-// (no WebGL, reduced motion, lost context) and while the 3D scene loads.
+// Cinematic MotoGP loop with a live-price leaderboard. The stock-card carousel is only the fallback for devices
+// that cannot run the scene (no WebGL, reduced motion, lost context); while the scene loads the stage stays dark.
 export function HeroRace({ markets, onSelectAsset }: HeroRaceProps) {
   const router = useRouter();
   const references = useReferencePrices();
@@ -31,7 +31,7 @@ export function HeroRace({ markets, onSelectAsset }: HeroRaceProps) {
   const [load, setLoad] = useState(false);
   const [ready, setReady] = useState(false);
   const [failed, setFailed] = useState(false);
-  const [showCards, setShowCards] = useState(true);
+  const [fallback, setFallback] = useState(false);
   const [inView, setInView] = useState(true);
   const [logo, setLogo] = useState(false);
   const [soundOn, setSoundOn] = useState(false);
@@ -84,7 +84,10 @@ export function HeroRace({ markets, onSelectAsset }: HeroRaceProps) {
 
   useEffect(() => {
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (reduce || !hasWebGL() || riders.length < 5) return;
+    if (reduce || !hasWebGL() || riders.length < 5) {
+      setFallback(true);
+      return;
+    }
     const idle = (window as unknown as { requestIdleCallback?: (cb: () => void, o?: { timeout: number }) => number }).requestIdleCallback;
     const id = idle ? idle(() => setLoad(true), { timeout: 1500 }) : window.setTimeout(() => setLoad(true), 400);
     return () => {
@@ -101,18 +104,11 @@ export function HeroRace({ markets, onSelectAsset }: HeroRaceProps) {
     return () => observer.disconnect();
   }, []);
 
-  // Remove the cards once the cross-fade has finished.
-  useEffect(() => {
-    if (!ready) return;
-    const id = window.setTimeout(() => setShowCards(false), 900);
-    return () => window.clearTimeout(id);
-  }, [ready]);
-
   const onReady = useCallback(() => setReady(true), []);
   const onFail = useCallback(() => {
     setFailed(true);
     setReady(false);
-    setShowCards(true);
+    setFallback(true);
   }, []);
   const onOrder = useCallback((next: number[]) => setOrder(next), []);
   const onLogo = useCallback((next: boolean) => setLogo(next), []);
@@ -124,8 +120,8 @@ export function HeroRace({ markets, onSelectAsset }: HeroRaceProps) {
 
   return (
     <div className="hero-race" ref={wrapRef}>
-      {showCards && (
-        <div className={`hero-race-cards${ready ? ' is-hidden' : ''}`} aria-hidden={ready || undefined}>
+      {fallback && (
+        <div className="hero-race-cards">
           <StockCardScene markets={markets} onSelectAsset={onSelectAsset} />
         </div>
       )}
