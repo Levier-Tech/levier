@@ -105,6 +105,14 @@ export function Footer() {
             <div className="footer-bottom">
                 <span>© 2026 Levier Markets</span>
                 <a
+                    className="footer-credit"
+                    href="https://sketchfab.com/3d-models/2021-ducati-panigale-v4-sp-8c0632e4c54249758114490390f0b73f"
+                    target="_blank"
+                    rel="noreferrer"
+                >
+                    Hero bike model by Gratisphile, CC BY 4.0, modified
+                </a>
+                <a
                     href={X_URL}
                     target="_blank"
                     rel="noopener noreferrer"

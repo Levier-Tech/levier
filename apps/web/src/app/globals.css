@@ -295,6 +295,7 @@
 /* Hero Section — pinned to its original typeface; restyle covers colors only, not this section's type/layout. */
 .hero {
   --display: Tomorrow, "Courier New", monospace;
+  --hero-scene-h: clamp(360px, 36vw, 540px);
   padding: 0 4.4%;
   position: relative;
   overflow: hidden;
@@ -309,7 +310,7 @@
   font-family: var(--display);
 }
 .stock-scene {
-  height: clamp(330px, 35vw, 480px);
+  height: var(--hero-scene-h);
   position: relative;
   display: flex;
   align-items: center;
@@ -423,11 +424,319 @@
   filter: brightness(0);
 }
 
+/* Hero race: cinematic three.js MotoGP loop. The old stock cards stay underneath as the fallback. */
+.hero-race {
+  position: relative;
+  height: var(--hero-scene-h);
+  margin-top: -2px;
+}
+.hero-race .stock-scene {
+  height: 100%;
+  margin-top: 0;
+}
+.hero-race-cards {
+  position: absolute;
+  inset: 0;
+  transition: opacity 0.8s ease;
+}
+.hero-race-cards.is-hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+.hero-race-stage {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.8s ease;
+  /* Feather the top and bottom edges into the page background */
+  -webkit-mask-image: linear-gradient(to bottom, transparent, #000 10%, #000 90%, transparent);
+  mask-image: linear-gradient(to bottom, transparent, #000 10%, #000 90%, transparent);
+}
+.hero-race-stage.is-ready {
+  opacity: 1;
+}
+.hero-race-canvas {
+  position: absolute;
+  inset: 0;
+}
+.hero-race-canvas canvas {
+  position: relative; /* above the carbon backdrop */
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.hero-race-tags {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+.hero-race-tag {
+  position: absolute;
+  left: 0;
+  top: 0;
+  padding: 2px 9px;
+  border: 1px solid rgba(194, 255, 71, 0.5);
+  border-radius: 999px;
+  background: rgba(8, 8, 8, 0.72);
+  color: var(--text);
+  font-family: var(--body);
+  font-size: 11px;
+  line-height: 1.5;
+  letter-spacing: 0.4px;
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 0.25s;
+  will-change: transform;
+}
+.hero-race-tag.is-on {
+  opacity: 1;
+}
+.hero-race-carbon {
+  /* Carbon-fibre twill behind the logo, fading into the page background at the edges */
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  background:
+    radial-gradient(ellipse 70% 75% at 50% 48%, rgba(8, 8, 8, 0) 0%, rgba(8, 8, 8, 0.6) 55%, #080808 88%),
+    linear-gradient(27deg, #121314 5px, transparent 5px) 0 5px,
+    linear-gradient(207deg, #121314 5px, transparent 5px) 10px 0,
+    linear-gradient(27deg, #1c1d1f 5px, transparent 5px) 0 10px,
+    linear-gradient(207deg, #1c1d1f 5px, transparent 5px) 10px 5px,
+    linear-gradient(90deg, #17181a 10px, transparent 10px),
+    linear-gradient(#18191b 25%, #151618 25%, #151618 50%, transparent 50%, transparent 75%, #1e1f21 75%, #1e1f21);
+  background-color: #111213;
+  background-size: 100% 100%, 20px 20px, 20px 20px, 20px 20px, 20px 20px, 20px 20px, 20px 20px;
+}
+.hero-race-carbon::after {
+  /* Slow sheen across the weave */
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(110deg, transparent 30%, rgba(255, 255, 255, 0.05) 45%, transparent 60%);
+  background-size: 250% 100%;
+  animation: hero-race-sheen 6s ease-in-out infinite;
+}
+@keyframes hero-race-sheen {
+  from { background-position: 100% 0; }
+  to { background-position: -150% 0; }
+}
+.hero-race-caption {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  margin: 0;
+  width: max-content;
+  max-width: 88%;
+  text-align: center;
+  font-family: var(--display);
+  font-size: clamp(14px, 1.5vw, 21px);
+  letter-spacing: 0.5px;
+  color: var(--text);
+  opacity: 0;
+  pointer-events: none;
+  text-shadow: 0 0 24px rgba(194, 255, 71, 0.25);
+}
+.hero-race-sound {
+  position: absolute;
+  right: 0;
+  bottom: 48px;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 4px 12px 4px 4px;
+  background: rgba(8, 8, 8, 0.72);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  transition: border-color 0.2s;
+}
+.hero-race-sound.is-on {
+  border-color: rgba(194, 255, 71, 0.6);
+}
+.hero-race-sound button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 8px;
+  background: none;
+  border: 0;
+  border-radius: 3px;
+  color: var(--muted);
+  font-family: var(--body);
+  font-size: 12px;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+.hero-race-sound button:hover,
+.hero-race-sound.is-on button {
+  color: var(--green);
+}
+.hero-race-sound button:focus-visible,
+.hero-race-sound input:focus-visible {
+  outline: 2px solid var(--green);
+  outline-offset: 2px;
+}
+.hero-race-sound input[type="range"] {
+  width: 88px;
+  height: 4px;
+  margin: 0;
+  appearance: none;
+  -webkit-appearance: none;
+  background: linear-gradient(to right, var(--green) var(--fill), var(--line) var(--fill));
+  border-radius: 2px;
+  cursor: pointer;
+}
+.hero-race-sound input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--text);
+  border: 0;
+}
+.hero-race-sound input[type="range"]::-moz-range-thumb {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--text);
+  border: 0;
+}
+@media (max-width: 760px) {
+  .hero-race-sound {
+    right: 6%;
+    bottom: 80px;
+  }
+  .hero-race-sound button span {
+    display: none;
+  }
+  .hero-race-sound input[type="range"] {
+    width: 64px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-race-carbon::after { animation: none; }
+}
+.hero-race-bar {
+  position: absolute;
+  left: 0;
+  right: 0;
+  background: #080808;
+  pointer-events: none;
+  will-change: transform;
+}
+.hero-race-bar.is-top {
+  top: 0;
+  transform: translateY(-100%);
+}
+.hero-race-bar.is-bottom {
+  bottom: 0;
+  transform: translateY(100%);
+}
+.hero-race-board.is-hidden {
+  opacity: 0;
+  visibility: hidden;
+}
+.hero-race-flash {
+  position: absolute;
+  inset: 0;
+  background: #080808;
+  opacity: 0;
+  pointer-events: none;
+}
+.hero-race-board {
+  position: absolute;
+  transition: opacity 0.6s ease, visibility 0.6s;
+  left: 0;
+  bottom: 48px;
+  z-index: 2;
+  display: grid;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-family: var(--body);
+}
+.hero-race-board button {
+  display: grid;
+  grid-template-columns: 2.2em 3.6em 1fr;
+  align-items: baseline;
+  gap: 8px;
+  width: 100%;
+  min-width: 210px;
+  padding: 5px 12px;
+  background: rgba(8, 8, 8, 0.72);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  color: var(--text);
+  font-size: 13px;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+}
+.hero-race-board button:hover {
+  border-color: var(--green);
+  background: rgba(20, 24, 12, 0.9);
+}
+.hero-race-board button:focus-visible {
+  outline: 2px solid var(--green);
+  outline-offset: 2px;
+}
+.hero-race-board .place {
+  color: var(--green);
+  font-weight: 600;
+}
+.hero-race-board .price {
+  color: var(--muted);
+  text-align: right;
+}
+@media (max-width: 760px) {
+  .hero-race {
+    width: calc(100% + 13.65%);
+    margin-left: -6.82%;
+    margin-top: 4px;
+  }
+  .hero-race .stock-scene {
+    width: 100%;
+    margin-left: 0;
+  }
+  .hero-race-board {
+    left: 6%;
+    right: 6%;
+    bottom: 40px;
+    display: flex;
+    gap: 4px;
+  }
+  .hero-race-board li {
+    flex: 1 1 0;
+  }
+  .hero-race-board button {
+    min-width: 0;
+    grid-template-columns: auto 1fr;
+    gap: 5px;
+    padding: 3px 6px;
+    font-size: 11px;
+  }
+  /* Prices stay readable to screen readers; the chips are too narrow to show them. */
+  .hero-race-board .price {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+  .hero-race-tag {
+    font-size: 10px;
+    padding: 1px 6px;
+  }
+}
+
 .motion-row {
   position: absolute;
   left: 4.4%;
   right: 4.4%;
-  top: calc(clamp(330px, 35vw, 480px) + 12px);
+  top: calc(var(--hero-scene-h) + 12px);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -1653,6 +1962,14 @@ button:hover .arrow-chip {
   color: var(--green);
   border-color: var(--green);
 }
+.footer-credit {
+  color: var(--muted);
+  opacity: 0.7;
+}
+.footer-credit:hover {
+  opacity: 1;
+  text-decoration: underline;
+}
 .footer-bottom {
   border-top: 1px solid var(--line);
   padding-top: 23px;
@@ -1777,11 +2094,8 @@ button:hover .arrow-chip {
     margin-left: -105.5px;
     margin-top: -132.5px;
   }
-  .stock-scene {
-    height: 355px;
-  }
-  .motion-row {
-    top: 365px;
+  .hero {
+    --hero-scene-h: 400px;
   }
   .product-layout {
     gap: 40px;
@@ -1862,8 +2176,10 @@ button:hover .arrow-chip {
   .hero-eyebrow > span:last-child {
     display: none;
   }
+  .hero {
+    --hero-scene-h: 380px;
+  }
   .stock-scene {
-    height: 307px;
     width: calc(100% + 13.65%);
     margin-left: -6.82%;
     margin-top: 4px;
@@ -1900,7 +2216,6 @@ button:hover .arrow-chip {
     font-size: 16px;
   }
   .motion-row {
-    top: 321px;
     left: 6%;
     right: 6%;
     font-size: 12px;

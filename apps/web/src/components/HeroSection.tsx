@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { StockCardScene } from './StockCardScene';
+import { HeroRace } from './HeroRace';
 import { MarketConfig } from '@levier/types';
 import { CABadge } from './CABadge';
 
@@ -39,11 +39,8 @@ export function HeroSection({
         <span>LEVIER / 01</span>
       </div>
 
-      {/* 3D Rotating Stock Card Scene */}
-      <StockCardScene
-        markets={markets}
-        onSelectAsset={onSelectMarketAsset}
-      />
+      {/* Cinematic 3D race scene (stock cards remain as the fallback) */}
+      <HeroRace markets={markets} onSelectAsset={onSelectMarketAsset} />
 
       {/* Motion row label */}
       <div className="motion-row">
