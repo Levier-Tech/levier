@@ -111,5 +111,5 @@ supabase/.temp/
 *.sqlite3
 *.env
 
-# /docs
+/docs
 /tests
