@@ -16,7 +16,6 @@ const FILES = [
   'hit-distorted',
   'braam',
   'crowd',
-  'whoosh',
   'logo-sting',
 ] as const;
 type Name = (typeof FILES)[number];
@@ -81,13 +80,7 @@ export class HeroSound {
         },
       },
       // Lights out.
-      {
-        at: PHASE.grid,
-        run: () => {
-          this.play('hit-distorted', 0.8);
-          this.play('whoosh', 1.6);
-        },
-      },
+      { at: PHASE.grid, run: one('hit-distorted', 0.8) },
       // The pack screams past on the first cut.
       { at: 5.3, run: () => this.startBed('pack', 'pack-pass', 0.9, 1, false, 0.4) },
       // Overtakes.

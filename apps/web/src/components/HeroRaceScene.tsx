@@ -237,7 +237,9 @@ export default function HeroRaceScene({ riders, active, onReady, onFail, onOrder
             rig.root.rotation.y = s.yaw;
             rig.lean.rotation.x = s.roll;
             rig.wheels.forEach((w) => {
-              w.rotation.z -= (speed / WHEEL_RADIUS) * dt;
+              // Real wheel speed would strobe (or spin backwards) at screen frame rates, so the visible spin is
+              // capped: fast enough to read as rolling, and it still winds down in slow motion.
+              w.rotation.z -= Math.min(speed / WHEEL_RADIUS, 26) * dt;
             });
           }
           if (s.visible) {
