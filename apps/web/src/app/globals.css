@@ -2960,9 +2960,11 @@ button:hover .arrow-chip {
 /* Faucet equities share the original full-face hero-card treatment. */
 .stock-card.palantir { background: #7fa7de; }
 .stock-card.netflix { background: #e9e6de; }
+.stock-card.nvidia { background: #9bd34f; }
 .stock-card.amd { background: #bded35; }
 .stock-card.palantir img { width: 106px; filter: brightness(0); }
 .stock-card.netflix img { width: 88px; filter: brightness(0); }
+.stock-card.nvidia img { width: 96px; filter: brightness(0); }
 .stock-card.amd img { width: 102px; filter: brightness(0); }
 .stock-card:focus-visible { outline: 3px solid var(--green); outline-offset: 5px; }
 .card-quote { display: flex; flex-direction: column; gap: 5px; }
@@ -2971,6 +2973,7 @@ button:hover .arrow-chip {
 @media (max-width: 600px) {
   .stock-card.palantir img, .stock-card.amd img { width: 76px; }
   .stock-card.netflix img { width: 66px; }
+  .stock-card.nvidia img { width: 72px; }
   .card-quote > span { font-size: 14px; }
 }
 

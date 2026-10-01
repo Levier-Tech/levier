@@ -19,7 +19,7 @@ const FAQ_ITEMS = [
   {
     question: "How does borrowing work?",
     answer:
-      "Deposit collateral into an enabled lending market, then borrow USDG within its LTV limits. The current TSLA market requires fresh oracle prices and available liquidity. AMZN, PLTR, NFLX and AMD are planned faucet-token markets awaiting deployment acceptance.",
+      "Deposit collateral into an enabled lending market, then borrow USDG within its LTV limits. The current TSLA market requires fresh oracle prices and available liquidity. AMZN, PLTR, NVDA and AMD are planned faucet-token markets awaiting deployment acceptance.",
   },
   {
     question: "What is Auto-Protect?",

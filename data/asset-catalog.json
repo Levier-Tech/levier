@@ -24,10 +24,10 @@
     "featured": true
   },
   {
-    "ticker": "NFLX",
-    "name": "Netflix",
-    "image": "/assets/netflix.svg",
-    "className": "netflix",
+    "ticker": "NVDA",
+    "name": "NVIDIA",
+    "image": "/assets/nvidia.svg",
+    "className": "nvidia",
     "indexStr": "04 / 05",
     "featured": true
   },
