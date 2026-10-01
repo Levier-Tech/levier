@@ -8,6 +8,7 @@ import {LevierVault, IERC20} from "../src/vaults/LevierVault.sol";
 import {TestnetERC20} from "../src/tokens/TestnetERC20.sol";
 import {DeployRhModules} from "../script/DeployRhModules.s.sol";
 import {DeployLevier} from "../script/DeployLevier.s.sol";
+import "../src/libraries/LevierProxies.sol";
 
 contract ModuleDeploymentSafetyTest is Test {
     LeverageRouter longRouter;
@@ -17,11 +18,11 @@ contract ModuleDeploymentSafetyTest is Test {
     TestnetERC20 token;
     address user = address(123);
     function setUp() public {
-        longRouter = new LeverageRouter(address(this));
-        shortRouter = new ShortRouter(address(this));
-        protect = new AutoProtectModule(address(this));
+        longRouter = LevierProxies.leverageRouter(address(this));
+        shortRouter = LevierProxies.shortRouter(address(this));
+        protect = LevierProxies.autoProtect(address(this));
         token = new TestnetERC20("Fixture USDG", "USDG", 6, 100e6, address(this));
-        vault = new LevierVault(IERC20(address(token)), "Fixture Vault", "fv", "fixture", "Experimental", address(this));
+        vault = LevierProxies.vault(IERC20(address(token)), "Fixture Vault", "fv", "fixture", "Experimental", address(this));
         token.transfer(user, 10e6);
     }
     function testRoutersStartPausedBeforeTouchingUserTokens() public {

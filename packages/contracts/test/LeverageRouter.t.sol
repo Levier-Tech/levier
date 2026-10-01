@@ -7,6 +7,7 @@ import "../src/oracle/CompositeSanityOracle.sol";
 import "../src/registry/LevierMarketRegistry.sol";
 import "../src/core/LevierPair.sol";
 import "../src/routers/LeverageRouter.sol";
+import "../src/libraries/LevierProxies.sol";
 
 contract LeverageRouterTest is Test {
     address admin = address(0xAD);
@@ -31,10 +32,10 @@ contract LeverageRouterTest is Test {
         oracle.setPrice(address(nvda), 250e18); // $250.00
         oracle.setPrice(address(usdg), 1e18); // $1.00
 
-        registry = new LevierMarketRegistry(admin);
+        registry = LevierProxies.registry(admin);
         marketId = keccak256(abi.encodePacked("nvda-usdg-testnet", address(nvda), address(usdg)));
 
-        pair = new LevierPair(marketId, address(nvda), address(usdg), address(oracle), address(registry), admin);
+        pair = LevierProxies.pair(marketId, address(nvda), address(usdg), address(oracle), address(registry), admin);
 
         registry.addMarket(
             "nvda-usdg-testnet",
@@ -50,7 +51,7 @@ contract LeverageRouterTest is Test {
             500_000e18
         );
 
-        leverageRouter = new LeverageRouter(admin);
+        leverageRouter = LevierProxies.leverageRouter(admin);
         leverageRouter.setPaused(false);
 
         // Authorize LeverageRouter in registry

@@ -5,8 +5,10 @@ import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/extensions/IERC20Metadata.sol";
 import "@openzeppelin/contracts/utils/math/Math.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
-import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
-import "@openzeppelin/contracts/access/Ownable.sol";
+import {ReentrancyGuardTransient} from "@openzeppelin/contracts/utils/ReentrancyGuardTransient.sol";
+import {Initializable} from "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
+import {OwnableUpgradeable} from "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
+import {UUPSUpgradeable} from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 import "../oracle/CompositeSanityOracle.sol";
 import "../registry/LevierMarketRegistry.sol";
 
@@ -14,14 +16,15 @@ import "../registry/LevierMarketRegistry.sol";
  * @title LevierPair
  * @notice Isolated lending and leverage engine for a single collateral/debt token pair.
  */
-contract LevierPair is ReentrancyGuard, Ownable {
+/// @dev Deployed behind an ERC1967 UUPS proxy; former immutables live in proxy storage.
+contract LevierPair is Initializable, ReentrancyGuardTransient, OwnableUpgradeable, UUPSUpgradeable {
     using SafeERC20 for IERC20;
 
-    bytes32 public immutable marketId;
-    IERC20 public immutable collateralToken;
-    IERC20 public immutable debtToken;
-    CompositeSanityOracle public immutable oracle;
-    LevierMarketRegistry public immutable registry;
+    bytes32 public marketId;
+    IERC20 public collateralToken;
+    IERC20 public debtToken;
+    CompositeSanityOracle public oracle;
+    LevierMarketRegistry public registry;
 
     // User positions
     struct UserAccount {
@@ -31,8 +34,8 @@ contract LevierPair is ReentrancyGuard, Ownable {
 
     mapping(address => UserAccount) public accounts;
     mapping(address => mapping(address => bool)) public approvedOperators;
-    uint256 public immutable collateralUnit;
-    uint256 public immutable debtUnit;
+    uint256 public collateralUnit;
+    uint256 public debtUnit;
 
     event OperatorApproval(address indexed user, address indexed operator, bool approved);
 
@@ -40,7 +43,7 @@ contract LevierPair is ReentrancyGuard, Ownable {
     uint256 public totalBorrowedDebt;
 
     // Liquidation bonus: 5% (500 bps)
-    uint256 public liquidationBonusBps = 500;
+    uint256 public liquidationBonusBps;
 
     event CollateralDeposited(address indexed user, uint256 amount);
     event CollateralWithdrawn(address indexed user, uint256 amount);
@@ -50,14 +53,24 @@ contract LevierPair is ReentrancyGuard, Ownable {
         address indexed user, address indexed liquidator, uint256 debtRepaid, uint256 collateralSeized
     );
 
-    constructor(
+    /// @custom:oz-upgrades-unsafe-allow constructor
+    constructor() {
+        _disableInitializers();
+    }
+
+    /// @dev Only the owner can move this proxy to a new implementation.
+    function _authorizeUpgrade(address) internal override onlyOwner {}
+
+    function initialize(
         bytes32 _marketId,
         address _collateralToken,
         address _debtToken,
         address _oracle,
         address _registry,
         address _initialOwner
-    ) Ownable(_initialOwner) {
+    ) external initializer {
+        __Ownable_init(_initialOwner);
+        liquidationBonusBps = 500;
         require(_collateralToken.code.length > 0 && _debtToken.code.length > 0, "Pair: Invalid token contract");
         require(_collateralToken != _debtToken, "Pair: Identical tokens");
         require(_oracle.code.length > 0 && _registry.code.length > 0, "Pair: Invalid infrastructure");

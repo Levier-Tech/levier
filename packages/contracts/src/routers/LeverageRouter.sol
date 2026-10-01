@@ -3,8 +3,10 @@ pragma solidity ^0.8.24;
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
-import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
-import "@openzeppelin/contracts/access/Ownable.sol";
+import {ReentrancyGuardTransient} from "@openzeppelin/contracts/utils/ReentrancyGuardTransient.sol";
+import {Initializable} from "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
+import {OwnableUpgradeable} from "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
+import {UUPSUpgradeable} from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 import "../core/LevierPair.sol";
 
 /**
@@ -12,10 +14,11 @@ import "../core/LevierPair.sol";
  * @notice Deposit/borrow router prepared for later leveraged trading integration.
  * @dev Swaps, re-supply and closing are not implemented. Deploy paused until that integration is accepted.
  */
-contract LeverageRouter is ReentrancyGuard, Ownable {
+/// @dev Deployed behind an ERC1967 UUPS proxy.
+contract LeverageRouter is Initializable, ReentrancyGuardTransient, OwnableUpgradeable, UUPSUpgradeable {
     using SafeERC20 for IERC20;
 
-    bool public isPaused = true;
+    bool public isPaused;
 
     event PauseUpdated(bool paused);
 
@@ -32,7 +35,19 @@ contract LeverageRouter is ReentrancyGuard, Ownable {
         _;
     }
 
-    constructor(address initialOwner) Ownable(initialOwner) {}
+    /// @custom:oz-upgrades-unsafe-allow constructor
+    constructor() {
+        _disableInitializers();
+    }
+
+    /// @dev Only the owner can move this proxy to a new implementation.
+    function _authorizeUpgrade(address) internal override onlyOwner {}
+
+    /// @notice Starts paused.
+    function initialize(address initialOwner) external initializer {
+        __Ownable_init(initialOwner);
+        isPaused = true;
+    }
 
     function setPaused(bool _paused) external onlyOwner {
         isPaused = _paused;

@@ -10,6 +10,7 @@ import "../src/vaults/LevierVault.sol";
 import "../src/routers/LevierRouter.sol";
 import "../src/routers/LeverageRouter.sol";
 import "../src/modules/AutoProtectModule.sol";
+import "../src/libraries/LevierProxies.sol";
 
 contract LevierCoreTest is Test {
     address admin = address(0xAD);
@@ -42,13 +43,13 @@ contract LevierCoreTest is Test {
         oracle.setPrice(address(usdg), 1e18);
 
         // 3. Deploy Registry
-        registry = new LevierMarketRegistry(admin);
+        registry = LevierProxies.registry(admin);
 
         // 4. Deploy Dummy Pair Address for pre-calculation
         marketId = keccak256(abi.encodePacked("nvda-usdg-testnet", address(nvda), address(usdg)));
 
         // 5. Deploy Pair
-        pair = new LevierPair(marketId, address(nvda), address(usdg), address(oracle), address(registry), admin);
+        pair = LevierProxies.pair(marketId, address(nvda), address(usdg), address(oracle), address(registry), admin);
 
         // Register Market in Registry
         registry.addMarket(
@@ -66,7 +67,7 @@ contract LevierCoreTest is Test {
         );
 
         // 6. Deploy Vault
-        vault = new LevierVault(
+        vault = LevierProxies.vault(
             IERC20(address(usdg)),
             "Levier USDG Yield Vault",
             "lvUSDG",
@@ -76,11 +77,11 @@ contract LevierCoreTest is Test {
         );
 
         // 7. Deploy Routers
-        router = new LevierRouter();
-        leverageRouter = new LeverageRouter(admin);
+        router = LevierProxies.lendingRouter(address(this));
+        leverageRouter = LevierProxies.leverageRouter(admin);
         vault.setDepositsPaused(false);
         leverageRouter.setPaused(false);
-        autoProtect = new AutoProtectModule(admin);
+        autoProtect = LevierProxies.autoProtect(admin);
         autoProtect.setPaused(false);
         autoProtect.setKeeper(keeper, true);
 

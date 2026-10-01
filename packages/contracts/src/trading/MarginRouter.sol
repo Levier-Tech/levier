@@ -2,8 +2,10 @@
 pragma solidity ^0.8.24;
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
-import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
-import "@openzeppelin/contracts/access/Ownable.sol";
+import {ReentrancyGuardTransient} from "@openzeppelin/contracts/utils/ReentrancyGuardTransient.sol";
+import {Initializable} from "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
+import {OwnableUpgradeable} from "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
+import {UUPSUpgradeable} from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 import "../core/LevierPair.sol";
 interface IV2Pool {
     function token0() external view returns(address);
@@ -16,21 +18,29 @@ interface IV2Pool {
 /// @notice Atomic margin trading against a pinned Uniswap V2 0.30% pool and two isolated lending pairs.
 /// @dev Only one aggregate position per wallet/side; open requires an empty pair account.
 ///      Flash swaps repay in the other asset. Closing pays debt from collateral, without a wallet top-up.
-contract MarginRouter is ReentrancyGuard,Ownable {
+/// @dev Deployed behind an ERC1967 UUPS proxy; former immutables live in proxy storage.
+contract MarginRouter is Initializable,ReentrancyGuardTransient,OwnableUpgradeable,UUPSUpgradeable {
     using SafeERC20 for IERC20;
-    IERC20 public immutable stock;
-    IERC20 public immutable stable;
-    LevierPair public immutable longPair;
-    LevierPair public immutable shortPair;
-    IV2Pool public immutable pool;
-    bool public immutable stockIsToken0;
-    bool public isPaused=true;
+    IERC20 public stock;
+    IERC20 public stable;
+    LevierPair public longPair;
+    LevierPair public shortPair;
+    IV2Pool public pool;
+    bool public stockIsToken0;
+    bool public isPaused;
     bytes32 private activeCall;
     struct Operation {address user;bool isShort;bool closing;uint256 collateral;uint256 debt;uint256 owed;uint256 output;}
     event PauseUpdated(bool paused);
     event PositionOpened(address indexed user,bool indexed isShort,uint256 margin,uint256 collateral,uint256 debt);
     event PositionClosed(address indexed user,bool indexed isShort,uint256 collateral,uint256 debt,uint256 stableReturned);
-    constructor(address stock_,address stable_,address long_,address short_,address pool_,address owner_) Ownable(owner_) {
+    /// @custom:oz-upgrades-unsafe-allow constructor
+    constructor() {_disableInitializers();}
+    /// @dev Only the owner can move this proxy to a new implementation.
+    function _authorizeUpgrade(address) internal override onlyOwner {}
+    /// @notice Starts paused.
+    function initialize(address stock_,address stable_,address long_,address short_,address pool_,address owner_) external initializer {
+        __Ownable_init(owner_);
+        isPaused=true;
         require(stock_!=stable_&&stock_.code.length>0&&stable_.code.length>0&&pool_.code.length>0,"Margin: Invalid assets");
         stock=IERC20(stock_);stable=IERC20(stable_);longPair=LevierPair(long_);shortPair=LevierPair(short_);pool=IV2Pool(pool_);
         require(address(longPair.collateralToken())==stock_&&address(longPair.debtToken())==stable_&&address(shortPair.collateralToken())==stable_&&address(shortPair.debtToken())==stock_,"Margin: Pair assets");

@@ -2,7 +2,7 @@
 # Interactive Robinhood Chain MAINNET (chain 4663) deployment of every non-Pons contract:
 # core, VerifiedFeedOracle, long + short LevierPair per market, LeverageRouter, Uniswap V2
 # factory + pools, MarginRouter per market. All markets PAUSED, all modules paused.
-# Resumable: every transaction is journaled in .secrets/rh-mainnet-full. Re-run this script
+# Resumable: every transaction is journaled in .secrets/rh-mainnet-proxies. Re-run this script
 # after any interruption and it continues from the journal instead of re-planning.
 # Broadcast is enabled in the profile only for the --deploy step and always switched back off.
 set -euo pipefail
@@ -10,7 +10,7 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$ROOT"
 ENV_FILE=".env.mainnet.core.local"
-STATE=".secrets/rh-mainnet-full/state.json"
+STATE=".secrets/rh-mainnet-proxies/state.json"
 [ -f "$ENV_FILE" ] || { echo "Missing $ENV_FILE"; exit 1; }
 
 confirm() {
@@ -32,7 +32,7 @@ if [ -f "$STATE" ]; then
 else
   echo "== Step 2/5: plan = full rehearsal on a local fork of mainnet (no mainnet transactions) =="
   pnpm rh:mainnet:full:plan
-  echo "Plan saved to .secrets/rh-mainnet-full/plan.json."
+  echo "Plan saved to .secrets/rh-mainnet-proxies/plan.json."
   echo "Do not send any other transaction from the deployer until step 3 finishes; the plan is bound to its nonce."
 fi
 confirm "Review the addresses and estimated fee above. Continue?"

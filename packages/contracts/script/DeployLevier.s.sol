@@ -11,6 +11,7 @@ import "../src/routers/LevierRouter.sol";
 import "../src/routers/LeverageRouter.sol";
 import "../src/routers/ShortRouter.sol";
 import "../src/modules/AutoProtectModule.sol";
+import "../src/libraries/LevierProxies.sol";
 
 contract DeployLevier is Script {
     function run() external {
@@ -42,27 +43,27 @@ contract DeployLevier is Script {
         oracle.setPrice(address(spy), 56020e16);  // $560.20
 
         // 3. Deploy Market Registry
-        LevierMarketRegistry registry = new LevierMarketRegistry(deployer);
+        LevierMarketRegistry registry = LevierProxies.registry(deployer);
 
         // 4. Deploy Isolated Pairs
         bytes32 nvdaMarketId = keccak256(abi.encodePacked("nvda-usdg-testnet", address(nvda), address(usdg)));
-        LevierPair pairNvda = new LevierPair(nvdaMarketId, address(nvda), address(usdg), address(oracle), address(registry), deployer);
+        LevierPair pairNvda = LevierProxies.pair(nvdaMarketId, address(nvda), address(usdg), address(oracle), address(registry), deployer);
         registry.addMarket("nvda-usdg-testnet", address(nvda), address(usdg), address(pairNvda), address(oracle), LevierMarketRegistry.RiskTier.TierA, 6000, 7000, 25000, 5_000_000e18, 3_000_000e18);
 
         bytes32 aaplMarketId = keccak256(abi.encodePacked("aapl-usdg-testnet", address(aapl), address(usdg)));
-        LevierPair pairAapl = new LevierPair(aaplMarketId, address(aapl), address(usdg), address(oracle), address(registry), deployer);
+        LevierPair pairAapl = LevierProxies.pair(aaplMarketId, address(aapl), address(usdg), address(oracle), address(registry), deployer);
         registry.addMarket("aapl-usdg-testnet", address(aapl), address(usdg), address(pairAapl), address(oracle), LevierMarketRegistry.RiskTier.TierA, 6000, 7000, 25000, 5_000_000e18, 3_000_000e18);
 
         bytes32 tslaMarketId = keccak256(abi.encodePacked("tsla-usdg-testnet", address(tsla), address(usdg)));
-        LevierPair pairTsla = new LevierPair(tslaMarketId, address(tsla), address(usdg), address(oracle), address(registry), deployer);
+        LevierPair pairTsla = LevierProxies.pair(tslaMarketId, address(tsla), address(usdg), address(oracle), address(registry), deployer);
         registry.addMarket("tsla-usdg-testnet", address(tsla), address(usdg), address(pairTsla), address(oracle), LevierMarketRegistry.RiskTier.TierB, 5000, 6000, 20000, 3_000_000e18, 1_500_000e18);
 
         bytes32 spyMarketId = keccak256(abi.encodePacked("spy-usdg-testnet", address(spy), address(usdg)));
-        LevierPair pairSpy = new LevierPair(spyMarketId, address(spy), address(usdg), address(oracle), address(registry), deployer);
+        LevierPair pairSpy = LevierProxies.pair(spyMarketId, address(spy), address(usdg), address(oracle), address(registry), deployer);
         registry.addMarket("spy-usdg-testnet", address(spy), address(usdg), address(pairSpy), address(oracle), LevierMarketRegistry.RiskTier.TierA, 7000, 8000, 25000, 10_000_000e18, 6_000_000e18);
 
         // 5. Deploy Yield Vault (ERC-4626)
-        LevierVault vaultUsdg = new LevierVault(
+        LevierVault vaultUsdg = LevierProxies.vault(
             IERC20(address(usdg)),
             "Levier USDG Yield Vault",
             "lvUSDG",
@@ -72,10 +73,10 @@ contract DeployLevier is Script {
         );
 
         // 6. Deploy Routers and Safety Modules
-        LevierRouter router = new LevierRouter();
-        LeverageRouter leverageRouter = new LeverageRouter(deployer);
-        ShortRouter shortRouter = new ShortRouter(deployer);
-        AutoProtectModule autoProtect = new AutoProtectModule(deployer);
+        LevierRouter router = LevierProxies.lendingRouter(deployer);
+        LeverageRouter leverageRouter = LevierProxies.leverageRouter(deployer);
+        ShortRouter shortRouter = LevierProxies.shortRouter(deployer);
+        AutoProtectModule autoProtect = LevierProxies.autoProtect(deployer);
 
         vm.stopBroadcast();
 

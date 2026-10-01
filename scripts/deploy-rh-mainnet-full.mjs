@@ -13,11 +13,13 @@ import { parseEnv } from "node:util";
 import { createRequire } from "node:module";
 import { acquireLock } from "./lib/process-lock.mjs";
 
-// Robinhood Chain MAINNET deployment of every non-Pons contract in one journaled run:
-// core (registry, lending router, AutoProtect, ShortRouter, vault), VerifiedFeedOracle,
-// a long and a short LevierPair per market, LeverageRouter, a Uniswap V2 factory with one
-// pool per market, and one MarginRouter per market. Every market is registered PAUSED,
-// every module starts paused, and only the lending router is authorized.
+// Robinhood Chain MAINNET deployment (v2, upgradeable) of every non-Pons contract in one
+// journaled run. Each Levier contract is an implementation behind an ERC1967 UUPS proxy that is
+// initialized in its creation transaction, so the proxy address stays fixed across upgrades:
+// registry, lending router, AutoProtect, ShortRouter, LeverageRouter, vault, VerifiedFeedOracle,
+// a long and a short LevierPair per market (one shared implementation) and one MarginRouter per
+// market. The v1 Uniswap V2 factory and its empty pools are reused. Every market is registered
+// PAUSED, every module starts paused, and only the lending router is authorized.
 //
 //   --plan    rehearses the whole sequence on a local anvil fork of mainnet (no mainnet tx)
 //   --deploy  broadcasts to mainnet; resumable from the journal after any interruption
@@ -30,7 +32,8 @@ const { privateKeyToAccount } = require("viem/accounts");
 
 const profile = ".env.mainnet.core.local";
 const configPath = "scripts/mainnet-full-deploy.config.json";
-const directory = ".secrets/rh-mainnet-full";
+const directory = ".secrets/rh-mainnet-proxies";
+const v1RecordPath = "packages/contracts/deployments/mainnet-4663-v1.json";
 const recordPath = "packages/contracts/deployments/mainnet-4663.json";
 const CHAIN_ID = 4663;
 const STATUS_PAUSED = 2;
@@ -224,13 +227,26 @@ function buildOperations(env, c, deployer, startNonce) {
   };
   const usdg = c.oracle.stable.token;
   const registryAbi = forge("LevierMarketRegistry").abi;
+  const proxyArtifact = forge("ERC1967Proxy");
+  // One implementation per contract type, then a proxy per instance initialized on creation.
+  const implementation = (name) => {
+    if (!addr[`impl-${name}`]) deploy(`impl-${name}`, forge(name), []);
+    return addr[`impl-${name}`];
+  };
+  const proxy = (role, name, args) => {
+    const init = v.encodeFunctionData({
+      abi: forge(name).abi,
+      functionName: "initialize",
+      args,
+    });
+    deploy(role, proxyArtifact, [implementation(name), init]);
+  };
 
-  // Core, same constructor arguments as scripts/deploy-rh-mainnet-core.mjs.
-  deploy("registry", forge("LevierMarketRegistry"), [deployer]);
-  deploy("lendingRouter", forge("LevierRouter"), []);
-  deploy("autoProtect", forge("AutoProtectModule"), [deployer]);
-  deploy("shortRouter", forge("ShortRouter"), [deployer]);
-  deploy("vault", forge("LevierVault"), [
+  proxy("registry", "LevierMarketRegistry", [deployer]);
+  proxy("lendingRouter", "LevierRouter", [deployer]);
+  proxy("autoProtect", "AutoProtectModule", [deployer]);
+  proxy("shortRouter", "ShortRouter", [deployer]);
+  proxy("vault", "LevierVault", [
     usdg,
     env.MAINNET_VAULT_NAME,
     env.MAINNET_VAULT_SYMBOL,
@@ -238,7 +254,7 @@ function buildOperations(env, c, deployer, startNonce) {
     env.MAINNET_VAULT_RISK_TIER,
     deployer,
   ]);
-  deploy("leverageRouter", forge("LeverageRouter"), [deployer]);
+  proxy("leverageRouter", "LeverageRouter", [deployer]);
 
   const feedInput = (f) => ({
     asset: f.token,
@@ -249,7 +265,8 @@ function buildOperations(env, c, deployer, startNonce) {
     maxPrice18: BigInt(f.maxPrice18),
     checkTokenPause: f.checkTokenPause ?? true,
   });
-  deploy("oracle", forge("VerifiedFeedOracle"), [
+  proxy("oracle", "VerifiedFeedOracle", [
+    deployer,
     BigInt(CHAIN_ID),
     c.oracle.sequencer,
     BigInt(c.oracle.sequencerGracePeriod),
@@ -265,7 +282,7 @@ function buildOperations(env, c, deployer, startNonce) {
     );
   const register = (key, side, collateral, debt) => {
     const id = marketId(side.slug, collateral, debt);
-    deploy(key, forge("LevierPair"), [
+    proxy(key, "LevierPair", [
       id,
       collateral,
       debt,
@@ -301,30 +318,16 @@ function buildOperations(env, c, deployer, startNonce) {
     };
   }
 
-  const factory = vendor("UniswapV2Factory");
-  const pairArtifact = vendor("UniswapV2Pair");
-  deploy("v2Factory", factory, [deployer]);
-  const initCodeHash = v.keccak256(pairArtifact.bytecode);
+  // Reuse the v1 Uniswap V2 factory and its pools: standard, verified and still empty.
+  const v1 = JSON.parse(readFileSync(v1RecordPath, "utf8"));
+  addr.v2Factory = v.getAddress(v1.addresses.v2Factory);
   for (const m of c.markets) {
     const s = m.symbol.toLowerCase();
-    call(`create-pool-${s}`, addr.v2Factory, factory.abi, "createPair", [
-      m.token,
-      usdg,
-    ]);
-    const [t0, t1] =
-      BigInt(m.token) < BigInt(usdg) ? [m.token, usdg] : [usdg, m.token];
-    addr[`pool-${s}`] = v.getContractAddress({
-      opcode: "CREATE2",
-      from: addr.v2Factory,
-      salt: v.keccak256(
-        v.encodePacked(["address", "address"], [t0, t1]),
-      ),
-      bytecodeHash: initCodeHash,
-    });
+    addr[`pool-${s}`] = v.getAddress(v1.addresses[`pool-${s}`]);
   }
   for (const m of c.markets) {
     const s = m.symbol.toLowerCase();
-    deploy(`margin-${s}`, forge("MarginRouter"), [
+    proxy(`margin-${s}`, "MarginRouter", [
       m.token,
       usdg,
       addr[`long-${s}`],
@@ -379,16 +382,29 @@ async function verifyState(client, env, c, deployer, built) {
     roles[`margin-${s}`] = forge("MarginRouter");
     roles[`pool-${s}`] = vendor("UniswapV2Pair");
   }
-  for (const [role, artifact] of Object.entries(roles))
-    await runtime(addr[role], artifact);
+  const proxyArtifact = forge("ERC1967Proxy");
+  const IMPLEMENTATION_SLOT =
+    "0x360894a13ba1a3210667c828492db98dca3e2076cc3735a920a3ca505d382bbc";
+  const implementations = {};
+  for (const [role, artifact] of Object.entries(roles)) {
+    if (role === "v2Factory" || role.startsWith("pool-")) {
+      await runtime(addr[role], artifact);
+      continue;
+    }
+    await runtime(addr[role], proxyArtifact);
+    const slot = await client.getStorageAt({
+      address: addr[role],
+      slot: IMPLEMENTATION_SLOT,
+    });
+    const impl = v.getAddress(`0x${slot.slice(-40)}`);
+    check(same(impl, addr[`impl-${artifact.name}`]), `IMPLEMENTATION_MISMATCH_${role}`);
+    await runtime(impl, artifact);
+    implementations[artifact.name] = impl;
+  }
 
-  for (const role of [
-    "registry",
-    "autoProtect",
-    "shortRouter",
-    "vault",
-    "leverageRouter",
-  ])
+  for (const role of Object.keys(roles).filter(
+    (r) => r !== "v2Factory" && !r.startsWith("pool-"),
+  ))
     check(
       same(await read(addr[role], roles[role].abi, "owner"), deployer),
       `OWNER_MISMATCH_${role}`,
@@ -569,6 +585,7 @@ try {
     check(!existsSync(statePath), "JOURNAL_EXISTS_RESUME_WITH_DEPLOY");
     const built = buildOperations(env, c, account.address, latest);
     for (const [role, address] of Object.entries(built.addr)) {
+      if (role === "v2Factory" || role.startsWith("pool-")) continue;
       const code = await main.client.getCode({ address });
       check(!code || code === "0x", `PREDICTED_ADDRESS_HAS_CODE_${role}`);
     }

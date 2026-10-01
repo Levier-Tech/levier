@@ -4,6 +4,7 @@ pragma solidity ^0.8.24;
 import "forge-std/Test.sol";
 import "../src/tokens/TestnetERC20.sol";
 import "../src/vaults/LevierVault.sol";
+import "../src/libraries/LevierProxies.sol";
 
 contract LevierVaultTest is Test {
     address admin = address(0xAD);
@@ -18,7 +19,7 @@ contract LevierVaultTest is Test {
     function setUp() public {
         vm.startPrank(admin);
         usdg = new TestnetERC20("Global Dollar", "USDG", 18, 1_000_000e18, admin);
-        vault = new LevierVault(
+        vault = LevierProxies.vault(
             IERC20(address(usdg)),
             "Levier USDG Yield Vault",
             "lvUSDG",

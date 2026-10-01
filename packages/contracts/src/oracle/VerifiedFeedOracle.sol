@@ -2,6 +2,9 @@
 pragma solidity ^0.8.24;
 
 import {Math} from "@openzeppelin/contracts/utils/math/Math.sol";
+import {Initializable} from "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
+import {OwnableUpgradeable} from "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
+import {UUPSUpgradeable} from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 
 interface IPriceFeedV3 {
     function decimals() external view returns (uint8);
@@ -13,10 +16,11 @@ interface IStockOracleStatus {
     function oraclePaused() external view returns (bool);
 }
 
-/// @notice Immutable per-token USD feed adapter. It cannot accept manually submitted prices.
+/// @notice Per-token USD feed adapter. It cannot accept manually submitted prices.
+/// @dev Deployed behind an ERC1967 UUPS proxy; feeds are fixed at initialization and change only by upgrade.
 /// @dev Feed identity/provenance must be verified before deployment. Equity feeds must already
 /// include the token's corporate-action multiplier. REST underlying prices are not compatible inputs.
-contract VerifiedFeedOracle {
+contract VerifiedFeedOracle is Initializable, OwnableUpgradeable, UUPSUpgradeable {
     struct FeedInput {
         address asset;
         address feed;
@@ -44,12 +48,27 @@ contract VerifiedFeedOracle {
     error InvalidPrice();
     error TokenOraclePaused();
 
-    IPriceFeedV3 public immutable sequencerFeed;
-    uint256 public immutable sequencerGracePeriod;
-    uint256 public immutable chainId;
+    IPriceFeedV3 public sequencerFeed;
+    uint256 public sequencerGracePeriod;
+    uint256 public chainId;
     mapping(address => FeedConfig) public feeds;
 
-    constructor(uint256 expectedChainId, address sequencer, uint256 gracePeriod, FeedInput[] memory inputs) {
+    /// @custom:oz-upgrades-unsafe-allow constructor
+    constructor() {
+        _disableInitializers();
+    }
+
+    /// @dev Only the owner can move this proxy to a new implementation.
+    function _authorizeUpgrade(address) internal override onlyOwner {}
+
+    function initialize(
+        address initialOwner,
+        uint256 expectedChainId,
+        address sequencer,
+        uint256 gracePeriod,
+        FeedInput[] memory inputs
+    ) external initializer {
+        __Ownable_init(initialOwner);
         // A chain without a Chainlink sequencer uptime feed (Robinhood Chain mainnet) is configured
         // explicitly as sequencer == address(0) with gracePeriod == 0; partial configuration is rejected.
         bool withSequencer = sequencer != address(0);

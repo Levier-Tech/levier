@@ -1,7 +1,9 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.24;
 
-import "@openzeppelin/contracts/access/Ownable.sol";
+import {Initializable} from "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
+import {OwnableUpgradeable} from "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
+import {UUPSUpgradeable} from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 
 /**
  * @title LevierMarketRegistry
@@ -16,7 +18,8 @@ interface IRegisteredPair {
     function registry() external view returns (address);
 }
 
-contract LevierMarketRegistry is Ownable {
+/// @dev Deployed behind an ERC1967 UUPS proxy; the proxy address is the stable registry address.
+contract LevierMarketRegistry is Initializable, OwnableUpgradeable, UUPSUpgradeable {
     enum RiskTier {
         TierA,
         TierB,
@@ -60,7 +63,17 @@ contract LevierMarketRegistry is Ownable {
     event MarketCapsUpdated(bytes32 indexed marketId, uint256 supplyCap, uint256 borrowCap);
     event RouterAuthorized(address indexed router, bool status);
 
-    constructor(address initialOwner) Ownable(initialOwner) {}
+    /// @custom:oz-upgrades-unsafe-allow constructor
+    constructor() {
+        _disableInitializers();
+    }
+
+    /// @dev Only the owner can move this proxy to a new implementation.
+    function _authorizeUpgrade(address) internal override onlyOwner {}
+
+    function initialize(address initialOwner) external initializer {
+        __Ownable_init(initialOwner);
+    }
 
     function setAuthorizedRouter(address router, bool status) external onlyOwner {
         require(router != address(0), "Registry: Invalid router address");

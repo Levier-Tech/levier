@@ -3,6 +3,7 @@ pragma solidity ^0.8.24;
 import {Script} from "forge-std/Script.sol";
 import {VerifiedFeedOracle, IPriceFeedV3} from "../src/oracle/VerifiedFeedOracle.sol";
 import {IERC20Metadata} from "@openzeppelin/contracts/token/ERC20/extensions/IERC20Metadata.sol";
+import "../src/libraries/LevierProxies.sol";
 
 /// @notice Prepares an immutable oracle using existing verified feeds; never creates test feeds.
 contract DeployRhOracle is Script {
@@ -65,7 +66,7 @@ contract DeployRhOracle is Script {
         uint256 key = vm.envUint("PRIVATE_KEY");
         require(vm.addr(key) == vm.envAddress("DEPLOYER_ADDRESS"), "Oracle deployment: Signer mismatch");
         vm.startBroadcast(key);
-        oracle = new VerifiedFeedOracle(block.chainid, sequencer, grace, inputs);
+        oracle = LevierProxies.oracle(vm.addr(key), block.chainid, sequencer, grace, inputs);
         require(
             oracle.getPrice(inputs[0].asset) > 0 && oracle.getPrice(inputs[1].asset) > 0,
             "Oracle deployment: Unavailable prices"
