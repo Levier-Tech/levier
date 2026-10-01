@@ -1,0 +1,71 @@
+{
+  "version": 1,
+  "chainId": 4663,
+  "note": "Robinhood Chain mainnet full deployment (all non-Pons contracts). Token and feed addresses verified on-chain 2026-10-01 against https://api.robinhood.com/rhj/assets and https://reference-data-directory.vercel.app/feeds-robinhood-mainnet.json. Every market is registered PAUSED; margin routers stay paused and unauthorized until their pools are seeded.",
+  "oracle": {
+    "sequencer": "0x0000000000000000000000000000000000000000",
+    "sequencerGracePeriod": 0,
+    "stable": {
+      "symbol": "USDG",
+      "token": "0x5fc5360D0400a0Fd4f2af552ADD042D716F1d168",
+      "decimals": 6,
+      "feed": "0x61B7e5650328764B076A108EFF5fa7282a1B9aD2",
+      "feedDescription": "USDG / USD",
+      "maxAge": 93600,
+      "minPrice18": "950000000000000000",
+      "maxPrice18": "1050000000000000000",
+      "checkTokenPause": false
+    }
+  },
+  "lendingRouterAuthorized": true,
+  "markets": [
+    {
+      "symbol": "TSLA",
+      "token": "0x322F0929c4625eD5bAd873c95208D54E1c003b2d",
+      "decimals": 18,
+      "feed": "0x4A1166a659A55625345e9515b32adECea5547C38",
+      "feedDescription": "RHTSLA / USD",
+      "maxAge": 93600,
+      "minPrice18": "35000000000000000000",
+      "maxPrice18": "3600000000000000000000",
+      "long": { "slug": "levier-tsla-usdg-mainnet", "maxLtvBps": 5000, "liquidationLtvBps": 6500, "maxLeverageBps": 15000, "supplyCapRaw": "25000000000000000000", "borrowCapRaw": "5000000000" },
+      "short": { "slug": "levier-tsla-usdg-short-mainnet", "maxLtvBps": 4000, "liquidationLtvBps": 6000, "maxLeverageBps": 12500, "supplyCapRaw": "10000000000", "borrowCapRaw": "14000000000000000000" }
+    },
+    {
+      "symbol": "AMZN",
+      "token": "0x12f190a9F9d7D37a250758b26824B97CE941bF54",
+      "decimals": 18,
+      "feed": "0xD5a1508ceD74c084eBf3cBe853e2C968fB2a651C",
+      "feedDescription": "Robinhood AMZN / USD",
+      "maxAge": 93600,
+      "minPrice18": "25000000000000000000",
+      "maxPrice18": "2500000000000000000000",
+      "long": { "slug": "levier-amzn-usdg-mainnet", "maxLtvBps": 5000, "liquidationLtvBps": 6500, "maxLeverageBps": 15000, "supplyCapRaw": "40000000000000000000", "borrowCapRaw": "5000000000" },
+      "short": { "slug": "levier-amzn-usdg-short-mainnet", "maxLtvBps": 4000, "liquidationLtvBps": 6000, "maxLeverageBps": 12500, "supplyCapRaw": "10000000000", "borrowCapRaw": "20000000000000000000" }
+    },
+    {
+      "symbol": "PLTR",
+      "token": "0x894E1EC2D74FFE5AEF8Dc8A9e84686acCB964F2A",
+      "decimals": 18,
+      "feed": "0x820ABedFF239034956B7A9d2F0a331f9F075eB4c",
+      "feedDescription": "Robinhood PLTR / USD",
+      "maxAge": 93600,
+      "minPrice18": "18000000000000000000",
+      "maxPrice18": "1900000000000000000000",
+      "long": { "slug": "levier-pltr-usdg-mainnet", "maxLtvBps": 5000, "liquidationLtvBps": 6500, "maxLeverageBps": 15000, "supplyCapRaw": "50000000000000000000", "borrowCapRaw": "5000000000" },
+      "short": { "slug": "levier-pltr-usdg-short-mainnet", "maxLtvBps": 4000, "liquidationLtvBps": 6000, "maxLeverageBps": 12500, "supplyCapRaw": "10000000000", "borrowCapRaw": "26000000000000000000" }
+    },
+    {
+      "symbol": "AMD",
+      "token": "0x86923f96303D656E4aa86D9d42D1e57ad2023fdC",
+      "decimals": 18,
+      "feed": "0x943A29E7ae51A4798823ca9eEd2ed533B2A22C72",
+      "feedDescription": "RHAMD / USD",
+      "maxAge": 93600,
+      "minPrice18": "60000000000000000000",
+      "maxPrice18": "6200000000000000000000",
+      "long": { "slug": "levier-amd-usdg-mainnet", "maxLtvBps": 5000, "liquidationLtvBps": 6500, "maxLeverageBps": 15000, "supplyCapRaw": "15000000000000000000", "borrowCapRaw": "5000000000" },
+      "short": { "slug": "levier-amd-usdg-short-mainnet", "maxLtvBps": 4000, "liquidationLtvBps": 6000, "maxLeverageBps": 12500, "supplyCapRaw": "10000000000", "borrowCapRaw": "8000000000000000000" }
+    }
+  ]
+}
