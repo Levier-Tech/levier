@@ -1,3 +1,4 @@
+import { isSupportedChainId } from "./networks";
 import { erc20Abi, keccak256, parseAbi, type PublicClient } from "viem";
 import { z } from "zod";
 import {
@@ -50,7 +51,7 @@ const poolSchema = z
 
 export const analyticsSchema = z
   .object({
-    chainId: z.literal(46630),
+    chainId: z.union([z.literal(46630), z.literal(4663)]),
     blockNumber: raw,
     blockHash: hash,
     blockTimestamp: raw,
@@ -119,8 +120,9 @@ export async function readAnalyticsSnapshot(
     | null,
   maxBlockAgeSeconds: number,
 ) {
+  const chainId = await client.getChainId();
   if (
-    (await client.getChainId()) !== 46630 ||
+    !isSupportedChainId(chainId) ||
     !Number.isSafeInteger(confirmations) ||
     confirmations < 1 ||
     !Number.isSafeInteger(maxBlockAgeSeconds) ||
@@ -273,7 +275,7 @@ export async function readAnalyticsSnapshot(
     };
     try {
       if (
-        d.chainId !== 46630 ||
+        d.chainId !== chainId ||
         !same(d.longPair, long.pair) ||
         !same(d.short.collateral, long.debt) ||
         !same(d.short.debt, long.collateral)
@@ -361,7 +363,7 @@ export async function readAnalyticsSnapshot(
     throw Error("ANALYTICS_REORG");
   assertFresh();
   return analyticsSchema.parse({
-    chainId: 46630,
+    chainId,
     blockNumber: String(blockNumber),
     blockHash: block.hash,
     blockTimestamp: String(block.timestamp),

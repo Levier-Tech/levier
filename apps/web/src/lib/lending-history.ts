@@ -1,3 +1,4 @@
+import { isSupportedChainId } from "./networks";
 import { z } from "zod";
 import {
   decodeFunctionData,
@@ -204,7 +205,10 @@ export async function readLendingHistory(options: {
   fetcher?: typeof fetch;
 }): Promise<LendingHistoryPage> {
   const { client, deployment: d, account } = options;
-  if (d.chainId !== 46630 || (await client.getChainId()) !== d.chainId)
+  if (
+    !isSupportedChainId(d.chainId) ||
+    (await client.getChainId()) !== d.chainId
+  )
     throw new HistoryError("WRONG_NETWORK");
   const head = await client.getBlockNumber();
   for (const role of ["pair", "collateral", "debt"] as const) {

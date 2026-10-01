@@ -1,3 +1,4 @@
+import { isSupportedChainId } from "./networks";
 import {
   decodeFunctionData,
   decodeEventLog,
@@ -194,9 +195,9 @@ export async function readMarginHistory(options: {
 }): Promise<MarginHistoryPage> {
   const { client, market, account } = options;
   if (
-    market.margin.chainId !== 46630 ||
-    market.long.chainId !== 46630 ||
-    (await client.getChainId()) !== 46630 ||
+    !isSupportedChainId(market.long.chainId) ||
+    market.margin.chainId !== market.long.chainId ||
+    (await client.getChainId()) !== market.long.chainId ||
     !Number.isSafeInteger(options.confirmations) ||
     options.confirmations < 1
   )
@@ -235,7 +236,7 @@ export async function readMarginHistory(options: {
   }
   return {
     account,
-    chainId: 46630,
+    chainId: market.long.chainId,
     market: market.symbol,
     rows,
     nextCursor: page.next_page_params,

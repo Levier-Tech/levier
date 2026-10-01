@@ -3,6 +3,13 @@
 import React from "react";
 
 import { X_URL } from "../lib/social";
+import { useNetworkMode } from "../hooks/useNetworkMode";
+const MAINNET_ANSWERS: Record<string, string> = {
+  "How does borrowing work?":
+    "Deposit collateral into an enabled lending market, then borrow USDG within its LTV limits. TSLA, AMZN, PLTR and AMD markets are deployed on Robinhood Chain mainnet and stay paused until each one is opened. Prices come from Chainlink.",
+  "Can I trade in this preview?":
+    "Not yet. The mainnet contracts are deployed and every market is paused. Lending, Long/Short, Earn and Auto-Protect open market by market after launch checks pass.",
+};
 const FAQ_ITEMS = [
   {
     question: "What is Levier Markets?",
@@ -27,6 +34,7 @@ const FAQ_ITEMS = [
 ];
 
 export function FAQSection() {
+  const { isTestnet } = useNetworkMode();
   return (
     <section className="faq-section section-wrap" id="faq">
       <div>
@@ -58,7 +66,7 @@ export function FAQSection() {
               {item.question}
               <span aria-hidden="true">+</span>
             </summary>
-            <p>{item.answer}</p>
+            <p>{(!isTestnet && MAINNET_ANSWERS[item.question]) || item.answer}</p>
           </details>
         ))}
       </div>

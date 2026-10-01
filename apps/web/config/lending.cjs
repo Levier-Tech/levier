@@ -9,7 +9,8 @@ const hash = z
   .refine((v) => !/^0x0{64}$/i.test(v));
 const deploymentSchema = z
   .object({
-    chainId: z.literal(46630),
+    // Robinhood Chain testnet (46630) or mainnet (4663).
+    chainId: z.union([z.literal(46630), z.literal(4663)]),
     marketId: hash,
     pair: address,
     registry: address,

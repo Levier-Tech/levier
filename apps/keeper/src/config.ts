@@ -2,16 +2,16 @@ import dotenv from "dotenv";
 import path from "path";
 import { z } from "zod";
 
-// This release supports RH testnet only; no implicit network selection.
+// Robinhood Chain testnet (46630) or mainnet (4663); NETWORK_MODE and CHAIN_ID must agree.
 dotenv.config({ path: path.resolve(process.cwd(), "../../.env.testnet") });
 dotenv.config({ path: path.resolve(process.cwd(), ".env.testnet") });
 
 const configSchema = z.object({
-  NETWORK_MODE: z.literal("TESTNET"),
+  NETWORK_MODE: z.enum(["TESTNET", "MAINNET"]),
   TRADING_ENABLED: z
     .enum(["true", "false"])
     .transform((value) => value === "true"),
-  CHAIN_ID: z.literal("46630").transform(Number),
+  CHAIN_ID: z.enum(["46630", "4663"]).transform(Number),
   RPC_URL: z.string().url(),
   KEEPER_PRIVATE_KEY: z
     .string()
@@ -36,9 +36,14 @@ const configSchema = z.object({
     ),
   SUPABASE_URL: z.string().url(),
   SUPABASE_ANON_KEY: z.string().min(1),
+  // Server-side writes; table write policies are limited to the service role.
+  SUPABASE_SERVICE_ROLE_KEY: z.string().min(1).optional(),
   POLL_INTERVAL_MS: z.coerce.number().int().positive(),
   MAX_GAS_PRICE_GWEI: z.coerce.number().positive(),
-});
+}).refine(
+  (c) => c.CHAIN_ID === (c.NETWORK_MODE === "MAINNET" ? 4663 : 46630),
+  { path: ["CHAIN_ID"], message: "CHAIN_ID does not match NETWORK_MODE" },
+);
 
 const _parsed = configSchema.safeParse({
   NETWORK_MODE: process.env.NETWORK_MODE,
@@ -51,6 +56,7 @@ const _parsed = configSchema.safeParse({
   MARKET_REGISTRY_ADDRESS: process.env.MARKET_REGISTRY_ADDRESS,
   SUPABASE_URL: process.env.SUPABASE_URL,
   SUPABASE_ANON_KEY: process.env.SUPABASE_ANON_KEY,
+  SUPABASE_SERVICE_ROLE_KEY: process.env.SUPABASE_SERVICE_ROLE_KEY || undefined,
   POLL_INTERVAL_MS: process.env.POLL_INTERVAL_MS,
   MAX_GAS_PRICE_GWEI: process.env.MAX_GAS_PRICE_GWEI,
 });

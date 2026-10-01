@@ -28,7 +28,7 @@ const protocolSchema = z
   .strict();
 const clientSchema = z
   .object({
-    NETWORK_MODE: z.literal("TESTNET"),
+    NETWORK_MODE: z.enum(["TESTNET", "MAINNET"]),
     CHAIN_ID: positiveInteger,
     CHAIN_NAME: z.string().min(1),
     EXPLORER_URL: z.string().url(),
@@ -79,14 +79,33 @@ const clientSchema = z
       .pipe(deploymentSchema.nullable()),
     LENDING_RECEIPT_CONFIRMATIONS: positiveInteger,
     LENDING_RECEIPT_TIMEOUT_MS: positiveInteger,
-    USDG_FAUCET_URL: z
-      .string()
-      .url()
-      .refine((v) => new URL(v).protocol === "https:"),
+    // Testnet only; mainnet has no faucet and must leave it empty.
+    USDG_FAUCET_URL: z.union([
+      z.literal(""),
+      z
+        .string()
+        .url()
+        .refine((v) => new URL(v).protocol === "https:"),
+    ]),
     UI_POLL_INTERVAL_MS: positiveInteger,
     TOKEN_CA: z.string().optional(),
   })
   .superRefine((value, ctx) => {
+    const expectedChainId = { TESTNET: 46630, MAINNET: 4663 }[
+      value.NETWORK_MODE
+    ];
+    if (value.CHAIN_ID !== expectedChainId)
+      ctx.addIssue({
+        code: "custom",
+        path: ["CHAIN_ID"],
+        message: "Chain ID does not match NETWORK_MODE",
+      });
+    if ((value.NETWORK_MODE === "TESTNET") !== (value.USDG_FAUCET_URL !== ""))
+      ctx.addIssue({
+        code: "custom",
+        path: ["USDG_FAUCET_URL"],
+        message: "Faucet is required on testnet and forbidden on mainnet",
+      });
     const lending = value.LENDING_DEPLOYMENT_JSON;
     const margin = value.MARGIN_DEPLOYMENT_JSON;
     for (const row of value.MARKET_DEPLOYMENTS_JSON) {

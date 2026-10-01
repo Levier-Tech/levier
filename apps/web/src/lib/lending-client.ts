@@ -1,3 +1,4 @@
+import { isSupportedChainId } from "./networks";
 import { lendingRisk } from "./lending-risk";
 import { ensureGasBalance } from "./transaction-feedback";
 import {
@@ -72,7 +73,7 @@ export async function readLendingSnapshot(
   atBlock?: bigint,
 ) {
   if (
-    deployment.chainId !== 46630 ||
+    !isSupportedChainId(deployment.chainId) ||
     (await client.getChainId()) !== deployment.chainId
   )
     throw new LendingError("WRONG_NETWORK");
