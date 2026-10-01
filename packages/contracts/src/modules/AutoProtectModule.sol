@@ -1,9 +1,11 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.24;
 
-import "@openzeppelin/contracts/access/Ownable.sol";
+import {Initializable} from "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
+import {OwnableUpgradeable} from "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
+import {UUPSUpgradeable} from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 import "@openzeppelin/contracts/utils/math/Math.sol";
-import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
+import {ReentrancyGuardTransient} from "@openzeppelin/contracts/utils/ReentrancyGuardTransient.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "../core/LevierPair.sol";
 
@@ -11,10 +13,11 @@ import "../core/LevierPair.sol";
  * @title AutoProtectModule
  * @notice Keeper-funded repayment foundation; collateral-swap deleveraging is not implemented.
  */
-contract AutoProtectModule is Ownable, ReentrancyGuard {
+/// @dev Deployed behind an ERC1967 UUPS proxy.
+contract AutoProtectModule is Initializable, OwnableUpgradeable, ReentrancyGuardTransient, UUPSUpgradeable {
     using SafeERC20 for IERC20;
 
-    bool public isPaused = true;
+    bool public isPaused;
     event PauseUpdated(bool paused);
 
     function setPaused(bool paused) external onlyOwner {
@@ -46,7 +49,18 @@ contract AutoProtectModule is Ownable, ReentrancyGuard {
         _;
     }
 
-    constructor(address initialOwner) Ownable(initialOwner) {
+    /// @custom:oz-upgrades-unsafe-allow constructor
+    constructor() {
+        _disableInitializers();
+    }
+
+    /// @dev Only the owner can move this proxy to a new implementation.
+    function _authorizeUpgrade(address) internal override onlyOwner {}
+
+    /// @notice Starts paused; the owner is the first keeper.
+    function initialize(address initialOwner) external initializer {
+        __Ownable_init(initialOwner);
+        isPaused = true;
         isKeeper[initialOwner] = true;
     }
 

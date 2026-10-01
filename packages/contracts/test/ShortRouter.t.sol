@@ -7,6 +7,7 @@ import "../src/oracle/CompositeSanityOracle.sol";
 import "../src/registry/LevierMarketRegistry.sol";
 import "../src/core/LevierPair.sol";
 import "../src/routers/ShortRouter.sol";
+import "../src/libraries/LevierProxies.sol";
 
 contract ShortRouterTest is Test {
     address admin = address(0xAD);
@@ -31,12 +32,12 @@ contract ShortRouterTest is Test {
         oracle.setPrice(address(nvda), 250e18); // $250.00
         oracle.setPrice(address(usdg), 1e18); // $1.00
 
-        registry = new LevierMarketRegistry(admin);
+        registry = LevierProxies.registry(admin);
 
         // For a Short Market: Collateral is USDG ($1), Debt is NVDA ($250)
         marketId = keccak256(abi.encodePacked("nvda-short-usdg", address(usdg), address(nvda)));
 
-        shortPair = new LevierPair(
+        shortPair = LevierProxies.pair(
             marketId,
             address(usdg), // collateralToken
             address(nvda), // debtToken
@@ -59,7 +60,7 @@ contract ShortRouterTest is Test {
             500_000e18
         );
 
-        shortRouter = new ShortRouter(admin);
+        shortRouter = LevierProxies.shortRouter(admin);
         shortRouter.setPaused(false);
         registry.setAuthorizedRouter(address(shortRouter), true);
 

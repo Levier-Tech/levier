@@ -6,6 +6,7 @@ import "../src/tokens/TestnetERC20.sol";
 import "../src/core/LevierPair.sol";
 import "../src/routers/LevierRouter.sol";
 import "../src/modules/AutoProtectModule.sol";
+import "../src/libraries/LevierProxies.sol";
 
 contract LendingLifecycleTest is Test {
     address alice = makeAddr("alice");
@@ -24,9 +25,9 @@ contract LendingLifecycleTest is Test {
         oracle = new CompositeSanityOracle(address(this));
         oracle.setPrice(address(stock), 250e18);
         oracle.setPrice(address(dollar), 1e18);
-        registry = new LevierMarketRegistry(address(this));
+        registry = LevierProxies.registry(address(this));
         marketId = keccak256(abi.encodePacked("stock-usd", address(stock), address(dollar)));
-        pair = new LevierPair(
+        pair = LevierProxies.pair(
             marketId, address(stock), address(dollar), address(oracle), address(registry), address(this)
         );
         registry.addMarket(
@@ -42,7 +43,7 @@ contract LendingLifecycleTest is Test {
             10000e18,
             100000e6
         );
-        router = new LevierRouter();
+        router = LevierProxies.lendingRouter(address(this));
         registry.setAuthorizedRouter(address(router), true);
         stock.transfer(alice, 100e18);
         dollar.transfer(address(pair), 100000e6);
@@ -161,7 +162,7 @@ contract LendingLifecycleTest is Test {
 
     function testSixDecimalCollateralAndEighteenDecimalDebt() public {
         bytes32 reverseId = keccak256(abi.encodePacked("usd-stock", address(dollar), address(stock)));
-        LevierPair reverse = new LevierPair(
+        LevierPair reverse = LevierProxies.pair(
             reverseId, address(dollar), address(stock), address(oracle), address(registry), address(this)
         );
         registry.addMarket(
@@ -192,7 +193,7 @@ contract LendingLifecycleTest is Test {
 
     function testAutoProtectUsesDebtValueAndStopsAtTarget() public {
         open();
-        AutoProtectModule module = new AutoProtectModule(address(this));
+        AutoProtectModule module = LevierProxies.autoProtect(address(this));
         module.setPaused(false);
         vm.prank(alice);
         module.setConfig(address(pair), true, 3900, 2000, 1000e6);

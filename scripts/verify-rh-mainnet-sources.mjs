@@ -40,20 +40,28 @@ const apiKey = (() => {
 if (verifier === "etherscan" && !apiKey)
   throw Error("ETHERSCAN_API_KEY_REQUIRED");
 
-const sources = {
-  registry: "src/registry/LevierMarketRegistry.sol:LevierMarketRegistry",
-  lendingRouter: "src/routers/LevierRouter.sol:LevierRouter",
-  autoProtect: "src/modules/AutoProtectModule.sol:AutoProtectModule",
-  shortRouter: "src/routers/ShortRouter.sol:ShortRouter",
-  vault: "src/vaults/LevierVault.sol:LevierVault",
-  leverageRouter: "src/routers/LeverageRouter.sol:LeverageRouter",
-  oracle: "src/oracle/VerifiedFeedOracle.sol:VerifiedFeedOracle",
+// v2 record: implementations are "impl-<Contract>", every other Levier role is an ERC1967 proxy.
+const SOURCE_PATHS = {
+  LevierMarketRegistry: "src/registry/LevierMarketRegistry.sol",
+  LevierRouter: "src/routers/LevierRouter.sol",
+  AutoProtectModule: "src/modules/AutoProtectModule.sol",
+  ShortRouter: "src/routers/ShortRouter.sol",
+  LevierVault: "src/vaults/LevierVault.sol",
+  LeverageRouter: "src/routers/LeverageRouter.sol",
+  VerifiedFeedOracle: "src/oracle/VerifiedFeedOracle.sol",
+  LevierPair: "src/core/LevierPair.sol",
+  MarginRouter: "src/trading/MarginRouter.sol",
 };
-for (const role of Object.keys(record.addresses))
-  if (/^(long|short)-/.test(role))
-    sources[role] = "src/core/LevierPair.sol:LevierPair";
-  else if (role.startsWith("margin-"))
-    sources[role] = "src/trading/MarginRouter.sol:MarginRouter";
+const PROXY =
+  "node_modules/@openzeppelin/contracts/proxy/ERC1967/ERC1967Proxy.sol:ERC1967Proxy";
+const sources = {};
+for (const role of Object.keys(record.addresses)) {
+  if (role === "v2Factory" || role.startsWith("pool-")) continue;
+  if (role.startsWith("impl-")) {
+    const name = role.slice(5);
+    sources[role] = `${SOURCE_PATHS[name]}:${name}`;
+  } else sources[role] = PROXY;
+}
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 async function sourcifyMatch(address) {
@@ -130,7 +138,9 @@ for (const [role, target] of Object.entries(sources)) {
     let status;
     if (verifier === "sourcify") {
       const id = out.match(/Job ID: `([^`]+)`/)?.[1];
-      status = id ? await sourcifyJob(id) : "submitted (no job id)";
+      status = id
+        ? await sourcifyJob(id)
+        : ((await sourcifyMatch(address)) ?? "failed: no job id and no match");
     } else status = /verified/i.test(out) ? "verified" : "submitted";
     results.push({ role, address, status });
     console.log(status);

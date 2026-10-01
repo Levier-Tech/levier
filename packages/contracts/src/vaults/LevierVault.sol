@@ -1,15 +1,20 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.24;
 
-import "@openzeppelin/contracts/token/ERC20/extensions/ERC4626.sol";
-import "@openzeppelin/contracts/access/Ownable.sol";
+import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import {Initializable} from "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
+import {ERC20Upgradeable} from "@openzeppelin/contracts-upgradeable/token/ERC20/ERC20Upgradeable.sol";
+import {ERC4626Upgradeable} from "@openzeppelin/contracts-upgradeable/token/ERC20/extensions/ERC4626Upgradeable.sol";
+import {OwnableUpgradeable} from "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
+import {UUPSUpgradeable} from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 
 /**
  * @title LevierVault
  * @notice ERC-4626 custody foundation. Market allocation and yield accrual are not implemented.
  */
-contract LevierVault is ERC4626, Ownable {
-    bool public depositsPaused = true;
+/// @dev Deployed behind an ERC1967 UUPS proxy.
+contract LevierVault is Initializable, ERC4626Upgradeable, OwnableUpgradeable, UUPSUpgradeable {
+    bool public depositsPaused;
     event DepositsPauseUpdated(bool paused);
 
     function setDepositsPaused(bool paused) external onlyOwner {
@@ -38,14 +43,27 @@ contract LevierVault is ERC4626, Ownable {
     event AllocationUpdated(address indexed pair, uint256 weightBps);
     event AllocationsReset();
 
-    constructor(
+    /// @custom:oz-upgrades-unsafe-allow constructor
+    constructor() {
+        _disableInitializers();
+    }
+
+    /// @dev Only the owner can move this proxy to a new implementation.
+    function _authorizeUpgrade(address) internal override onlyOwner {}
+
+    /// @notice Starts with deposits paused.
+    function initialize(
         IERC20 asset,
         string memory name,
         string memory symbol,
         string memory _vaultSlug,
         string memory _riskTier,
         address initialOwner
-    ) ERC4626(asset) ERC20(name, symbol) Ownable(initialOwner) {
+    ) external initializer {
+        __ERC20_init(name, symbol);
+        __ERC4626_init(asset);
+        __Ownable_init(initialOwner);
+        depositsPaused = true;
         vaultSlug = _vaultSlug;
         riskTier = _riskTier;
     }

@@ -6,6 +6,7 @@ import {IERC20Metadata} from "@openzeppelin/contracts/token/ERC20/extensions/IER
 import {LevierPair} from "../src/core/LevierPair.sol";
 import {LevierMarketRegistry} from "../src/registry/LevierMarketRegistry.sol";
 import {LevierRouter} from "../src/routers/LevierRouter.sol";
+import "../src/libraries/LevierProxies.sol";
 
 interface IVerifiedPriceSource {
     function getPrice(address asset) external view returns (uint256);
@@ -87,9 +88,9 @@ contract DeployRhLending is Script {
         MarketInput memory m = readInput(vm.envString("RH_LENDING_MARKET_JSON"));
         bytes32 marketId = keccak256(abi.encodePacked(m.slug, m.collateral, m.debt));
         vm.startBroadcast(key);
-        LevierMarketRegistry registry = new LevierMarketRegistry(admin);
-        LevierPair pair = new LevierPair(marketId, m.collateral, m.debt, m.oracle, address(registry), admin);
-        LevierRouter router = new LevierRouter();
+        LevierMarketRegistry registry = LevierProxies.registry(admin);
+        LevierPair pair = LevierProxies.pair(marketId, m.collateral, m.debt, m.oracle, address(registry), admin);
+        LevierRouter router = LevierProxies.lendingRouter(admin);
         registry.addMarket(
             m.slug,
             m.collateral,

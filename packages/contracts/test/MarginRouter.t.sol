@@ -5,6 +5,7 @@ import "../src/trading/MarginRouter.sol";
 import "../src/trading/RhShortReferenceOracle.sol";
 import "../src/oracle/RhTestnetReferenceOracle.sol";
 import "../src/tokens/TestnetERC20.sol";
+import "../src/libraries/LevierProxies.sol";
 interface IV2FactoryTest {function createPair(address,address) external returns(address);}
 interface IV2MintTest {function mint(address) external returns(uint256);}
 contract MarginRouterTest is Test {
@@ -18,18 +19,18 @@ contract MarginRouterTest is Test {
   oracle=new RhTestnetReferenceOracle(address(this),binding,RhTestnetReferenceOracle.Policy(address(stock),1000,1e18,1000e18),RhTestnetReferenceOracle.Policy(address(stable),1000,0.9e18,1.1e18),500);
   oracle.publish(250e18,block.timestamp,1e18,block.timestamp,keccak256("observation"));
   shortOracle=new RhShortReferenceOracle(address(oracle),binding,address(stock),address(stable),50);
-  registry=new LevierMarketRegistry(address(this));
+  registry=LevierProxies.registry(address(this));
   bytes32 longId=keccak256(abi.encodePacked("long",address(stock),address(stable)));
   bytes32 shortId=keccak256(abi.encodePacked("short",address(stable),address(stock)));
-  longPair=new LevierPair(longId,address(stock),address(stable),address(oracle),address(registry),address(this));
-  shortPair=new LevierPair(shortId,address(stable),address(stock),address(shortOracle),address(registry),address(this));
+  longPair=LevierProxies.pair(longId,address(stock),address(stable),address(oracle),address(registry),address(this));
+  shortPair=LevierProxies.pair(shortId,address(stable),address(stock),address(shortOracle),address(registry),address(this));
   registry.addMarket("long",address(stock),address(stable),address(longPair),address(oracle),LevierMarketRegistry.RiskTier.Experimental,5000,6500,20000,100e18,10000e6);
   registry.addMarket("short",address(stable),address(stock),address(shortPair),address(shortOracle),LevierMarketRegistry.RiskTier.Experimental,6000,7500,20000,10000e6,100e18);
   bytes memory creation=abi.encodePacked(vm.parseBytes(vm.readFile("vendor/uniswap-v2-core/Factory.creation.txt")),abi.encode(address(this)));
   address factory;assembly {factory:=create(0,add(creation,32),mload(creation))}require(factory!=address(0));
   pool=IV2FactoryTest(factory).createPair(address(stock),address(stable));
   stable.transfer(address(longPair),1000e6);stock.transfer(address(shortPair),10e18);
-  router=new MarginRouter(address(stock),address(stable),address(longPair),address(shortPair),pool,address(this));registry.setAuthorizedRouter(address(router),true);router.setPaused(false);stock.approve(address(router),100e18);stable.approve(address(router),25000e6);router.seedLiquidity(100e18,25000e6,1,block.timestamp+60);
+  router=LevierProxies.marginRouter(address(stock),address(stable),address(longPair),address(shortPair),pool,address(this));registry.setAuthorizedRouter(address(router),true);router.setPaused(false);stock.approve(address(router),100e18);stable.approve(address(router),25000e6);router.seedLiquidity(100e18,25000e6,1,block.timestamp+60);
   stable.transfer(alice,1000e6);vm.startPrank(alice);stable.approve(address(router),1000e6);longPair.setOperator(address(router),true);shortPair.setOperator(address(router),true);vm.stopPrank();
  }
  function openPosition(bool isShort) internal {vm.prank(alice);router.open(isShort,10e6,isShort?0.04e18:5e6,1,block.timestamp+60);}

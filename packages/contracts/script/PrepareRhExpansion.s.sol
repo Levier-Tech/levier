@@ -9,6 +9,7 @@ import {RhShortReferenceOracle} from "../src/trading/RhShortReferenceOracle.sol"
 import {MarginRouter} from "../src/trading/MarginRouter.sol";
 import {LevierPair} from "../src/core/LevierPair.sol";
 import {LevierMarketRegistry} from "../src/registry/LevierMarketRegistry.sol";
+import "../src/libraries/LevierProxies.sol";
 
 interface IExpansionFactory {
     function getPair(address, address) external view returns (address);
@@ -109,17 +110,17 @@ contract PrepareRhExpansion is Script {
             ),
             u(string.concat(p, ".binding.maxDeviationBps"))
         );
-        LevierPair longPair = new LevierPair(longId, stock, stable, address(source), address(registry), owner);
+        LevierPair longPair = LevierProxies.pair(longId, stock, stable, address(source), address(registry), owner);
         RhShortReferenceOracle reverse = new RhShortReferenceOracle(
             address(source), binding, stock, stable, u(string.concat(p, ".binding.maxSpreadBps"))
         );
-        LevierPair shortPair = new LevierPair(shortId, stable, stock, address(reverse), address(registry), owner);
+        LevierPair shortPair = LevierProxies.pair(shortId, stable, stock, address(reverse), address(registry), owner);
         registerPair(longSlug, longPair, string.concat(p, ".longRisk"));
         registerPair(shortSlug, shortPair, string.concat(p, ".shortRisk"));
         require(factory.getPair(stock, stable) == address(0), "Expansion: Pool already exists; reconcile");
         address pool = factory.createPair(stock, stable);
         require(pool.codehash == b(".poolCodeHash"), "Expansion: Pool code");
-        MarginRouter router = new MarginRouter(stock, stable, address(longPair), address(shortPair), pool, owner);
+        MarginRouter router = LevierProxies.marginRouter(stock, stable, address(longPair), address(shortPair), pool, owner);
         require(router.isPaused(), "Expansion: Initial router open");
         uint256 seedStock = u(string.concat(p, ".seedStockRaw"));
         uint256 seedStable = u(string.concat(p, ".seedStableRaw"));

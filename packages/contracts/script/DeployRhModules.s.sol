@@ -8,6 +8,7 @@ import {LeverageRouter} from "../src/routers/LeverageRouter.sol";
 import {ShortRouter} from "../src/routers/ShortRouter.sol";
 import {LevierVault, IERC20} from "../src/vaults/LevierVault.sol";
 import {AutoProtectModule} from "../src/modules/AutoProtectModule.sol";
+import "../src/libraries/LevierProxies.sol";
 
 /// @notice Simulate the development modules against existing RH-testnet infrastructure.
 /// @dev Does not create replacement assets, seed liquidity, publish prices, or authorize incomplete routers.
@@ -47,10 +48,10 @@ contract DeployRhModules is Script {
         require(bytes(name).length > 0 && bytes(symbol).length > 0 && bytes(slug).length > 0 && bytes(tier).length > 0,
             "Modules: Missing vault metadata");
         vm.startBroadcast(key);
-        LeverageRouter longRouter = new LeverageRouter(admin);
-        ShortRouter shortRouter = new ShortRouter(admin);
-        AutoProtectModule protect = new AutoProtectModule(admin);
-        LevierVault vault = new LevierVault(IERC20(debt), name, symbol, slug, tier, admin);
+        LeverageRouter longRouter = LevierProxies.leverageRouter(admin);
+        ShortRouter shortRouter = LevierProxies.shortRouter(admin);
+        AutoProtectModule protect = LevierProxies.autoProtect(admin);
+        LevierVault vault = LevierProxies.vault(IERC20(debt), name, symbol, slug, tier, admin);
         vm.stopBroadcast();
 
         require(longRouter.isPaused() && shortRouter.isPaused() && protect.isPaused(), "Modules: Execution open");

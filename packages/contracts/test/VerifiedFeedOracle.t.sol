@@ -2,6 +2,7 @@
 pragma solidity ^0.8.24;
 import {Test} from "forge-std/Test.sol";
 import {VerifiedFeedOracle} from "../src/oracle/VerifiedFeedOracle.sol";
+import "../src/libraries/LevierProxies.sol";
 
 // Fixtures are isolated unit tests, never public-testnet deployments or live-price evidence.
 contract FeedFixture {
@@ -63,7 +64,7 @@ contract VerifiedFeedOracleTest is Test {
         stock = new StockStatusFixture();
         feed = new FeedFixture(8, "STOCK / USD", 250e8, 9900, 9990);
         sequencer = new FeedFixture(0, "Sequencer", 0, 100, 100);
-        oracle = new VerifiedFeedOracle(block.chainid, address(sequencer), 60, inputs());
+        oracle = LevierProxies.oracle(address(this), block.chainid, address(sequencer), 60, inputs());
     }
 
     function testNormalizesFeedDecimalsWithoutReapplyingMultiplier() public view {
@@ -132,31 +133,35 @@ contract VerifiedFeedOracleTest is Test {
     }
 
     function testRejectsWrongDescriptionAndDuplicateAssets() public {
+        // Deploy the implementation first so expectRevert targets the initializing proxy.
+        address implementation = address(new VerifiedFeedOracle());
         VerifiedFeedOracle.FeedInput[] memory values = inputs();
         values[0].description = "OTHER / USD";
         vm.expectRevert(VerifiedFeedOracle.InvalidConfiguration.selector);
-        new VerifiedFeedOracle(block.chainid, address(sequencer), 60, values);
+        LevierProxies.oracleAt(implementation, address(this), block.chainid, address(sequencer), 60, values);
         values = new VerifiedFeedOracle.FeedInput[](2);
         values[0] = inputs()[0];
         values[1] = inputs()[0];
         vm.expectRevert(VerifiedFeedOracle.InvalidConfiguration.selector);
-        new VerifiedFeedOracle(block.chainid, address(sequencer), 60, values);
+        LevierProxies.oracleAt(implementation, address(this), block.chainid, address(sequencer), 60, values);
     }
 
     function testRejectsWrongChainAndMissingSequencer() public {
+        // Deploy the implementation first so expectRevert targets the initializing proxy.
+        address implementation = address(new VerifiedFeedOracle());
         VerifiedFeedOracle.FeedInput[] memory values = inputs();
         vm.expectRevert(VerifiedFeedOracle.InvalidConfiguration.selector);
-        new VerifiedFeedOracle(block.chainid + 1, address(sequencer), 60, values);
+        LevierProxies.oracleAt(implementation, address(this), block.chainid + 1, address(sequencer), 60, values);
         vm.expectRevert(VerifiedFeedOracle.InvalidConfiguration.selector);
-        new VerifiedFeedOracle(block.chainid, address(0), 60, values);
+        LevierProxies.oracleAt(implementation, address(this), block.chainid, address(0), 60, values);
         vm.expectRevert(VerifiedFeedOracle.InvalidConfiguration.selector);
-        new VerifiedFeedOracle(block.chainid, address(sequencer), 0, values);
+        LevierProxies.oracleAt(implementation, address(this), block.chainid, address(sequencer), 0, values);
         vm.expectRevert(VerifiedFeedOracle.InvalidConfiguration.selector);
-        new VerifiedFeedOracle(block.chainid, address(0xBEEF), 60, values);
+        LevierProxies.oracleAt(implementation, address(this), block.chainid, address(0xBEEF), 60, values);
     }
 
     function testWithoutSequencerFeedKeepsPriceChecks() public {
-        oracle = new VerifiedFeedOracle(block.chainid, address(0), 0, inputs());
+        oracle = LevierProxies.oracle(address(this), block.chainid, address(0), 0, inputs());
         assertEq(address(oracle.sequencerFeed()), address(0));
         assertEq(oracle.getPrice(address(stock)), 250e18);
         feed.set(250e8, 9000, 9000, 1, 1);
@@ -170,7 +175,7 @@ contract VerifiedFeedOracleTest is Test {
 
     function testSupportsHighDecimals() public {
         feed = new FeedFixture(20, "STOCK / USD", 250e20, 9900, 9990);
-        oracle = new VerifiedFeedOracle(block.chainid, address(sequencer), 60, inputs());
+        oracle = LevierProxies.oracle(address(this), block.chainid, address(sequencer), 60, inputs());
         assertEq(oracle.getPrice(address(stock)), 250e18);
     }
 }

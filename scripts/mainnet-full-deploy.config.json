@@ -1,7 +1,7 @@
 {
   "version": 1,
   "chainId": 4663,
-  "note": "Robinhood Chain mainnet full deployment (all non-Pons contracts). Token and feed addresses verified on-chain 2026-10-01 against https://api.robinhood.com/rhj/assets and https://reference-data-directory.vercel.app/feeds-robinhood-mainnet.json. Every market is registered PAUSED; margin routers stay paused and unauthorized until their pools are seeded.",
+  "note": "Robinhood Chain mainnet full deployment (all non-Pons contracts). Token and feed addresses verified on-chain 2026-10-01 against https://api.robinhood.com/rhj/assets and https://reference-data-directory.vercel.app/feeds-robinhood-mainnet.json. Every market is registered PAUSED; margin routers stay paused and unauthorized until their pools are seeded. v2: every Levier contract sits behind an ERC1967 UUPS proxy; caps start at the micro launch size.",
   "oracle": {
     "sequencer": "0x0000000000000000000000000000000000000000",
     "sequencerGracePeriod": 0,
@@ -28,8 +28,22 @@
       "maxAge": 93600,
       "minPrice18": "35000000000000000000",
       "maxPrice18": "3600000000000000000000",
-      "long": { "slug": "levier-tsla-usdg-mainnet", "maxLtvBps": 5000, "liquidationLtvBps": 6500, "maxLeverageBps": 15000, "supplyCapRaw": "25000000000000000000", "borrowCapRaw": "5000000000" },
-      "short": { "slug": "levier-tsla-usdg-short-mainnet", "maxLtvBps": 4000, "liquidationLtvBps": 6000, "maxLeverageBps": 12500, "supplyCapRaw": "10000000000", "borrowCapRaw": "14000000000000000000" }
+      "long": {
+        "slug": "levier-tsla-usdg-mainnet",
+        "maxLtvBps": 5000,
+        "liquidationLtvBps": 6500,
+        "maxLeverageBps": 15000,
+        "supplyCapRaw": "10000000000000000",
+        "borrowCapRaw": "250000"
+      },
+      "short": {
+        "slug": "levier-tsla-usdg-short-mainnet",
+        "maxLtvBps": 4000,
+        "liquidationLtvBps": 6000,
+        "maxLeverageBps": 12500,
+        "supplyCapRaw": "5000000",
+        "borrowCapRaw": "1000000000000000"
+      }
     },
     {
       "symbol": "AMZN",
@@ -40,8 +54,22 @@
       "maxAge": 93600,
       "minPrice18": "25000000000000000000",
       "maxPrice18": "2500000000000000000000",
-      "long": { "slug": "levier-amzn-usdg-mainnet", "maxLtvBps": 5000, "liquidationLtvBps": 6500, "maxLeverageBps": 15000, "supplyCapRaw": "40000000000000000000", "borrowCapRaw": "5000000000" },
-      "short": { "slug": "levier-amzn-usdg-short-mainnet", "maxLtvBps": 4000, "liquidationLtvBps": 6000, "maxLeverageBps": 12500, "supplyCapRaw": "10000000000", "borrowCapRaw": "20000000000000000000" }
+      "long": {
+        "slug": "levier-amzn-usdg-mainnet",
+        "maxLtvBps": 5000,
+        "liquidationLtvBps": 6500,
+        "maxLeverageBps": 15000,
+        "supplyCapRaw": "10000000000000000",
+        "borrowCapRaw": "250000"
+      },
+      "short": {
+        "slug": "levier-amzn-usdg-short-mainnet",
+        "maxLtvBps": 4000,
+        "liquidationLtvBps": 6000,
+        "maxLeverageBps": 12500,
+        "supplyCapRaw": "5000000",
+        "borrowCapRaw": "1000000000000000"
+      }
     },
     {
       "symbol": "PLTR",
@@ -52,8 +80,22 @@
       "maxAge": 93600,
       "minPrice18": "18000000000000000000",
       "maxPrice18": "1900000000000000000000",
-      "long": { "slug": "levier-pltr-usdg-mainnet", "maxLtvBps": 5000, "liquidationLtvBps": 6500, "maxLeverageBps": 15000, "supplyCapRaw": "50000000000000000000", "borrowCapRaw": "5000000000" },
-      "short": { "slug": "levier-pltr-usdg-short-mainnet", "maxLtvBps": 4000, "liquidationLtvBps": 6000, "maxLeverageBps": 12500, "supplyCapRaw": "10000000000", "borrowCapRaw": "26000000000000000000" }
+      "long": {
+        "slug": "levier-pltr-usdg-mainnet",
+        "maxLtvBps": 5000,
+        "liquidationLtvBps": 6500,
+        "maxLeverageBps": 15000,
+        "supplyCapRaw": "10000000000000000",
+        "borrowCapRaw": "250000"
+      },
+      "short": {
+        "slug": "levier-pltr-usdg-short-mainnet",
+        "maxLtvBps": 4000,
+        "liquidationLtvBps": 6000,
+        "maxLeverageBps": 12500,
+        "supplyCapRaw": "5000000",
+        "borrowCapRaw": "1000000000000000"
+      }
     },
     {
       "symbol": "AMD",
@@ -64,8 +106,22 @@
       "maxAge": 93600,
       "minPrice18": "60000000000000000000",
       "maxPrice18": "6200000000000000000000",
-      "long": { "slug": "levier-amd-usdg-mainnet", "maxLtvBps": 5000, "liquidationLtvBps": 6500, "maxLeverageBps": 15000, "supplyCapRaw": "15000000000000000000", "borrowCapRaw": "5000000000" },
-      "short": { "slug": "levier-amd-usdg-short-mainnet", "maxLtvBps": 4000, "liquidationLtvBps": 6000, "maxLeverageBps": 12500, "supplyCapRaw": "10000000000", "borrowCapRaw": "8000000000000000000" }
+      "long": {
+        "slug": "levier-amd-usdg-mainnet",
+        "maxLtvBps": 5000,
+        "liquidationLtvBps": 6500,
+        "maxLeverageBps": 15000,
+        "supplyCapRaw": "10000000000000000",
+        "borrowCapRaw": "250000"
+      },
+      "short": {
+        "slug": "levier-amd-usdg-short-mainnet",
+        "maxLtvBps": 4000,
+        "liquidationLtvBps": 6000,
+        "maxLeverageBps": 12500,
+        "supplyCapRaw": "5000000",
+        "borrowCapRaw": "1000000000000000"
+      }
     }
   ]
 }

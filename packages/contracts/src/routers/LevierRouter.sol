@@ -3,7 +3,10 @@ pragma solidity ^0.8.24;
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
-import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
+import {ReentrancyGuardTransient} from "@openzeppelin/contracts/utils/ReentrancyGuardTransient.sol";
+import {Initializable} from "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
+import {OwnableUpgradeable} from "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
+import {UUPSUpgradeable} from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 import "../core/LevierPair.sol";
 
 /**
@@ -11,8 +14,21 @@ import "../core/LevierPair.sol";
  * @notice Unified user interaction contract for isolated lending pairs.
  * @dev Simplifies single-transaction supply, borrow, repay, and withdraw flows.
  */
-contract LevierRouter is ReentrancyGuard {
+/// @dev Deployed behind an ERC1967 UUPS proxy. The owner can only upgrade; it has no lending powers.
+contract LevierRouter is Initializable, ReentrancyGuardTransient, OwnableUpgradeable, UUPSUpgradeable {
     using SafeERC20 for IERC20;
+
+    /// @custom:oz-upgrades-unsafe-allow constructor
+    constructor() {
+        _disableInitializers();
+    }
+
+    /// @dev Only the owner can move this proxy to a new implementation.
+    function _authorizeUpgrade(address) internal override onlyOwner {}
+
+    function initialize(address initialOwner) external initializer {
+        __Ownable_init(initialOwner);
+    }
 
     /**
      * @notice Supplies collateral and borrows debt token in a single atomic transaction.

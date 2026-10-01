@@ -7,6 +7,7 @@ import "../src/oracle/CompositeSanityOracle.sol";
 import "../src/registry/LevierMarketRegistry.sol";
 import "../src/core/LevierPair.sol";
 import "../src/vaults/LevierVault.sol";
+import "../src/libraries/LevierProxies.sol";
 
 /**
  * @title LevierInvariantsTest
@@ -38,10 +39,10 @@ contract LevierInvariantsTest is Test {
         oracle.setPrice(address(usdg), 1e18);   // $1.00
         oracle.setPrice(address(nvda), 250e18); // $250.00
 
-        registry = new LevierMarketRegistry(admin);
+        registry = LevierProxies.registry(admin);
 
         // Vault for USDG
-        vault = new LevierVault(
+        vault = LevierProxies.vault(
             IERC20(address(usdg)),
             "Levier USDG Vault",
             "lvUSDG",
@@ -53,7 +54,7 @@ contract LevierInvariantsTest is Test {
         vault.setDepositsPaused(false);
         // Pair: NVDA as Collateral ($250), USDG as Debt ($1)
         marketId = keccak256(abi.encodePacked("nvda-usdg-fuzz", address(nvda), address(usdg)));
-        pair = new LevierPair(
+        pair = LevierProxies.pair(
             marketId,
             address(nvda),
             address(usdg),
