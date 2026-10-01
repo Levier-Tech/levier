@@ -39,7 +39,7 @@ export function MobileNavigation({
   return (
     <nav
       id="mobile-nav"
-      className="mobile-nav flex flex-col absolute top-[79px] left-0 right-0 max-h-[calc(100vh-80px)] overflow-y-auto bg-[#12160e] border-b border-[#39432e] px-[6%] py-4 z-50 animate-appear shadow-2xl"
+      className="mobile-nav flex flex-col fixed top-[79px] left-0 right-0 max-h-[calc(100dvh-79px)] overflow-y-auto overscroll-contain bg-[#12160e] border-b border-[#39432e] px-[6%] py-4 z-50 animate-appear shadow-2xl"
       aria-label="Mobile navigation"
     >
       {isLanding ? (
