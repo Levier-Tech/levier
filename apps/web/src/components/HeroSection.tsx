@@ -4,6 +4,7 @@ import React from 'react';
 import { StockCardScene } from './StockCardScene';
 import { MarketConfig } from '@levier/types';
 import { CABadge } from './CABadge';
+import { env } from '../env.mjs';
 
 interface HeroSectionProps {
   markets?: MarketConfig[];
@@ -16,7 +17,7 @@ export function HeroSection({
   onSelectProductTab,
   onSelectMarketAsset,
 }: HeroSectionProps) {
-  const tokenCA = process.env.NEXT_PUBLIC_TOKEN_CA || process.env.TOKEN_CA || '';
+  const tokenCA = env.TOKEN_CA ?? '';
 
   const handleSelectTab = (tab: 'borrow' | 'earn' | 'leverage') => {
     if (onSelectProductTab) {

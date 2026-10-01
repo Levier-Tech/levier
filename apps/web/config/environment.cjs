@@ -88,7 +88,9 @@ const clientSchema = z
         .refine((v) => new URL(v).protocol === "https:"),
     ]),
     UI_POLL_INTERVAL_MS: positiveInteger,
-    TOKEN_CA: z.string().optional(),
+    // LEVIER token contract address shown in the hero; empty until launch. A malformed value fails the build.
+    TOKEN_CA: z.union([z.literal(""), address]).optional(),
+    NEXT_PUBLIC_TOKEN_CA: z.union([z.literal(""), address]).optional(),
   })
   .superRefine((value, ctx) => {
     const expectedChainId = { TESTNET: 46630, MAINNET: 4663 }[

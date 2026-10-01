@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import { env } from '../env.mjs';
 
 interface CABadgeProps {
   address?: string;
@@ -48,67 +49,82 @@ export function CABadge({ address, className = '', truncate = false }: CABadgePr
     }
   };
 
+  // Lets holders confirm on the explorer that this is the real token.
+  const explorerHref = `${env.EXPLORER_URL.replace(/\/$/, '')}/token/${cleanAddress}`;
+
   return (
-    <button
-      type="button"
-      onClick={handleCopy}
-      title={copied ? 'Copied to clipboard!' : `Copy Contract Address: ${cleanAddress}`}
-      aria-label={copied ? 'CA copied to clipboard' : `Copy Contract Address: ${cleanAddress}`}
-      className={`inline-flex items-center gap-1.5 sm:gap-2 px-2.5 py-1 rounded-full bg-[#11160e]/95 border border-[#2a3723] hover:border-[var(--green)] hover:bg-[#172014] text-[10px] sm:text-[11px] font-mono transition-all cursor-pointer select-none group shadow-[0_2px_8px_rgba(0,0,0,0.5)] max-w-full text-left ${className}`}
-    >
-      <span className="relative flex h-2 w-2 shrink-0 items-center justify-center">
-        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--green)] opacity-60"></span>
-        <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-[var(--green)]"></span>
-      </span>
+    <span className="inline-flex items-center gap-1.5 max-w-full">
+      <button
+        type="button"
+        onClick={handleCopy}
+        title={copied ? 'Copied to clipboard!' : `Copy Contract Address: ${cleanAddress}`}
+        aria-label={copied ? 'CA copied to clipboard' : `Copy Contract Address: ${cleanAddress}`}
+        className={`inline-flex items-center gap-1.5 sm:gap-2 px-2.5 py-1 rounded-full bg-[#11160e]/95 border border-[#2a3723] hover:border-[var(--green)] hover:bg-[#172014] text-[10px] sm:text-[11px] font-mono transition-all cursor-pointer select-none group shadow-[0_2px_8px_rgba(0,0,0,0.5)] max-w-full text-left ${className}`}
+      >
+        <span className="relative flex h-2 w-2 shrink-0 items-center justify-center">
+          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--green)] opacity-60"></span>
+          <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-[var(--green)]"></span>
+        </span>
 
-      <span className="text-[#849177] font-semibold text-[9px] sm:text-[10px] tracking-wider uppercase shrink-0">
-        CA:
-      </span>
+        <span className="text-[#849177] font-semibold text-[9px] sm:text-[10px] tracking-wider uppercase shrink-0">
+          CA:
+        </span>
 
-      <span className="text-[#d7e0ce] group-hover:text-white font-medium transition-colors break-all">
-        {formattedAddress}
-      </span>
+        <span className="text-[#d7e0ce] group-hover:text-white font-medium transition-colors break-all">
+          {formattedAddress}
+        </span>
 
-      <span className="inline-flex items-center ml-0.5 shrink-0">
-        {copied ? (
-          <span className="flex items-center gap-1 text-[var(--green)] text-[10px] font-semibold animate-in fade-in zoom-in-95 duration-150">
+        <span className="inline-flex items-center ml-0.5 shrink-0">
+          {copied ? (
+            <span className="flex items-center gap-1 text-[var(--green)] text-[10px] font-semibold animate-in fade-in zoom-in-95 duration-150">
+              <svg
+                className="w-3 h-3 stroke-[2.5]"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+              </svg>
+              <span>Copied!</span>
+            </span>
+          ) : (
             <svg
-              className="w-3 h-3 stroke-[2.5]"
+              className="w-3 h-3 text-[#77836b] group-hover:text-[var(--green)] transition-colors"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
             >
-              <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+              <rect
+                x="9"
+                y="9"
+                width="13"
+                height="13"
+                rx="2"
+                ry="2"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+              <path
+                d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
             </svg>
-            <span>Copied!</span>
-          </span>
-        ) : (
-          <svg
-            className="w-3 h-3 text-[#77836b] group-hover:text-[var(--green)] transition-colors"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <rect
-              x="9"
-              y="9"
-              width="13"
-              height="13"
-              rx="2"
-              ry="2"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-            <path
-              d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
-        )}
-      </span>
-    </button>
+          )}
+        </span>
+      </button>
+      <a
+        href={explorerHref}
+        target="_blank"
+        rel="noopener noreferrer"
+        title="View token on explorer"
+        aria-label="View token on explorer"
+        className="inline-flex items-center justify-center shrink-0 h-[26px] w-[26px] rounded-full bg-[#11160e]/95 border border-[#2a3723] text-[#77836b] hover:border-[var(--green)] hover:text-[var(--green)] transition-colors"
+      >
+        <span aria-hidden="true" className="text-[11px] leading-none">↗</span>
+      </a>
+    </span>
   );
 }
