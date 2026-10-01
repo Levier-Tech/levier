@@ -1833,7 +1833,8 @@ button:hover .arrow-chip {
   .mobile-nav:not([hidden]) {
     display: flex;
     flex-direction: column;
-    position: absolute;
+    /* Fixed like the header, so the menu opens below it at any scroll position. */
+    position: fixed;
     top: 79px;
     left: 0;
     right: 0;

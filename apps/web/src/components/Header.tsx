@@ -6,6 +6,7 @@ import { usePathname } from 'next/navigation';
 import { WalletModal } from './WalletModal';
 import { MobileNavigation } from './MobileNavigation';
 import { useAccount } from 'wagmi';
+import { useNetworkMode } from '../hooks/useNetworkMode';
 
 import { X_URL, X_LABEL, X_TITLE } from '../lib/social';
 export function Header() {
@@ -13,6 +14,7 @@ export function Header() {
     const [isWalletModalOpen, setIsWalletModalOpen] = useState(false);
     const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
     const { address, isConnected } = useAccount();
+    const { isTestnet } = useNetworkMode();
     const productsMenuRef = useRef<HTMLDetailsElement>(null);
 
     const formattedAddress = address
@@ -187,7 +189,7 @@ export function Header() {
                 <div className="nav-right">
                     <span className="chain-label">
                         <span className="live-dot" aria-hidden="true" />
-                        Robinhood Chain
+                        Robinhood Chain {isTestnet ? 'Testnet' : 'Mainnet'}
                     </span>
 
                     {isLanding ? (
