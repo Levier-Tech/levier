@@ -34,6 +34,7 @@
     "rh:mainnet:full:deploy": "node scripts/deploy-rh-mainnet-full.mjs --deploy",
     "rh:mainnet:full:verify": "node scripts/deploy-rh-mainnet-full.mjs --verify",
     "rh:mainnet:full:interactive": "bash scripts/deploy-rh-mainnet-full.sh",
+    "rh:mainnet:verify-sources": "node scripts/verify-rh-mainnet-sources.mjs",
     "rh:publisher:observe:runtime": "node --import tsx scripts/run-rh-publisher.mjs --observe --runtime",
     "rh:publisher:serve:runtime": "node --import tsx scripts/run-rh-publisher.mjs --serve --runtime",
     "rh:publisher:serve": "node --import tsx scripts/run-rh-publisher.mjs --serve .env.testnet",
