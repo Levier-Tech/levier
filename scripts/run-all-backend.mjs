@@ -28,6 +28,22 @@ const SERVICES = [
 ];
 
 const RESET = "\x1b[0m";
+
+// BACKEND_SERVICES limits which daemons run (comma-separated names, e.g. "API,INDEXER").
+// Mainnet does not run ORACLE: prices come from Chainlink, not the testnet publisher.
+const selected = (process.env.BACKEND_SERVICES ?? "")
+  .split(",")
+  .map((s) => s.trim().toUpperCase())
+  .filter(Boolean);
+for (const name of selected)
+  if (!SERVICES.some((s) => s.name === name))
+    throw new Error(`Unknown BACKEND_SERVICES entry: ${name}`);
+if (selected.length)
+  SERVICES.splice(
+    0,
+    SERVICES.length,
+    ...SERVICES.filter((s) => selected.includes(s.name)),
+  );
 const children = new Map();
 
 function startProcess(service) {

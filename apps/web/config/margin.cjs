@@ -11,7 +11,7 @@ const hash = z
 // Reuse the strict descriptor shape while reversing the assets for the stock-debt pair.
 const shortDeploymentSchema = z
   .object({
-    chainId: z.literal(46630),
+    chainId: z.union([z.literal(46630), z.literal(4663)]),
     marketId: hash,
     pair: address,
     registry: address,
@@ -38,7 +38,7 @@ const shortDeploymentSchema = z
   .strict();
 const marginSchema = z
   .object({
-    chainId: z.literal(46630),
+    chainId: z.union([z.literal(46630), z.literal(4663)]),
     owner: address,
     router: address,
     factory: address,

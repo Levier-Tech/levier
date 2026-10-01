@@ -44,7 +44,10 @@ export function replayEvents(events) {
   return accounts;
 }
 export async function verifyIndexerIdentity(client, d, start) {
-  if (d.chainId !== 46630 || (await client.getChainId()) !== d.chainId)
+  if (
+    ![46630, 4663].includes(d.chainId) ||
+    (await client.getChainId()) !== d.chainId
+  )
     throw Error("INDEXER_WRONG_CHAIN");
   const head = await client.getBlockNumber();
   for (const role of ["pair", "registry", "oracle", "collateral", "debt"]) {

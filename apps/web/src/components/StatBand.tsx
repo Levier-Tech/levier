@@ -2,6 +2,7 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import { assetCatalog } from '../lib/asset-catalog';
+import { useNetworkMode } from '../hooks/useNetworkMode';
 
 const FEATURED_MARKET_COUNT = assetCatalog.filter((asset) => asset.featured).length;
 
@@ -16,7 +17,7 @@ interface Stat {
 
 const STATS: Stat[] = [
   { label: 'Target equity markets', target: FEATURED_MARKET_COUNT, primary: true },
-  { label: 'Max leverage (testnet)', target: 2.5, decimals: 1, suffix: '×' },
+  { label: 'Max leverage', target: 2.5, decimals: 1, suffix: '×' },
   { label: 'Automated margin router', staticValue: '1-Click' },
 ];
 
@@ -85,15 +86,19 @@ export function StatBand() {
     return () => observer.disconnect();
   }, []);
 
+  const { isTestnet } = useNetworkMode();
   const primary = STATS.find((stat) => stat.primary);
-  const secondary = STATS.filter((stat) => !stat.primary);
+  // Mainnet markets are capped at 1.5x leverage at launch.
+  const secondary = STATS.filter((stat) => !stat.primary).map((stat) =>
+    stat.label === 'Max leverage' && !isTestnet ? { ...stat, target: 1.5 } : stat,
+  );
 
   return (
     <section className="stat-band" aria-label="Levier at a glance">
       <div className="stat-band-inner section-wrap" ref={sectionRef}>
         <div className="stat-band-eyebrow">
           <span className="live-dot" aria-hidden="true" />
-          <span>Live on Robinhood Chain testnet</span>
+          <span>Live on Robinhood Chain {isTestnet ? 'testnet' : 'mainnet'}</span>
         </div>
 
         <div className="stat-band-row">

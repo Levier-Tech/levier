@@ -36,12 +36,15 @@ export async function main(args) {
     profile === "--runtime"
       ? process.env
       : parseEnv(readFileSync(profile, "utf8"));
+  // The file profile is the testnet one; --runtime may run on testnet or mainnet.
+  const chainId = { TESTNET: 46630, MAINNET: 4663 }[env.NETWORK_MODE];
   if (
-    env.NETWORK_MODE !== "TESTNET" ||
-    env.CHAIN_ID !== "46630" ||
+    !chainId ||
+    env.CHAIN_ID !== String(chainId) ||
+    (profile !== "--runtime" && chainId !== 46630) ||
     env.TRADING_ENABLED !== "false"
   )
-    throw Error("INDEXER_TESTNET_ONLY");
+    throw Error("INDEXER_NETWORK_MISMATCH");
   if (
     !env.INDEXER_MARKETS_JSON ||
     !env.INDEXER_RPC_URL ||
@@ -102,7 +105,7 @@ export async function main(args) {
       console.log(
         json({
           status: "RH lending tables prepared",
-          chainId: 46630,
+          chainId,
           arcTablesTouched: false,
         }),
       );

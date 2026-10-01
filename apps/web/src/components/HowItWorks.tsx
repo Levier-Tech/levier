@@ -4,6 +4,7 @@ import dynamic from 'next/dynamic';
 import React, { useEffect, useRef, useState } from 'react';
 
 import { HowItWorksFlat } from './HowItWorksFlat';
+import { useNetworkMode } from '../hooks/useNetworkMode';
 
 // three.js only loads once the section has scrolled into view.
 const HowItWorksScene = dynamic(() => import('./HowItWorksScene'), { ssr: false });
@@ -25,6 +26,7 @@ function hasWebGL() {
 }
 
 export function HowItWorks() {
+  const { isTestnet } = useNetworkMode();
   const [step, setStep] = useState(0);
   const [inView, setInView] = useState(false);
   const [revealed, setRevealed] = useState(false);
@@ -150,7 +152,7 @@ export function HowItWorks() {
 
         <p className="hiw-caption" key={step}>
           {STEPS[step].caption}
-          {step === 2 && <span className="hiw-testnet">Testnet</span>}
+          {step === 2 && isTestnet && <span className="hiw-testnet">Testnet</span>}
         </p>
 
         <div

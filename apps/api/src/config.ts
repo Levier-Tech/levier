@@ -15,7 +15,9 @@ const envSchema = z.object({
   SUPABASE_ANON_KEY: z
     .string()
     .min(1, { message: "SUPABASE_ANON_KEY is required" }),
-  NETWORK_MODE: z.literal("TESTNET"),
+  // Server-side writes; table write policies are limited to the service role.
+  SUPABASE_SERVICE_ROLE_KEY: z.string().min(1).optional(),
+  NETWORK_MODE: z.enum(["TESTNET", "MAINNET"]),
   API_BIND_HOST: z.enum(["127.0.0.1", "::1", "0.0.0.0"]),
   WEB_ORIGIN: z.string().url(),
   TRADING_ENABLED: z

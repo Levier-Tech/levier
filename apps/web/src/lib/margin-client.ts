@@ -1,3 +1,4 @@
+import { isSupportedChainId } from "./networks";
 import {
   decodeEventLog,
   encodeFunctionData,
@@ -47,7 +48,7 @@ export async function readMarginSnapshot(
   account: Address,
 ) {
   check(
-    d.chainId === 46630 && (await client.getChainId()) === d.chainId,
+    isSupportedChainId(d.chainId) && (await client.getChainId()) === d.chainId,
     "WRONG_NETWORK",
   );
   check(
