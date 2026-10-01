@@ -122,6 +122,33 @@
         "supplyCapRaw": "5000000",
         "borrowCapRaw": "1000000000000000"
       }
+    },
+    {
+      "symbol": "NVDA",
+      "token": "0xd0601CE157Db5bdC3162BbaC2a2C8aF5320D9EEC",
+      "decimals": 18,
+      "feed": "0x379EC4f7C378F34a1B47E4F3cbeBCbAC3E8E9F15",
+      "feedDescription": "RHNVDA / USD",
+      "maxAge": 93600,
+      "minPrice18": "23000000000000000000",
+      "maxPrice18": "2400000000000000000000",
+      "addedAfterLaunch": true,
+      "long": {
+        "slug": "levier-nvda-usdg-mainnet",
+        "maxLtvBps": 5000,
+        "liquidationLtvBps": 6500,
+        "maxLeverageBps": 15000,
+        "supplyCapRaw": "10000000000000000",
+        "borrowCapRaw": "250000"
+      },
+      "short": {
+        "slug": "levier-nvda-usdg-short-mainnet",
+        "maxLtvBps": 4000,
+        "liquidationLtvBps": 6000,
+        "maxLeverageBps": 12500,
+        "supplyCapRaw": "5000000",
+        "borrowCapRaw": "1000000000000000"
+      }
     }
   ]
 }

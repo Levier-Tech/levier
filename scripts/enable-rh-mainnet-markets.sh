@@ -7,7 +7,9 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$ROOT"
 ENV_FILE=".env.mainnet.core.local"
-STATE=".secrets/rh-mainnet-enable/state.json"
+# Must match the journal directory chosen in enable-rh-mainnet-markets.mjs.
+SCOPE="$(printf '%s' "${MAINNET_ENABLE_MARKETS:-}" | tr 'A-Z' 'a-z' | tr -d ' ' | tr ',' '-')"
+STATE=".secrets/rh-mainnet-enable${SCOPE:+-$SCOPE}/state.json"
 
 confirm() {
   read -r -p "$1 [y/N] " reply

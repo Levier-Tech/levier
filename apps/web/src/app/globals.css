@@ -2965,13 +2965,14 @@ button:hover .arrow-chip {
 .stock-card.palantir img { width: 106px; filter: brightness(0); }
 .stock-card.netflix img { width: 88px; filter: brightness(0); }
 .stock-card.nvidia img { width: 96px; filter: brightness(0); }
-.stock-card.amd img { width: 102px; filter: brightness(0); }
+.stock-card.amd img { width: 124px; filter: brightness(0); }
 .stock-card:focus-visible { outline: 3px solid var(--green); outline-offset: 5px; }
 .card-quote { display: flex; flex-direction: column; gap: 5px; }
 .card-quote > span { font-size: 17px; font-variant-numeric: tabular-nums; }
 .card-quote small { font-size: 9px; letter-spacing: .2px; opacity: .7; }
 @media (max-width: 600px) {
-  .stock-card.palantir img, .stock-card.amd img { width: 76px; }
+  .stock-card.palantir img { width: 76px; }
+  .stock-card.amd img { width: 96px; }
   .stock-card.netflix img { width: 66px; }
   .stock-card.nvidia img { width: 72px; }
   .card-quote > span { font-size: 14px; }

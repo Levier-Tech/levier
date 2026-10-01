@@ -17,7 +17,7 @@
     "vault": "0x6899cC83261e224500d080411f2D179922374929",
     "impl-LeverageRouter": "0x4F2297C36A4de61B352B8D96f8271a49CE90cE64",
     "leverageRouter": "0x9C955c201F492585670Ca7e923CC257790e02F8B",
-    "impl-VerifiedFeedOracle": "0x99c5bE99ffdb9C3a6C95701a60BDe015595EdD29",
+    "impl-VerifiedFeedOracle": "0xf71b9bcbE3e0646ec5daA316826A29a676b7ea45",
     "oracle": "0x44665e0809d5116d37aB9981046e177b070471d9",
     "impl-LevierPair": "0x3051439D28d5d341478dc523246A81D2E99B240F",
     "long-tsla": "0xCeeD715559762eFe25830eb88EcFd060f10CfFcd",
@@ -37,7 +37,11 @@
     "margin-tsla": "0x60a309D3e8610a726FF8bf8c46ae48005aC06607",
     "margin-amzn": "0xA451dE6096bC1929611A6Ab7Dd2aa5DE5567dc91",
     "margin-pltr": "0x4b6bb73390B4c37933f1889bF35CAe9a50EC03aE",
-    "margin-amd": "0xda41d1BDf4E1C8A01B20dE9f0C1eCdF035dE4f44"
+    "margin-amd": "0xda41d1BDf4E1C8A01B20dE9f0C1eCdF035dE4f44",
+    "long-nvda": "0x80eB6BD4f25Edfa7178C80e3E4fed8c1703FC983",
+    "short-nvda": "0x0F04420079de568770996E1072D6e37cf4031d9A",
+    "pool-nvda": "0x5dFf9696f7Db9ED0a1A382ebF6A82F2C89560F30",
+    "margin-nvda": "0x7fbeD49d4cE565eCBB9fbCAb4217d9330A3fEC85"
   },
   "markets": {
     "TSLA": {
@@ -67,6 +71,13 @@
       "longMarketId": "0x535d9a479e88c5ca74c03d8a3227776ae70be574215b77a537bde10c420cd705",
       "shortMarketId": "0xb8d2839c491273a5f3c0aa758cdfcfcb7eb05a14423d9354bd3b512c990f37a2",
       "status": "PAUSED"
+    },
+    "NVDA": {
+      "token": "0xd0601CE157Db5bdC3162BbaC2a2C8aF5320D9EEC",
+      "feed": "0x379EC4f7C378F34a1B47E4F3cbeBCbAC3E8E9F15",
+      "longMarketId": "0x2643e974bcad4c9c82cd61584428735e0b571b9dc5b0ce7946a515382dace0c7",
+      "shortMarketId": "0x9ec1d7dc0698b7b0fe73cce800ffca46897f6490aa89e14e109c8c22ed4eaf96",
+      "status": "PAUSED"
     }
   },
   "usdg": "0x5fc5360D0400a0Fd4f2af552ADD042D716F1d168",
@@ -75,7 +86,8 @@
     "TSLA": "356393800000000000000",
     "AMZN": "246370000000000000000",
     "PLTR": "188380000000000000000",
-    "AMD": "611360000000000000000"
+    "AMD": "611360000000000000000",
+    "NVDA": "231396630280000000000"
   },
   "transactions": {
     "deploy-impl-LevierMarketRegistry": "0xc1c53ade064f6f5914c072821afe5a7327b520890163ff0b20b015945b53f65d",
@@ -90,7 +102,7 @@
     "deploy-vault": "0xa268c8dc985e563860db8842601d00fa7358af5207f9c9a767c8db20b79822cf",
     "deploy-impl-LeverageRouter": "0x2e4758f8292fc38f315df3fcba17d319c5cb1d41722110fded7078c73d0ea2e6",
     "deploy-leverageRouter": "0x4e7f462ce6c5edd84728b34cc903fc9c06a3d820c038acb2c191a7acbc19999d",
-    "deploy-impl-VerifiedFeedOracle": "0x3a4a96f43fe944ae7ecefa46087ce8657874e2b2b68b89e2399fc0ed91f0aeaf",
+    "deploy-impl-VerifiedFeedOracle": "0x7b8e3123d9664563a113a6b0ee0cd54a02ff3432685ac878b0c1cadf3deb5b6f",
     "deploy-oracle": "0x577edf57bf7d0ddf9acaf6a17b62b8da375b28db93202a45f577863adc1dcaff",
     "deploy-impl-LevierPair": "0x43e075cd580d68f22048b8e3174d35883a360496386db9900890852b801c67f3",
     "deploy-long-tsla": "0x82b7ff885c71c5e1bccdecd7af9bec977517aa69998c1e0274a252c89a37e6cd",
@@ -122,7 +134,23 @@
     "deploy-margin-amzn": "0x3b9a3d54404017049828f76b7823042416fd18851f1264d450f48f3cb77c782d",
     "deploy-margin-pltr": "0xc0b2505f4fe20400dca445f6f10da43e8515b70aa0226b4120835aecbd6f01a1",
     "deploy-margin-amd": "0x9363f1527d657b8a72f3c4c46689a3e78222eb2752bdb25e82a139ca772c46be",
-    "authorize-lending-router": "0x94b6ad4cf5ac693447b873cc47478e6dad427e9c5aa5f041497ca580366f52ca"
+    "authorize-lending-router": "0x94b6ad4cf5ac693447b873cc47478e6dad427e9c5aa5f041497ca580366f52ca",
+    "upgrade-oracle": "0xc2d9fe3fb60bc882e78b7ad8fb00dd36495c8ab61dc6271676f056b5da778e47",
+    "add-feed-nvda": "0x6dbb85b48f2e19aac3ff68ddc11a0b650f9eefd428188abbcfb987fbf71230f1",
+    "create-pool-nvda": "0x1392e8b15c54510bbe73e6ccaf06fc22bd4538280965b6615ac4d8087a8703a8",
+    "deploy-long-nvda": "0x6c0dfd80979bd6ee4b62b8a9876afd0d85f19c0cf3dd5bfa3262921bdcf61038",
+    "register-long-nvda": "0x648ffa714820169d2522e0ed72609dcee977695d33a297a8d248e76cde41a0d2",
+    "pause-long-nvda": "0x97587219391ceabecdafd57291dc8e650702e870d9d9ca7902da26d4f4ea6cbc",
+    "deploy-short-nvda": "0x03b2af93d94c0d2c5be71e048b9634b3bd32f452f2877d49b4cf6d3945b24cfd",
+    "register-short-nvda": "0x409d724e9e2899a9cfb998ffd57649a196fde14c1927809773e384a6af94a6e1",
+    "pause-short-nvda": "0x7ddf99256481d12ee1721ff9692b2630a8ac697dd04f14ad34981347df3da9b4",
+    "deploy-margin-nvda": "0x3a93d35d563b92bbdc22007fc6124ec4621132e85a9be992e45d69a45b9d030a"
   },
-  "spentEth": "0.000474876599116"
+  "spentEth": "0.000474876599116",
+  "retired": {
+    "impl-VerifiedFeedOracle": {
+      "address": "0x99c5bE99ffdb9C3a6C95701a60BDe015595EdD29",
+      "transaction": "0x3a4a96f43fe944ae7ecefa46087ce8657874e2b2b68b89e2399fc0ed91f0aeaf"
+    }
+  }
 }

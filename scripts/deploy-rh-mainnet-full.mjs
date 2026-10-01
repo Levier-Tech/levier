@@ -160,6 +160,8 @@ function loadProfile() {
 }
 function loadConfig(env) {
   const c = JSON.parse(readFileSync(configPath, "utf8"));
+  // Markets added after the v2 launch are deployed by scripts/add-rh-mainnet-market.mjs.
+  c.markets = c.markets.filter((m) => !m.addedAfterLaunch);
   check(c.version === 1 && c.chainId === CHAIN_ID, "CONFIG_VERSION_MISMATCH");
   check(
     same(c.oracle.stable.token, env.MAINNET_VAULT_ASSET_ADDRESS),
