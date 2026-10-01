@@ -17,7 +17,8 @@ interface IStockOracleStatus {
 }
 
 /// @notice Per-token USD feed adapter. It cannot accept manually submitted prices.
-/// @dev Deployed behind an ERC1967 UUPS proxy; feeds are fixed at initialization and change only by upgrade.
+/// @dev Deployed behind an ERC1967 UUPS proxy. The owner can add a feed for a new asset; an existing
+/// feed is never replaced or removed.
 /// @dev Feed identity/provenance must be verified before deployment. Equity feeds must already
 /// include the token's corporate-action multiplier. REST underlying prices are not compatible inputs.
 contract VerifiedFeedOracle is Initializable, OwnableUpgradeable, UUPSUpgradeable {
@@ -47,6 +48,8 @@ contract VerifiedFeedOracle is Initializable, OwnableUpgradeable, UUPSUpgradeabl
     error StalePrice();
     error InvalidPrice();
     error TokenOraclePaused();
+
+    event FeedAdded(address indexed asset, address indexed feed, string description);
 
     IPriceFeedV3 public sequencerFeed;
     uint256 public sequencerGracePeriod;
@@ -82,20 +85,29 @@ contract VerifiedFeedOracle is Initializable, OwnableUpgradeable, UUPSUpgradeabl
         sequencerFeed = IPriceFeedV3(sequencer);
         sequencerGracePeriod = gracePeriod;
         for (uint256 i; i < inputs.length; ++i) {
-            FeedInput memory input = inputs[i];
-            if (
-                input.asset.code.length == 0 || input.feed.code.length == 0
-                    || address(feeds[input.asset].feed) != address(0) || input.maxAge == 0 || input.minPrice18 == 0
-                    || input.maxPrice18 <= input.minPrice18 || bytes(input.description).length == 0
-            ) revert InvalidConfiguration();
-            IPriceFeedV3 feed = IPriceFeedV3(input.feed);
-            uint8 decimals = feed.decimals();
-            if (decimals > 36 || keccak256(bytes(feed.description())) != keccak256(bytes(input.description))) {
-                revert InvalidConfiguration();
-            }
-            feeds[input.asset] =
-                FeedConfig(feed, decimals, input.maxAge, input.minPrice18, input.maxPrice18, input.checkTokenPause);
+            _addFeed(inputs[i]);
         }
+    }
+
+    /// @notice Adds the feed for an asset that has none yet, with the same checks as initialization.
+    function addFeed(FeedInput calldata input) external onlyOwner {
+        _addFeed(input);
+    }
+
+    function _addFeed(FeedInput memory input) private {
+        if (
+            input.asset.code.length == 0 || input.feed.code.length == 0
+                || address(feeds[input.asset].feed) != address(0) || input.maxAge == 0 || input.minPrice18 == 0
+                || input.maxPrice18 <= input.minPrice18 || bytes(input.description).length == 0
+        ) revert InvalidConfiguration();
+        IPriceFeedV3 feed = IPriceFeedV3(input.feed);
+        uint8 decimals = feed.decimals();
+        if (decimals > 36 || keccak256(bytes(feed.description())) != keccak256(bytes(input.description))) {
+            revert InvalidConfiguration();
+        }
+        feeds[input.asset] =
+            FeedConfig(feed, decimals, input.maxAge, input.minPrice18, input.maxPrice18, input.checkTokenPause);
+        emit FeedAdded(input.asset, input.feed, input.description);
     }
 
     function getPrice(address asset) external view returns (uint256) {

@@ -178,4 +178,37 @@ contract VerifiedFeedOracleTest is Test {
         oracle = LevierProxies.oracle(address(this), block.chainid, address(sequencer), 60, inputs());
         assertEq(oracle.getPrice(address(stock)), 250e18);
     }
+
+    function testOwnerAddsFeedForNewAssetOnly() public {
+        StockStatusFixture other = new StockStatusFixture();
+        FeedFixture otherFeed = new FeedFixture(8, "OTHER / USD", 100e8, 9900, 9990);
+        VerifiedFeedOracle.FeedInput memory input =
+            VerifiedFeedOracle.FeedInput(address(other), address(otherFeed), "OTHER / USD", 120, 1e18, 10000e18, true);
+        vm.expectRevert(VerifiedFeedOracle.UnknownAsset.selector);
+        oracle.getPrice(address(other));
+        vm.prank(address(0xBAD));
+        vm.expectRevert(abi.encodeWithSignature("OwnableUnauthorizedAccount(address)", address(0xBAD)));
+        oracle.addFeed(input);
+        oracle.addFeed(input);
+        assertEq(oracle.getPrice(address(other)), 100e18);
+        // An existing feed is never replaced.
+        vm.expectRevert(VerifiedFeedOracle.InvalidConfiguration.selector);
+        oracle.addFeed(input);
+        input.asset = address(stock);
+        vm.expectRevert(VerifiedFeedOracle.InvalidConfiguration.selector);
+        oracle.addFeed(input);
+        assertEq(oracle.getPrice(address(stock)), 250e18);
+    }
+
+    function testUpgradeKeepsFeedsAndEnablesAddFeed() public {
+        address next = address(new VerifiedFeedOracle());
+        oracle.upgradeToAndCall(next, "");
+        assertEq(oracle.getPrice(address(stock)), 250e18);
+        StockStatusFixture other = new StockStatusFixture();
+        FeedFixture otherFeed = new FeedFixture(8, "OTHER / USD", 100e8, 9900, 9990);
+        oracle.addFeed(
+            VerifiedFeedOracle.FeedInput(address(other), address(otherFeed), "OTHER / USD", 120, 1e18, 10000e18, true)
+        );
+        assertEq(oracle.getPrice(address(other)), 100e18);
+    }
 }

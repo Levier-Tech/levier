@@ -28,7 +28,9 @@ const v = require("viem");
 const { privateKeyToAccount } = require("viem/accounts");
 
 const profile = ".env.mainnet.core.local";
-const directory = ".secrets/rh-mainnet-enable";
+// Each MAINNET_ENABLE_MARKETS selection keeps its own journal; the launch run used the default one.
+const enableScope = (process.env.MAINNET_ENABLE_MARKETS ?? "").split(",").map((x) => x.trim().toLowerCase()).filter(Boolean).join("-");
+const directory = enableScope ? `.secrets/rh-mainnet-enable-${enableScope}` : ".secrets/rh-mainnet-enable";
 const CHAIN_ID = 4663;
 const STATUS_NORMAL = 0;
 // Funding size per market. MAINNET_ENABLE_SIZE=micro (default, about $1.10 per market)
