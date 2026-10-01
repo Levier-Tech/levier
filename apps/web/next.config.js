@@ -52,6 +52,23 @@ module.exports = (phase) => {
     reactStrictMode: true,
     transpilePackages: ["@levier/types"],
     env: Object.fromEntries(publicKeys.map((key) => [key, process.env[key]])),
+    // Tell browsers to use HTTPS only and apply basic hardening on every page.
+    async headers() {
+      return [
+        {
+          source: "/:path*",
+          headers: [
+            {
+              key: "Strict-Transport-Security",
+              value: "max-age=63072000; includeSubDomains",
+            },
+            { key: "X-Content-Type-Options", value: "nosniff" },
+            { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+            { key: "X-Frame-Options", value: "DENY" },
+          ],
+        },
+      ];
+    },
     async rewrites() {
       return [
         {
