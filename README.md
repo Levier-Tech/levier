@@ -1,6 +1,6 @@
 # LEVIER MARKETS
 
-> **Leverage for tokenized assets on Robinhood Chain.**
+> **Leverage safely for tokenized assets on Robinhood Chain.**
 
 Levier Markets is the credit and leverage layer built for tokenized assets (equities, ETFs, and RWAs) on [Robinhood Chain](https://explorer.testnet.chain.robinhood.com). It provides a modern brokerage margin experience — **Borrow, Earn, Long, Short, Multiply, Auto-Protect** — over isolated lending markets, with each tokenized asset operating in its own risk-isolated pair.
 
@@ -37,16 +37,16 @@ User / Web3 Wallet
 
 ### Deployed Contracts
 
-| Contract | Address | State |
-| :--- | :--- | :--- |
-| `LevierMarketRegistry` | [`0x41d7…fff3`](https://explorer.testnet.chain.robinhood.com/address/0x41d7f4c434de83d1602c5a0bd548d1b985c8fff3) | 1 registered market; owner verified |
-| `LevierRouter` | [`0x23aa…6878`](https://explorer.testnet.chain.robinhood.com/address/0x23aa8e2c2025354553217f091f15ba1e1d5e6878) | Authorized in registry |
-| `LeverageRouter` | [`0xf284…53d2`](https://explorer.testnet.chain.robinhood.com/address/0xf284f47c169774d303ac92d46c88598f82a453d2) | Paused; swaps/close incomplete |
-| `ShortRouter` | [`0x8bea…e4ef`](https://explorer.testnet.chain.robinhood.com/address/0x8beabef1bc8a123abe915f088487c90e917de4ef) | Paused; reverse market incomplete |
-| `AutoProtectModule` | [`0xe157…0365`](https://explorer.testnet.chain.robinhood.com/address/0xe1578ca2519b23bc5fad31d021e6e69736f60365) | Paused; deleveraging incomplete |
-| `LevierVault` | [`0xfe8b…049e`](https://explorer.testnet.chain.robinhood.com/address/0xfe8bc5b71743a98c3864437ad86f8b8ab2ea049e) | Deposit/mint closed |
-| `RhTestnetReferenceOracle` | [`0x8f0e…2ad4`](https://explorer.testnet.chain.robinhood.com/address/0x8f0e3da3941570c945a930092b2a721eddeb2ad4) | Real price publications |
-| `LevierPair` (TSLA/USDG) | [`0x43b3…38aa`](https://explorer.testnet.chain.robinhood.com/address/0x43b3c72fa2e5b0b8ba8b610b7a39ce4c33ed38aa) | Lifecycle passed; paused |
+| Contract                   | Address                                                                                                          | State                               |
+| :------------------------- | :--------------------------------------------------------------------------------------------------------------- | :---------------------------------- |
+| `LevierMarketRegistry`     | [`0x41d7…fff3`](https://explorer.testnet.chain.robinhood.com/address/0x41d7f4c434de83d1602c5a0bd548d1b985c8fff3) | 1 registered market; owner verified |
+| `LevierRouter`             | [`0x23aa…6878`](https://explorer.testnet.chain.robinhood.com/address/0x23aa8e2c2025354553217f091f15ba1e1d5e6878) | Authorized in registry              |
+| `LeverageRouter`           | [`0xf284…53d2`](https://explorer.testnet.chain.robinhood.com/address/0xf284f47c169774d303ac92d46c88598f82a453d2) | Paused; swaps/close incomplete      |
+| `ShortRouter`              | [`0x8bea…e4ef`](https://explorer.testnet.chain.robinhood.com/address/0x8beabef1bc8a123abe915f088487c90e917de4ef) | Paused; reverse market incomplete   |
+| `AutoProtectModule`        | [`0xe157…0365`](https://explorer.testnet.chain.robinhood.com/address/0xe1578ca2519b23bc5fad31d021e6e69736f60365) | Paused; deleveraging incomplete     |
+| `LevierVault`              | [`0xfe8b…049e`](https://explorer.testnet.chain.robinhood.com/address/0xfe8bc5b71743a98c3864437ad86f8b8ab2ea049e) | Deposit/mint closed                 |
+| `RhTestnetReferenceOracle` | [`0x8f0e…2ad4`](https://explorer.testnet.chain.robinhood.com/address/0x8f0e3da3941570c945a930092b2a721eddeb2ad4) | Real price publications             |
+| `LevierPair` (TSLA/USDG)   | [`0x43b3…38aa`](https://explorer.testnet.chain.robinhood.com/address/0x43b3c72fa2e5b0b8ba8b610b7a39ce4c33ed38aa) | Lifecycle passed; paused            |
 
 Full record: [`packages/contracts/deployments/testnet-46630.json`](packages/contracts/deployments/testnet-46630.json).
 
@@ -155,16 +155,16 @@ graph TD
 
 ### Core Contracts
 
-| Contract | Role |
-| :--- | :--- |
-| **LevierMarketRegistry** | Stores supported markets with risk parameters: LLTV, oracle, caps, status, risk tier (`Tier A` / `Tier B` / `Tier C` / `Experimental`). Controls market add, pause, and configuration. |
-| **LevierPair** | Isolated lending engine per asset pair. Handles collateral deposits, stablecoin borrowing, Max LTV checks, dynamic interest rate model, and on-chain liquidation with controlled penalties. |
-| **LevierRouter** | Main user entry point. Routes supply/borrow/repay/withdraw actions with permit/transfer management in a single transaction. |
-| **LeverageRouter** | Atomic multi-step execution for **Long** & **Multiply** positions (deposit → borrow → swap → re-supply) up to 2.5x with slippage protection and oracle sanity checks. |
-| **ShortRouter** | Atomic short execution: deposit stablecoin collateral → borrow tokenized stock → sell for stablecoin to lock short position. |
-| **AutoProtectModule** | Stores user-configured deleverage rules (`triggerLtv`, `targetLtv`, `maxDeleverage`). Keeper bots execute deleveraging only when LTV breach is proven on-chain. |
-| **LevierVault** | ERC-4626 yield vault accepting stablecoin deposits and routing liquidity across isolated lending pairs for supplier APY. |
-| **RhTestnetReferenceOracle** | Centralized testnet-only oracle with real reference prices (Robinhood TSLA quotes, Kraken USDG/USD). Immutable publisher/binding. Max age, deviation checks, and stale-data blocking. |
+| Contract                     | Role                                                                                                                                                                                        |
+| :--------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **LevierMarketRegistry**     | Stores supported markets with risk parameters: LLTV, oracle, caps, status, risk tier (`Tier A` / `Tier B` / `Tier C` / `Experimental`). Controls market add, pause, and configuration.      |
+| **LevierPair**               | Isolated lending engine per asset pair. Handles collateral deposits, stablecoin borrowing, Max LTV checks, dynamic interest rate model, and on-chain liquidation with controlled penalties. |
+| **LevierRouter**             | Main user entry point. Routes supply/borrow/repay/withdraw actions with permit/transfer management in a single transaction.                                                                 |
+| **LeverageRouter**           | Atomic multi-step execution for **Long** & **Multiply** positions (deposit → borrow → swap → re-supply) up to 2.5x with slippage protection and oracle sanity checks.                       |
+| **ShortRouter**              | Atomic short execution: deposit stablecoin collateral → borrow tokenized stock → sell for stablecoin to lock short position.                                                                |
+| **AutoProtectModule**        | Stores user-configured deleverage rules (`triggerLtv`, `targetLtv`, `maxDeleverage`). Keeper bots execute deleveraging only when LTV breach is proven on-chain.                             |
+| **LevierVault**              | ERC-4626 yield vault accepting stablecoin deposits and routing liquidity across isolated lending pairs for supplier APY.                                                                    |
+| **RhTestnetReferenceOracle** | Centralized testnet-only oracle with real reference prices (Robinhood TSLA quotes, Kraken USDG/USD). Immutable publisher/binding. Max age, deviation checks, and stale-data blocking.       |
 
 ### Compiler & Toolchain
 
@@ -177,15 +177,15 @@ graph TD
 
 ## Tech Stack
 
-| Layer | Technology |
-| :--- | :--- |
-| **Frontend** | Next.js 14+ (App Router), React 18, Tailwind CSS, Wagmi v3, Viem |
-| **Backend API** | Express, TypeScript, Zod, Supabase Client |
-| **Database** | Supabase (PostgreSQL) with network-scoped RLS |
-| **Smart Contracts** | Solidity 0.8.24, Foundry (Forge), OpenZeppelin v5 |
-| **Blockchain** | Robinhood Chain Testnet (Chain ID: 46630) |
-| **Monorepo** | Turborepo, pnpm workspaces |
-| **Deployment** | Railway (Docker / Nixpacks) |
+| Layer               | Technology                                                       |
+| :------------------ | :--------------------------------------------------------------- |
+| **Frontend**        | Next.js 14+ (App Router), React 18, Tailwind CSS, Wagmi v3, Viem |
+| **Backend API**     | Express, TypeScript, Zod, Supabase Client                        |
+| **Database**        | Supabase (PostgreSQL) with network-scoped RLS                    |
+| **Smart Contracts** | Solidity 0.8.24, Foundry (Forge), OpenZeppelin v5                |
+| **Blockchain**      | Robinhood Chain Testnet (Chain ID: 46630)                        |
+| **Monorepo**        | Turborepo, pnpm workspaces                                       |
+| **Deployment**      | Railway (Docker / Nixpacks)                                      |
 
 ---
 
@@ -200,36 +200,43 @@ graph TD
 ### Installation
 
 1. Clone the repository:
-   ```bash
-   git clone https://github.com/Levier-Tech/levier.git
-   ```
+
+    ```bash
+    git clone https://github.com/Levier-Tech/levier.git
+    ```
 
 2. Install workspace dependencies:
-   ```bash
-   pnpm install
-   ```
+
+    ```bash
+    pnpm install
+    ```
 
 3. Setup environment variables:
-   ```bash
-   cp .env.testnet.example .env
-   ```
-   Fill in your RPC URL, Supabase credentials, wallet keys and contract addresses. All variables are Zod-validated — missing keys trigger a fail-fast error.
+
+    ```bash
+    cp .env.testnet.example .env
+    ```
+
+    Fill in your RPC URL, Supabase credentials, wallet keys and contract addresses. All variables are Zod-validated — missing keys trigger a fail-fast error.
 
 4. Start the development servers (web + API):
-   ```bash
-   pnpm dev:core
-   ```
-   Open [http://localhost:3002](http://localhost:3002) to view the application.
+
+    ```bash
+    pnpm dev:core
+    ```
+
+    Open [http://localhost:3002](http://localhost:3002) to view the application.
 
 5. Start all services (web + API + indexer + keeper + price-oracle):
-   ```bash
-   pnpm dev
-   ```
+
+    ```bash
+    pnpm dev
+    ```
 
 6. Verify production build:
-   ```bash
-   pnpm run build
-   ```
+    ```bash
+    pnpm run build
+    ```
 
 ### Smart Contract Development
 
@@ -248,20 +255,20 @@ pnpm generate:lending-abis
 
 ## Available Scripts
 
-| Script | Description |
-| :--- | :--- |
-| `pnpm dev` | Start all workspace services |
-| `pnpm dev:core` | Start web + API only |
-| `pnpm build` | Build all packages (excluding contracts) |
-| `pnpm build:all` | Build everything including contracts |
-| `pnpm lint` | Run TypeScript type-checking |
-| `pnpm format` | Format code with Prettier |
-| `pnpm test:web-boundaries` | Run web boundary tests |
-| `pnpm test:lending-client` | Run lending client tests |
-| `pnpm security:check` | Scan for leaked secrets |
-| `pnpm check:preparation` | Verify RH deployment preparation |
-| `pnpm check:assets` | Verify RH testnet asset balances |
-| `pnpm generate:lending-abis` | Generate ABIs from Foundry artifacts |
+| Script                       | Description                              |
+| :--------------------------- | :--------------------------------------- |
+| `pnpm dev`                   | Start all workspace services             |
+| `pnpm dev:core`              | Start web + API only                     |
+| `pnpm build`                 | Build all packages (excluding contracts) |
+| `pnpm build:all`             | Build everything including contracts     |
+| `pnpm lint`                  | Run TypeScript type-checking             |
+| `pnpm format`                | Format code with Prettier                |
+| `pnpm test:web-boundaries`   | Run web boundary tests                   |
+| `pnpm test:lending-client`   | Run lending client tests                 |
+| `pnpm security:check`        | Scan for leaked secrets                  |
+| `pnpm check:preparation`     | Verify RH deployment preparation         |
+| `pnpm check:assets`          | Verify RH testnet asset balances         |
+| `pnpm generate:lending-abis` | Generate ABIs from Foundry artifacts     |
 
 ---
 
@@ -339,14 +346,14 @@ Strict resource preservation for Supabase Free Tier (2 GB/month egress):
 
 ## Documentation
 
-| Document | Description |
-| :--- | :--- |
-| [`brief/levier_development.md`](../brief/levier_development.md) | Product & engineering brief |
-| [`brief/levier_roadmap.md`](../brief/levier_roadmap.md) | Phase-by-phase development roadmap |
-| [`docs/RH_TESTNET_STATUS.md`](docs/RH_TESTNET_STATUS.md) | Current testnet status & verification commands |
-| [`docs/RH_CORE_DEPLOYMENT_COMPLETE.md`](docs/RH_CORE_DEPLOYMENT_COMPLETE.md) | Core deployment completion report |
-| [`docs/RH_ORACLE_CHECKPOINT.md`](docs/RH_ORACLE_CHECKPOINT.md) | Oracle integration checkpoint |
-| [`docs/RH_LENDING_CLIENT_CHECKPOINT.md`](docs/RH_LENDING_CLIENT_CHECKPOINT.md) | Lending client implementation checkpoint |
+| Document                                                                       | Description                                    |
+| :----------------------------------------------------------------------------- | :--------------------------------------------- |
+| [`brief/levier_development.md`](../brief/levier_development.md)                | Product & engineering brief                    |
+| [`brief/levier_roadmap.md`](../brief/levier_roadmap.md)                        | Phase-by-phase development roadmap             |
+| [`docs/RH_TESTNET_STATUS.md`](docs/RH_TESTNET_STATUS.md)                       | Current testnet status & verification commands |
+| [`docs/RH_CORE_DEPLOYMENT_COMPLETE.md`](docs/RH_CORE_DEPLOYMENT_COMPLETE.md)   | Core deployment completion report              |
+| [`docs/RH_ORACLE_CHECKPOINT.md`](docs/RH_ORACLE_CHECKPOINT.md)                 | Oracle integration checkpoint                  |
+| [`docs/RH_LENDING_CLIENT_CHECKPOINT.md`](docs/RH_LENDING_CLIENT_CHECKPOINT.md) | Lending client implementation checkpoint       |
 
 ---
 

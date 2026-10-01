@@ -238,7 +238,8 @@
   gap: 7px;
   font-size: 12px;
   color: var(--muted);
-  max-width: 115px;
+  /* One line: "Robinhood Chain Mainnet" is wider than the old 115px cap. */
+  white-space: nowrap;
   line-height: 1.45;
 }
 /* Small pulsing indicator for live/onchain signals — reused wherever a label states a real live fact. */
