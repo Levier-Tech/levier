@@ -6,6 +6,9 @@ import {
   erc20Abi,
   formatUnits,
   keccak256,
+  pad,
+  toEventSelector,
+  toHex,
   type Address,
   type Hex,
   type PublicClient,
@@ -58,6 +61,89 @@ export type LendingHistoryPage = {
   checkedAt: string;
 };
 export class HistoryError extends Error {}
+
+// The public RPC caps eth_getLogs at 10M blocks for one address and one value per topic,
+// and at 100k blocks for wildcard topics, so every query names one contract and one event.
+const LOG_RANGE = 10_000_000n;
+const MAX_HISTORY_TRANSACTIONS = 50;
+export const historyEvents = {
+  collateralDeposited: toEventSelector("CollateralDeposited(address,uint256)"),
+  collateralWithdrawn: toEventSelector("CollateralWithdrawn(address,uint256)"),
+  debtBorrowed: toEventSelector("DebtBorrowed(address,uint256)"),
+  debtRepaid: toEventSelector("DebtRepaid(address,uint256)"),
+  approval: toEventSelector("Approval(address,address,uint256)"),
+  positionOpened: toEventSelector("PositionOpened(address,bool,uint256,uint256,uint256)"),
+  positionClosed: toEventSelector("PositionClosed(address,bool,uint256,uint256,uint256)"),
+} as const;
+export const pairEvents = [
+  historyEvents.collateralDeposited,
+  historyEvents.collateralWithdrawn,
+  historyEvents.debtBorrowed,
+  historyEvents.debtRepaid,
+];
+
+type RpcLog = { transactionHash: Hex; blockNumber: Hex; logIndex: Hex };
+const getLogs = (client: PublicClient, filter: Record<string, unknown>) =>
+  client.request({ method: "eth_getLogs", params: [filter] } as never) as Promise<RpcLog[]>;
+
+// Block of the anchor contract's first event (its proxy deployment), found once per server
+// process. Logs are used because the public RPC does not serve historical state.
+const deployBlocks = new Map<string, bigint>();
+async function firstEventBlock(client: PublicClient, address: Address, head: bigint) {
+  const key = address.toLowerCase();
+  const known = deployBlocks.get(key);
+  if (known !== undefined) return known;
+  for (let start = 0n; start <= head; start += LOG_RANGE) {
+    const end = start + LOG_RANGE - 1n < head ? start + LOG_RANGE - 1n : head;
+    const logs = await getLogs(client, { address, fromBlock: toHex(start), toBlock: toHex(end) });
+    if (logs.length) {
+      const first = logs.reduce(
+        (m, l) => (BigInt(l.blockNumber) < m ? BigInt(l.blockNumber) : m),
+        BigInt(logs[0].blockNumber),
+      );
+      deployBlocks.set(key, first);
+      return first;
+    }
+  }
+  throw new HistoryError("CONTRACT_DEPLOYMENT_NOT_FOUND");
+}
+
+// Finds the account's transactions from events whose first indexed argument is the account.
+// Reads the chain directly; the explorer API blocks server-side requests.
+export async function discoverAccountTransactions(
+  client: PublicClient,
+  options: {
+    account: Address;
+    sources: readonly { address: Address; events: readonly Hex[] }[];
+    anchor: Address;
+    head: bigint;
+  },
+): Promise<Hex[]> {
+  const from = await firstEventBlock(client, options.anchor, options.head);
+  const topic = pad(options.account.toLowerCase() as Hex);
+  const found: { hash: Hex; block: bigint; index: number }[] = [];
+  for (let start = from; start <= options.head; start += LOG_RANGE) {
+    const end = start + LOG_RANGE - 1n < options.head ? start + LOG_RANGE - 1n : options.head;
+    // One small query per contract event; together they stay well under the RPC's limits.
+    const batches = await Promise.all(
+      options.sources.flatMap((source) =>
+        source.events.map((event) =>
+          getLogs(client, {
+            address: source.address,
+            fromBlock: toHex(start),
+            toBlock: toHex(end),
+            topics: [event, topic],
+          }),
+        ),
+      ),
+    );
+    for (const log of batches.flat())
+      found.push({ hash: log.transactionHash, block: BigInt(log.blockNumber), index: Number(log.logIndex) });
+  }
+  found.sort((a, b) => (a.block === b.block ? b.index - a.index : a.block > b.block ? -1 : 1));
+  return [...new Set(found.map((x) => x.hash))].slice(0, MAX_HISTORY_TRANSACTIONS);
+}
+
 const actions = {
   depositCollateral: "deposit",
   borrow: "borrow",
@@ -216,18 +302,16 @@ export async function readLendingHistory(options: {
     if (!code || keccak256(code) !== d.codeHashes[role])
       throw new HistoryError("CONTRACT_IDENTITY_MISMATCH");
   }
-  const page = await discoverWalletTransactions(options);
-  const candidates = [
-    ...new Set(
-      page.items
-        .filter(
-          (x) =>
-            x.to &&
-            [d.pair, d.collateral, d.debt].some((a) => same(a, x.to!.hash)),
-        )
-        .map((x) => x.hash),
-    ),
-  ];
+  const candidates = await discoverAccountTransactions(client, {
+    account,
+    sources: [
+      { address: d.pair, events: pairEvents },
+      { address: d.collateral, events: [historyEvents.approval] },
+      { address: d.debt, events: [historyEvents.approval] },
+    ],
+    anchor: d.pair,
+    head,
+  });
   const rows: LendingHistoryRow[] = [];
   // Bounded sequential verification avoids an unbounded fan-out against the private RPC.
   for (const txHash of candidates) {
@@ -252,8 +336,8 @@ export async function readLendingHistory(options: {
     account,
     chainId: d.chainId,
     rows,
-    nextCursor: page.next_page_params,
-    scannedTransactions: page.items.length,
+    nextCursor: null,
+    scannedTransactions: candidates.length,
     checkedAt: new Date().toISOString(),
   };
 }

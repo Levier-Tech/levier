@@ -12,7 +12,9 @@ import {
 import { MarginRouterABI } from "../contracts/generated/margin";
 import { LevierPairABI } from "../contracts/generated/lending";
 import {
-  discoverWalletTransactions,
+  discoverAccountTransactions,
+  historyEvents,
+  pairEvents,
   HistoryError,
   type HistoryCursor,
 } from "./lending-history";
@@ -214,14 +216,20 @@ export async function readMarginHistory(options: {
     if (!code || !same(keccak256(code), expected))
       throw new HistoryError("CONTRACT_IDENTITY_MISMATCH");
   }
-  const page = await discoverWalletTransactions(options);
-  const hashes = [
-    ...new Set(
-      page.items
-        .filter((t) => t.to && contracts.some(([a]) => same(a, t.to!.hash)))
-        .map((t) => t.hash),
-    ),
-  ];
+  const hashes = await discoverAccountTransactions(client, {
+    account,
+    sources: [
+      {
+        address: market.margin.router,
+        events: [historyEvents.positionOpened, historyEvents.positionClosed],
+      },
+      { address: market.long.pair, events: pairEvents },
+      { address: market.margin.short.pair, events: pairEvents },
+      { address: market.long.debt, events: [historyEvents.approval] },
+    ],
+    anchor: market.margin.router,
+    head,
+  });
   const rows: MarginHistoryRow[] = [];
   for (const hash of hashes) {
     const row = await verifyMarginHistoryTransaction(
@@ -239,7 +247,7 @@ export async function readMarginHistory(options: {
     chainId: market.long.chainId,
     market: market.symbol,
     rows,
-    nextCursor: page.next_page_params,
+    nextCursor: null,
     checkedAt: new Date().toISOString(),
   };
 }
