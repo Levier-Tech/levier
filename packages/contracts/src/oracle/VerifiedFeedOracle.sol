@@ -50,7 +50,13 @@ contract VerifiedFeedOracle {
     mapping(address => FeedConfig) public feeds;
 
     constructor(uint256 expectedChainId, address sequencer, uint256 gracePeriod, FeedInput[] memory inputs) {
-        if (block.chainid != expectedChainId || sequencer.code.length == 0 || gracePeriod == 0 || inputs.length == 0) {
+        // A chain without a Chainlink sequencer uptime feed (Robinhood Chain mainnet) is configured
+        // explicitly as sequencer == address(0) with gracePeriod == 0; partial configuration is rejected.
+        bool withSequencer = sequencer != address(0);
+        if (
+            block.chainid != expectedChainId || inputs.length == 0
+                || (withSequencer ? sequencer.code.length == 0 || gracePeriod == 0 : gracePeriod != 0)
+        ) {
             revert InvalidConfiguration();
         }
         chainId = expectedChainId;
@@ -77,14 +83,16 @@ contract VerifiedFeedOracle {
         if (block.chainid != chainId) revert InvalidConfiguration();
         FeedConfig memory config = feeds[asset];
         if (address(config.feed) == address(0)) revert UnknownAsset();
-        (uint80 seqRound, int256 status, uint256 startedAt, uint256 seqUpdated, uint80 seqAnswered) =
-            sequencerFeed.latestRoundData();
-        if (
-            seqRound == 0 || seqAnswered < seqRound || status != 0 || startedAt == 0 || startedAt > block.timestamp
-                || seqUpdated < startedAt || seqUpdated > block.timestamp
-                || block.timestamp - startedAt <= sequencerGracePeriod
-        ) {
-            revert SequencerUnavailable();
+        if (address(sequencerFeed) != address(0)) {
+            (uint80 seqRound, int256 status, uint256 startedAt, uint256 seqUpdated, uint80 seqAnswered) =
+                sequencerFeed.latestRoundData();
+            if (
+                seqRound == 0 || seqAnswered < seqRound || status != 0 || startedAt == 0
+                    || startedAt > block.timestamp || seqUpdated < startedAt || seqUpdated > block.timestamp
+                    || block.timestamp - startedAt <= sequencerGracePeriod
+            ) {
+                revert SequencerUnavailable();
+            }
         }
         if (config.checkTokenPause && IStockOracleStatus(asset).oraclePaused()) revert TokenOraclePaused();
         (uint80 roundId, int256 answer, uint256 priceStarted, uint256 updatedAt, uint80 answeredInRound) =
