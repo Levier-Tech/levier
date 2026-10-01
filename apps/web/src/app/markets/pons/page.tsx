@@ -19,14 +19,12 @@ export default function PonsMarketsPage() {
       {isLoading ? (
         <MetricsSkeleton label="Loading Pons markets" />
       ) : error ? (
-        <DataState title="Pons data unavailable" retry={refetch}>
-          Market data for graduated Pons assets could not be retrieved. No
-          placeholder values are substituted.
+        <DataState title="Cooking something up" retry={refetch}>
+          Pons Market is on the way. Graduated tokens will land here soon.
         </DataState>
       ) : markets.length === 0 ? (
-        <DataState title="No graduated assets">
-          No Pons assets have graduated yet. Check back after tokens complete
-          the bonding curve process.
+        <DataState title="Cooking something up">
+          Pons Market is on the way. Graduated tokens will land here soon.
         </DataState>
       ) : (
         <PonsMarketTable 
