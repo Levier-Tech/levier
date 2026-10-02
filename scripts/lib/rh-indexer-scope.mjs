@@ -10,7 +10,7 @@ const scopeSchema = z
   .array(
     z
       .object({
-        symbol: z.enum(["TSLA", "AMZN", "PLTR", "NFLX", "AMD"]),
+        symbol: z.enum(["TSLA", "AMZN", "PLTR", "NFLX", "AMD", "NVDA"]),
         side: z.enum(["long", "short"]),
         startBlock: z.string().regex(/^[1-9]\d*$/),
         deployment: z.union([deploymentSchema, marginSchema.shape.short]),
