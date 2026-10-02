@@ -29,9 +29,9 @@ export default function PonsMarketsPage() {
           lastUpdated={lastUpdated}
         />
       ) : ponsEnabled && ponsDeployment ? (
-        <DataState title="Leverage is live">
-          Trade {Object.keys(ponsDeployment.markets).join(" or ")} with up to 2x from the LP vault panel above. Tokens
-          still on the Pons bonding curve open once they graduate.
+        <DataState title={`${Object.keys(ponsDeployment.markets).join(" and ")} leverage`}>
+          Up to 2x on {Object.keys(ponsDeployment.markets).join(" and ")}, settled in USDG. A token opens for trading once
+          it graduates from the Pons bonding curve; open it from the panel above to see its status.
         </DataState>
       ) : (
         <DataState title="Cooking something up" retry={error ? refetch : undefined}>
