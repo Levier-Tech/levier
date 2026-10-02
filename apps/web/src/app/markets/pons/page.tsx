@@ -3,6 +3,7 @@
 import { AppPage, DataState } from "../../../components/AppPage";
 import { PonsMarketTable } from "../../../components/PonsMarketTable";
 import { PonsVaultPanel } from "../../../components/PonsVaultPanel";
+import { ponsDeployment, ponsEnabled } from "../../../lib/pons-perp-client";
 import { MetricsSkeleton } from "../../../components/LoadingSkeleton";
 import { usePonsMarkets } from "../../../hooks/usePonsMarkets";
 
@@ -20,21 +21,22 @@ export default function PonsMarketsPage() {
 
       {isLoading ? (
         <MetricsSkeleton label="Loading Pons markets" />
-      ) : error ? (
-        <DataState title="Cooking something up" retry={refetch}>
-          Pons Market is on the way. Graduated tokens will land here soon.
-        </DataState>
-      ) : markets.length === 0 ? (
-        <DataState title="Cooking something up">
-          Pons Market is on the way. Graduated tokens will land here soon.
-        </DataState>
-      ) : (
+      ) : !error && markets.length > 0 ? (
         <PonsMarketTable 
           markets={markets} 
           onRefresh={refetch}
           isRefetching={isRefetching}
           lastUpdated={lastUpdated}
         />
+      ) : ponsEnabled && ponsDeployment ? (
+        <DataState title="Leverage is live">
+          Trade {Object.keys(ponsDeployment.markets).join(" or ")} with up to 2x from the LP vault panel above. Tokens
+          still on the Pons bonding curve open once they graduate.
+        </DataState>
+      ) : (
+        <DataState title="Cooking something up" retry={error ? refetch : undefined}>
+          Pons Market is on the way. Graduated tokens will land here soon.
+        </DataState>
       )}
 
       <section className="app-panel" style={{ marginTop: 24 }}>
