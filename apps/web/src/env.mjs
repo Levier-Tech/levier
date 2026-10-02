@@ -19,5 +19,7 @@ export const env = environment.validate(environment.clientSchema, {
   LENDING_RECEIPT_TIMEOUT_MS: process.env.LENDING_RECEIPT_TIMEOUT_MS,
   USDG_FAUCET_URL: process.env.USDG_FAUCET_URL,
   UI_POLL_INTERVAL_MS: process.env.UI_POLL_INTERVAL_MS,
+  PONS_TRADING_ENABLED: process.env.PONS_TRADING_ENABLED || undefined,
+  PONS_DEPLOYMENT_JSON: process.env.PONS_DEPLOYMENT_JSON || undefined,
   TOKEN_CA: process.env.NEXT_PUBLIC_TOKEN_CA || process.env.TOKEN_CA || "",
 });

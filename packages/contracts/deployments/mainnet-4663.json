@@ -152,5 +152,37 @@
       "address": "0x99c5bE99ffdb9C3a6C95701a60BDe015595EdD29",
       "transaction": "0x3a4a96f43fe944ae7ecefa46087ce8657874e2b2b68b89e2399fc0ed91f0aeaf"
     }
+  },
+  "pons": {
+    "addresses": {
+      "impl-PonsV4TwapOracle": "0xAb90667a9f50c1f0A33Da338985CD5D7149476dd",
+      "ponsOracle": "0xa25CD15bAAdc3C470C3c8edea07017B2Ecb02341",
+      "impl-PonsLiquidityVault": "0xDb0ce9Ea14281EE7406c26f3Af65D2Edf07Ec796",
+      "ponsVault": "0x5834b25835785E056468a5FdDAa516380565bFEb",
+      "impl-PonsPerpManager": "0x83C77daa003d375cF2096AD59a2CE4f53cA4DFa1",
+      "ponsManager": "0x6eee1721048B7bED44Fe852956AeeaE2fBB79a80"
+    },
+    "transactions": {
+      "add-feed-weth": "0x279343b660b4826004d26285b3789e04c72c20cf38363b22030b4de43192ce3a",
+      "deploy-impl-PonsV4TwapOracle": "0x81e22edbf1dbb56fcc40ea38320b0d379b8cd939075dd9749ff24c15084d2751",
+      "deploy-ponsOracle": "0xf6e83ac785518599ce31ad3622b21a9eac336942c084585fea761a97086a4851",
+      "deploy-impl-PonsLiquidityVault": "0x1b8d3b8d3fb79845a41e241b467c04ba959eff37d453c2d80165a57fa2cd06d6",
+      "deploy-ponsVault": "0x59b59e822f2fbc3999b4b5c7ca0aa67bcb70ee177ee6aac246f9897b51adbae9",
+      "deploy-impl-PonsPerpManager": "0x9246ffbdb724aaaf9d591de76312a5b3dd082ba1f21f66d5d156bf0c347594dc",
+      "deploy-ponsManager": "0xaa3749792cfa8a1b29f5fe90f041ffce5fb2cdd87f24da517905f33bccded48d",
+      "vault-set-manager": "0x6f59172eeaa0b9c8014a3da8534ebedd9c115c752ba17bab5dfd1be7ae8f3165",
+      "list-levier": "0xb7e0162ab4c48c256b7250d89a4d013e72fcf8f77b20435d3312e8e45889504b",
+      "set-market-levier": "0x8d2ca245ed4d79201a92390af1f48ca6b20cb3728e89d9b145115d75723c5463"
+    },
+    "poolManager": "0x8366a39CC670B4001A1121B8F6A443A643e40951",
+    "ponsFactory": "0x7eD598BcEf8bd9Edd8C97A195C6d13f40801EC7e",
+    "ponsHook": "0xE5e702641Ea86F4ae6cC3cDaeD2B886f976Be044",
+    "markets": {
+      "LEVIER": {
+        "token": "0xeC0b618cAdd930791329E834E11DCfD8213249C0",
+        "poolId": "0x81f5e23a8b1e3fb8e8d7c355f51a139c45b028facb3b2f527a555ff4f01316b0",
+        "status": "PAUSED"
+      }
+    }
   }
 }

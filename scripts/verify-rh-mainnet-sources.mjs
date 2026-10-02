@@ -51,7 +51,15 @@ const SOURCE_PATHS = {
   VerifiedFeedOracle: "src/oracle/VerifiedFeedOracle.sol",
   LevierPair: "src/core/LevierPair.sol",
   MarginRouter: "src/trading/MarginRouter.sol",
+  PonsV4TwapOracle: "src/ponsperp/PonsV4TwapOracle.sol",
+  PonsLiquidityVault: "src/ponsperp/PonsLiquidityVault.sol",
+  PonsPerpManager: "src/ponsperp/PonsPerpManager.sol",
 };
+// Pons leverage lives in its own section of the record; verify it with the core contracts.
+if (record.pons) {
+  Object.assign(record.addresses, record.pons.addresses);
+  Object.assign(record.transactions, record.pons.transactions);
+}
 const PROXY =
   "node_modules/@openzeppelin/contracts/proxy/ERC1967/ERC1967Proxy.sol:ERC1967Proxy";
 const sources = {};

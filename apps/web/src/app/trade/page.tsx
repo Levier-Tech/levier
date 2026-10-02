@@ -2,20 +2,17 @@
 
 import React, { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
-import { PositionList } from "@/components/PositionList";
 import { ponsClient } from "@/lib/pons-client";
 import type { PonsMarketEntry, OracleStatus } from "@/lib/pons-client";
 import { OracleHealthIndicator } from "@/components/OracleHealthIndicator";
 import { TradingViewChart } from "@/components/TradingViewChart";
 import { TokenLogo } from "@/components/TokenLogo";
-import { useAccount, useWriteContract, useWaitForTransactionReceipt } from "wagmi";
-import { parseUnits } from "viem";
-import { toast, Toaster } from "react-hot-toast";
-import ERC20ABI from "@/lib/contracts/TestnetERC20.json";
 import { MarketSelectorModal } from "@/components/MarketSelectorModal";
 import { AppPage } from "@/components/AppPage";
 import { MarginTradePanel } from "@/components/MarginTradePanel";
 import { marketDeployments } from "@/lib/market-deployments";
+import { PonsLeveragePanel } from "@/components/PonsLeveragePanel";
+import { ponsMarketFor } from "@/lib/pons-perp-client";
 
 // Configured stock / USDG markets trade through the margin router; anything else falls back to the Pons workspace.
 export default function TradePage() {
@@ -47,16 +44,6 @@ function PonsTradeWorkspace() {
   const [loading, setLoading] = useState(true);
   const [chartData, setChartData] = useState<any[]>([]);
   
-  // Order state
-  const [isLong, setIsLong] = useState(true);
-  const [collateral, setCollateral] = useState<string>("");
-  const [leverage, setLeverage] = useState<number>(2);
-  const [isBridging, setIsBridging] = useState(false);
-  const [optimisticPositions, setOptimisticPositions] = useState<any[]>([]);
-
-  // Wagmi hooks
-  const { address: accountAddress } = useAccount();
-  const { writeContract, data: hash, isPending, error: writeError, isSuccess } = useWriteContract();
 
   useEffect(() => {
     async function loadData() {
@@ -119,44 +106,6 @@ function PonsTradeWorkspace() {
     }
   }, [market?.address, market?.price]);
 
-  useEffect(() => {
-    if (isPending) {
-      toast.loading("Confirming in wallet...", { id: "tx" });
-    }
-    if (isSuccess && hash && market) {
-      toast.success(
-        <div>
-          Trade executed successfully!<br/>
-          <span className="text-xs">Tx: {hash?.slice(0,10)}...</span>
-        </div>, 
-        { id: "tx", duration: 5000 }
-      );
-      
-      const collatNum = parseFloat(collateral || "0");
-      const sizeUsd = collatNum * leverage;
-      
-      const newPos = {
-        id: `pos-${market.symbol}-${Date.now()}`,
-        asset: market.symbol,
-        isLong,
-        sizeUsd,
-        collateralUsd: collatNum,
-        leverage,
-        entryPrice: market.price,
-        markPrice: market.price,
-        liquidationPrice: market.price * (isLong ? (1 - (1/leverage)*0.95) : (1 + (1/leverage)*0.95)),
-        pnlUsd: 0,
-        pnlPercentage: 0
-      };
-      setOptimisticPositions(prev => [newPos, ...prev]);
-    }
-  }, [isPending, isSuccess, hash, market, collateral, leverage, isLong]);
-
-  useEffect(() => {
-    if (writeError) {
-      toast.error(`Error: User rejected or contract reverted`, { id: "tx", duration: 5000 });
-    }
-  }, [writeError]);
 
   function formatPrice(price: number) {
     if (price < 0.0001) return price.toPrecision(4);
@@ -181,6 +130,28 @@ function PonsTradeWorkspace() {
     );
   }
 
+  const listedPons = ponsMarketFor(market?.address) ?? ponsMarketFor(assetQuery ?? undefined);
+  if (!market && listedPons) {
+    return (
+      <div className="trade-page">
+        <div className="trade-header">
+          <h1 className="font-bold text-lg font-display tracking-tight">{listedPons.symbol}/USD</h1>
+        </div>
+        <div className="trade-content">
+          <div className="chart-area">
+            <div className="chart-wrapper">
+              <div className="chart-placeholder">
+                <span>{listedPons.symbol} is not on a DEX yet. Leverage opens after it graduates from the Pons bonding curve.</span>
+              </div>
+            </div>
+          </div>
+          <PonsLeveragePanel token={listedPons.token} symbol={listedPons.symbol} />
+        </div>
+        <style>{tradeStyles}</style>
+      </div>
+    );
+  }
+
   if (!market) {
     return (
       <div className="trade-page flex flex-col items-center justify-center min-h-[40vh] text-center">
@@ -193,12 +164,6 @@ function PonsTradeWorkspace() {
     );
   }
 
-  const collatNum = parseFloat(collateral) || 0;
-  const positionSize = collatNum * leverage;
-  const liqPrice = isLong 
-    ? market.price * (1 - (1 / leverage) * 0.95)
-    : market.price * (1 + (1 / leverage) * 0.95); // Placeholder for short
-
   const activeOracleStatus = oracleStatus || {
     asset: market.symbol,
     primaryPrice: market.price,
@@ -209,55 +174,8 @@ function PonsTradeWorkspace() {
     status: "HEALTHY",
   };
 
-  const handleExecute = async () => {
-    if (!accountAddress) {
-      toast.error("Please connect your wallet first (e.g. MetaMask)");
-      return;
-    }
-    
-    setIsBridging(true);
-    let targetAddress = market.address;
-    
-    try {
-      if (market.coingeckoId) {
-        toast.loading("Initializing secure trading channel...", { id: "bridge" });
-        const res = await fetch("/api/bridge/register", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            coingeckoId: market.coingeckoId,
-            symbol: market.symbol,
-            name: market.name,
-            price: market.price
-          })
-        });
-        const data = await res.json();
-        if (data.error) throw new Error(data.error);
-        targetAddress = data.address;
-        toast.success("Trading channel active!", { id: "bridge", duration: 2000 });
-      }
-
-      toast.loading("Confirm transaction in wallet...", { id: "tx" });
-      
-      // Simulate trade by approving the collateral amount
-      writeContract({
-        address: targetAddress as `0x${string}`,
-        abi: ERC20ABI.abi,
-        functionName: 'approve',
-        args: [targetAddress as `0x${string}`, parseUnits(collateral || "0", 18)],
-      });
-
-    } catch (e: any) {
-      toast.error(e.message, { id: "tx" });
-      toast.dismiss("bridge");
-    } finally {
-      setIsBridging(false);
-    }
-  };
-
   return (
     <div className="trade-page">
-      <Toaster position="top-right" />
       <div className="trade-header">
         <div className="market-info flex items-center justify-between gap-3 sm:gap-4 flex-wrap">
           <div className="flex items-center gap-3 sm:gap-4 flex-wrap min-w-0">
@@ -316,101 +234,24 @@ function PonsTradeWorkspace() {
           </div>
         </div>
 
-        <div className="order-panel">
-          <div className="order-tabs">
-            <button 
-              className={`tab ${isLong ? "active long" : ""}`}
-              onClick={() => setIsLong(true)}
-            >
-              LONG
-            </button>
-            <button 
-              className={`tab ${!isLong ? "active short" : ""}`}
-              onClick={() => setIsLong(false)}
-            >
-              SHORT
-            </button>
-          </div>
-
-          <div className="input-group">
-            <label>Collateral (USD)</label>
-            <div className="input-wrapper">
-              <input 
-                type="number" 
-                value={collateral}
-                onChange={e => setCollateral(e.target.value)}
-                placeholder="0.00"
-              />
-              <span className="currency">USDG</span>
-            </div>
-          </div>
-
-          <div className="input-group">
-            <div className="flex justify-between items-center mb-1">
-              <label className="!mb-0">Leverage</label>
-              <span className="font-mono text-sm font-semibold text-[var(--green)]">{leverage.toFixed(1)}x</span>
-            </div>
-            <input 
-              type="range" 
-              min="1.1" 
-              max={market.maxLeverage || 10} 
-              step="0.1" 
-              value={leverage}
-              onChange={e => setLeverage(parseFloat(e.target.value))}
-              className="leverage-slider"
-            />
-          </div>
-
-          <div className="order-summary">
-            <div className="summary-row">
-              <span>Position Size</span>
-              <span>${positionSize.toFixed(2)}</span>
-            </div>
-            <div className="summary-row">
-              <span>Entry Price</span>
-              <span>${formatPrice(market.price)}</span>
-            </div>
-            <div className="summary-row">
-              <span>Liq. Price</span>
-              <span style={{ color: "#ff6b6b" }}>${formatPrice(liqPrice)}</span>
-            </div>
-          </div>
-
-          <button 
-            className={`submit-btn ${isLong ? "long" : "short"}`}
-            disabled={collatNum <= 0 || !activeOracleStatus.isSafe || isPending || isBridging}
-            onClick={handleExecute}
-          >
-            {isBridging ? "Initializing..." 
-              : isPending ? "Confirm in Wallet" 
-              : collatNum <= 0 ? "Enter Amount" 
-              : !activeOracleStatus.isSafe ? "Oracle Unsafe" 
-              : `Place ${isLong ? "Long" : "Short"} Order`
-            }
-          </button>
-        </div>
-      </div>
-
-      {/* POSITIONS SECTION */}
-      <div className="positions-section mt-8 md:mt-12">
-        <div className="flex items-center justify-between gap-4 mb-4 sm:mb-6 flex-wrap">
-          <h2 className="text-xl sm:text-2xl font-display font-bold tracking-tight">Your Positions</h2>
-          {optimisticPositions.length > 0 && (
-            <span className="text-xs px-2.5 py-1 rounded bg-[var(--green)]/10 text-[var(--green)] font-mono border border-[var(--green)]/20">
-              {optimisticPositions.length} active order{optimisticPositions.length > 1 ? "s" : ""}
-            </span>
-          )}
-        </div>
-        {accountAddress ? (
-          <PositionList account={accountAddress} optimisticPositions={optimisticPositions} />
+        {listedPons ? (
+          <PonsLeveragePanel token={listedPons.token} symbol={listedPons.symbol} />
         ) : (
-          <div className="p-6 sm:p-8 text-center text-[var(--muted)] border border-[var(--line)] rounded-xl bg-white/5 text-sm sm:text-base">
-            Please connect your wallet to view your positions.
+          <div className="order-panel">
+            <p className="text-sm text-[var(--muted)]">
+              Leverage is not available for {market.symbol} yet. Pons leverage launches one token at a time with small caps.
+            </p>
           </div>
         )}
       </div>
 
-      <style>{`
+
+      <style>{tradeStyles}</style>
+    </div>
+  );
+}
+
+const tradeStyles = `
         .trade-page {
           padding: 8px 12px 36px;
           max-width: 1400px;
@@ -646,7 +487,4 @@ function PonsTradeWorkspace() {
         .mt-4 { margin-top: 24px; }
         .mt-2 { margin-top: 8px; }
         .text-sm { font-size: 14px; }
-      `}</style>
-    </div>
-  );
-}
+      `;

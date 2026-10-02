@@ -2,6 +2,7 @@
 
 import { AppPage, DataState } from "../../../components/AppPage";
 import { PonsMarketTable } from "../../../components/PonsMarketTable";
+import { PonsVaultPanel } from "../../../components/PonsVaultPanel";
 import { MetricsSkeleton } from "../../../components/LoadingSkeleton";
 import { usePonsMarkets } from "../../../hooks/usePonsMarkets";
 
@@ -15,6 +16,7 @@ export default function PonsMarketsPage() {
       title="Pons Graduated Assets"
       description="Tokens that completed the Pons bonding curve and meet liquidity, market cap, and oracle requirements for leverage trading."
     >
+      <PonsVaultPanel />
 
       {isLoading ? (
         <MetricsSkeleton label="Loading Pons markets" />

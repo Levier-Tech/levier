@@ -26,6 +26,15 @@ const protocolSchema = z
     pairs: z.record(z.string().regex(/^[A-Z0-9]+$/), address),
   })
   .strict();
+// Pons leverage: one manager, its LP vault and oracle, plus the listed tokens by symbol.
+const ponsSchema = z
+  .object({
+    manager: address,
+    vault: address,
+    oracle: address,
+    markets: z.record(z.string().regex(/^[A-Z0-9]+$/), address),
+  })
+  .strict();
 const clientSchema = z
   .object({
     NETWORK_MODE: z.enum(["TESTNET", "MAINNET"]),
@@ -88,11 +97,35 @@ const clientSchema = z
         .refine((v) => new URL(v).protocol === "https:"),
     ]),
     UI_POLL_INTERVAL_MS: positiveInteger,
+    // Optional until the Pons contracts are deployed; trading also needs PONS_TRADING_ENABLED=true.
+    PONS_TRADING_ENABLED: z
+      .enum(["true", "false"])
+      .default("false")
+      .transform((v) => v === "true"),
+    PONS_DEPLOYMENT_JSON: z
+      .string()
+      .default("")
+      .transform((v, ctx) => {
+        if (v === "") return null;
+        try {
+          return JSON.parse(v);
+        } catch {
+          ctx.addIssue({ code: "custom", message: "Invalid JSON" });
+          return z.NEVER;
+        }
+      })
+      .pipe(ponsSchema.nullable()),
     // LEVIER token contract address shown in the hero; empty until launch. A malformed value fails the build.
     TOKEN_CA: z.union([z.literal(""), address]).optional(),
     NEXT_PUBLIC_TOKEN_CA: z.union([z.literal(""), address]).optional(),
   })
   .superRefine((value, ctx) => {
+    if (value.PONS_TRADING_ENABLED && !value.PONS_DEPLOYMENT_JSON)
+      ctx.addIssue({
+        code: "custom",
+        path: ["PONS_TRADING_ENABLED"],
+        message: "Pons deployment required",
+      });
     const expectedChainId = { TESTNET: 46630, MAINNET: 4663 }[
       value.NETWORK_MODE
     ];
