@@ -2,6 +2,7 @@
 import { useRef, useState } from "react";
 import { useAccount, usePublicClient, useWalletClient } from "wagmi";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
+import Link from "next/link";
 import { formatUnits, type Hex } from "viem";
 import { env } from "../env.mjs";
 import { exactAmount } from "../lib/lending-client";
@@ -107,6 +108,18 @@ export function PonsVaultPanel() {
         </button>
       </div>
       {issue && <p className="text-xs text-[#ff6b6b] mt-2" role="status">{issue}</p>}
+      <div className="flex flex-wrap items-center gap-2 mt-4 text-sm">
+        <span className="text-[var(--muted)]">Trade with up to 2x:</span>
+        {Object.keys(ponsDeployment.markets).map((symbol) => (
+          <Link
+            key={symbol}
+            href={`/trade?asset=${symbol}`}
+            className="px-3 py-1.5 rounded-md border border-[var(--green)] text-[var(--green)] font-semibold hover:bg-[var(--green)] hover:text-black"
+          >
+            {symbol}
+          </Link>
+        ))}
+      </div>
       <TransactionResultModal result={result} onClose={() => setResult(null)} />
       <WalletModal isOpen={showWallet} onClose={() => setShowWallet(false)} />
     </section>

@@ -12,7 +12,10 @@
     "minPrice18": "100000000000000000000",
     "maxPrice18": "100000000000000000000000"
   },
-  "vault": { "name": "Levier Pons LP", "symbol": "lpPONS" },
+  "vault": {
+    "name": "Levier Pons LP",
+    "symbol": "lpPONS"
+  },
   "market": {
     "symbol": "LEVIER",
     "token": "0xeC0b618cAdd930791329E834E11DCfD8213249C0",
@@ -20,5 +23,16 @@
     "maintenanceMarginBps": 1000,
     "maxPositionSizeRaw": "20000000",
     "maxOpenInterestRaw": "100000000"
-  }
+  },
+  "openMarkets": [
+    {
+      "symbol": "ZZZ",
+      "token": "0x7dbf38976f6D3b9c529e7D9484A71898B409eE6a",
+      "maxLeverageBps": 20000,
+      "maintenanceMarginBps": 1000,
+      "maxPositionSizeRaw": "20000000",
+      "maxOpenInterestRaw": "100000000",
+      "note": "Graduated Pons token opened first (2026-10-02) while LEVIER is still on its bonding curve; v4 pool id 0x6538e2c223ed70228114983afecbe5e69fe627e2fafdf367bdd6bdeff2ad391f."
+    }
+  ]
 }

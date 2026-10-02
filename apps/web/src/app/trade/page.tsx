@@ -141,7 +141,7 @@ function PonsTradeWorkspace() {
           <div className="chart-area">
             <div className="chart-wrapper">
               <div className="chart-placeholder">
-                <span>{listedPons.symbol} is not on a DEX yet. Leverage opens after it graduates from the Pons bonding curve.</span>
+                <span>Chart unavailable for {listedPons.symbol}. Trades settle on the onchain 30-minute average price shown in the order panel.</span>
               </div>
             </div>
           </div>
